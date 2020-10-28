@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <groupId>com.enongm.dianji</groupId>
-    <artifactId>oss-spring-boot-autoconfigure</artifactId>
+    <artifactId>payment-spring-boot-autoconfigure</artifactId>
     <version>1.0.0.RELEASE</version>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>

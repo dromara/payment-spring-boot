@@ -12,7 +12,7 @@
     <description>payment sdk</description>
 
     <modules>
-        <module>oss-spring-boot-autoconfigure</module>
+        <module>payment-spring-boot-autoconfigure</module>
         <module>payment-spring-boot-starter</module>
     </modules>
 
@@ -65,6 +65,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.verison}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.enongm.dianji</groupId>
+                <artifactId>payment-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
