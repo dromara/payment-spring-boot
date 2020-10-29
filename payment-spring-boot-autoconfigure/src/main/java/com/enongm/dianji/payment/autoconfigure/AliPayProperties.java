@@ -1,4 +1,4 @@
-package com.enongm.dianji.payment.alipay.configuration;
+package com.enongm.dianji.payment.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

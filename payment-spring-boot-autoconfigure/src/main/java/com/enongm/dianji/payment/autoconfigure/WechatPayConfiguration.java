@@ -6,6 +6,7 @@ import com.enongm.dianji.payment.wechat.WechatPayV3Service;
 import com.enongm.dianji.payment.wechat.v2.WechatPayV2Service;
 import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
 import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +15,13 @@ import org.springframework.context.annotation.Configuration;
  * The type Wechat pay configuration.
  */
 @Configuration
+@ConditionalOnProperty(prefix = "wechat.pay",havingValue = "v3")
 @EnableConfigurationProperties(WechatPayProperties.class)
 public class WechatPayConfiguration {
     private static final String CERT_ALIAS = "Tenpay Certificate";
 
     /**
-     * 微信支付公私钥 以及序列号.
+     * 微信支付公私钥 以及序列号等元数据.
      *
      * @param wechatPayProperties the wechat pay properties
      * @return the wechat cert bean
@@ -35,13 +37,13 @@ public class WechatPayConfiguration {
     }
 
     /**
-     * Signature provider signature provider.
+     * 微信支付V3签名工具.
      *
      * @param wechatMetaBean the wechat meta bean
      * @return the signature provider
      */
     @Bean
-    public SignatureProvider signatureProvider(WechatMetaBean wechatMetaBean) {
+    SignatureProvider signatureProvider(WechatMetaBean wechatMetaBean) {
         return new SignatureProvider(wechatMetaBean);
     }
 
@@ -58,7 +60,7 @@ public class WechatPayConfiguration {
     }
 
     /**
-     * Wechat pay service wechat pay service.
+     * 微信支付V3 全量支持.
      *
      * @param signatureProvider the signature provider
      * @return the wechat pay service

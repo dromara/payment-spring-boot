@@ -1,5 +1,6 @@
-package com.enongm.dianji.payment.alipay.configuration;
+package com.enongm.dianji.payment.autoconfigure;
 
+import com.enongm.dianji.payment.autoconfigure.AliPayProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 

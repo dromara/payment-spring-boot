@@ -19,6 +19,7 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.MD5Digest;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.util.AlternativeJdkIdGenerator;
+import org.springframework.util.Assert;
 import org.springframework.util.IdGenerator;
 
 
@@ -52,7 +53,7 @@ public class BaseModel {
     private String mchid;
     private String sign;
     @JsonIgnore
-    private String key;
+    private String appSecret;
     @JsonIgnore
     private V2PayType payType;
 
@@ -72,6 +73,11 @@ public class BaseModel {
         return this;
     }
 
+    public BaseModel appSecret(String appSecret) {
+        this.appSecret = appSecret;
+        return this;
+    }
+
     /**
      * Xml string.
      *
@@ -79,15 +85,8 @@ public class BaseModel {
      */
     @SneakyThrows
     public String xml() {
-
-
-
-        this.key = "Djkjchina19491001";
-        String link = link(this, key);
-
+        String link = link(this);
         this.sign = this.bouncyCastleMD5(link);
-
-
         return MAPPER.writer()
                 .withRootName("xml")
                 .writeValueAsString(this);
@@ -116,8 +115,10 @@ public class BaseModel {
      * @return the map
      */
     @SneakyThrows
-    private <T> String link(T t, String apiKey) {
-
+    private <T> String link(T t) {
+        Assert.hasText(this.mchAppid, "wechat pay appId is required");
+        Assert.hasText(this.mchid, "wechat pay mchId is required");
+        Assert.hasText(appSecret, "wechat pay appSecret is required");
         return new ObjectMapper()
                 .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
@@ -128,13 +129,13 @@ public class BaseModel {
                 .replaceAll("\",\"", "&")
                 .replaceAll("\\{\"", "")
                 .replaceAll("\"}", "")
-                .concat("&key=").concat(apiKey);
+                .concat("&key=").concat(this.appSecret);
     }
 
 
     @SneakyThrows
     public WechatResponseBody request() {
-
+        Assert.notNull(payType, "wechat pay payType is required");
         Request request = new Request.Builder()
                 .method(payType.method(), RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), this.xml()))
                 .url(payType.defaultUri(WeChatServer.CHINA))
