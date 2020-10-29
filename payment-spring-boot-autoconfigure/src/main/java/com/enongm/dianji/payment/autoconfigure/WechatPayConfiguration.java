@@ -6,7 +6,6 @@ import com.enongm.dianji.payment.wechat.WechatPayV3Service;
 import com.enongm.dianji.payment.wechat.v2.WechatPayV2Service;
 import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
 import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
  * The type Wechat pay configuration.
  */
 @Configuration
-@ConditionalOnProperty(prefix = "wechat.pay",havingValue = "v3")
 @EnableConfigurationProperties(WechatPayProperties.class)
 public class WechatPayConfiguration {
     private static final String CERT_ALIAS = "Tenpay Certificate";
@@ -56,6 +54,7 @@ public class WechatPayConfiguration {
      */
     @Bean
     public WechatPayV2Service wechatPayV2Service(WechatPayProperties wechatPayProperties) {
+        System.out.println("wechatPayProperties = " + wechatPayProperties);
         return new WechatPayV2Service(wechatPayProperties);
     }
 
