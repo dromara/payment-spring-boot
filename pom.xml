@@ -26,6 +26,9 @@
         <aliy-pay-sdk.version>4.10.167.ALL</aliy-pay-sdk.version>
         <oss-starter.version>1.0.0.RELEASE</oss-starter.version>
         <lombok.verison>1.18.12</lombok.verison>
+        <jackson.version>2.9.10</jackson.version>
+        <bcprov.version>1.66</bcprov.version>
+        <okhttp3.version>3.14.9</okhttp3.version>
     </properties>
 
 
@@ -65,6 +68,21 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.verison}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15to18</artifactId>
+                <version>${bcprov.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.enongm.dianji</groupId>
