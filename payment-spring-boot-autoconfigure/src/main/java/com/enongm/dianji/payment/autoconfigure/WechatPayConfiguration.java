@@ -1,8 +1,8 @@
 package com.enongm.dianji.payment.autoconfigure;
 
 
-import com.enongm.dianji.payment.wechat.KeyPairFactory;
-import com.enongm.dianji.payment.wechat.WechatPayV3Service;
+import com.enongm.dianji.payment.wechat.v3.KeyPairFactory;
+import com.enongm.dianji.payment.wechat.v3.WechatPayV3Service;
 import com.enongm.dianji.payment.wechat.v2.WechatPayV2Service;
 import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
 import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;

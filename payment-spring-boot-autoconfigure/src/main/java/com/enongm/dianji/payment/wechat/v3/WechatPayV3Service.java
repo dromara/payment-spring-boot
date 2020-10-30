@@ -1,9 +1,7 @@
-package com.enongm.dianji.payment.wechat;
+package com.enongm.dianji.payment.wechat.v3;
 
 
 
-import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
-import com.enongm.dianji.payment.wechat.v3.WechatPayRequest;
 import com.enongm.dianji.payment.wechat.v3.filter.BodyMergeFilter;
 import com.enongm.dianji.payment.wechat.v3.filter.HeaderFilter;
 import com.enongm.dianji.payment.wechat.v3.filter.HttpRequestFilter;

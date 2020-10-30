@@ -2,8 +2,8 @@ package com.enongm.dianji.payment.wechat.v3.filter;
 
 
 import com.enongm.dianji.payment.autoconfigure.WechatPayProperties;
-import com.enongm.dianji.payment.wechat.PayFilter;
-import com.enongm.dianji.payment.wechat.PayFilterChain;
+import com.enongm.dianji.payment.wechat.v3.PayFilter;
+import com.enongm.dianji.payment.wechat.v3.PayFilterChain;
 import com.enongm.dianji.payment.wechat.v3.WechatPayRequest;
 import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -1,8 +1,8 @@
 package com.enongm.dianji.payment.wechat.v3.filter;
 
 
-import com.enongm.dianji.payment.wechat.PayFilter;
-import com.enongm.dianji.payment.wechat.PayFilterChain;
+import com.enongm.dianji.payment.wechat.v3.PayFilter;
+import com.enongm.dianji.payment.wechat.v3.PayFilterChain;
 import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
 import com.enongm.dianji.payment.wechat.v3.WechatPayRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +73,6 @@ public class HttpRequestFilter implements PayFilter {
 
             // 验证微信服务器签名
             if (signatureProvider.responseSignVerify(wechatpaySerial, wechatpaySignature, wechatpayTimestamp, wechatpayNonce, body)) {
-            ;
                 Consumer<String> responseConsumer = request.getResponseBodyConsumer();
                 if (Objects.nonNull(responseConsumer)) {
                     // 验证通过消费
