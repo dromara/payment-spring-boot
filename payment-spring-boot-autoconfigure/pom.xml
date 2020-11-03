@@ -82,6 +82,10 @@
             <artifactId>bcprov-jdk15to18</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
