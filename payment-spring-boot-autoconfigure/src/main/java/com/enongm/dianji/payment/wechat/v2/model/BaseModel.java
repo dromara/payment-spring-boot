@@ -56,6 +56,10 @@ public class BaseModel {
     private String appSecret;
     @JsonIgnore
     private V2PayType payType;
+    @JsonIgnore
+    private final WeChatServer weChatServer = WeChatServer.CHINA;
+    private boolean sandboxMode;
+    private boolean partnerMode;
 
 
     public BaseModel appId(String appId) {
@@ -136,9 +140,16 @@ public class BaseModel {
     @SneakyThrows
     public WechatResponseBody request() {
         Assert.notNull(payType, "wechat pay payType is required");
+
+        String url = payType.defaultUri(this.weChatServer);
+        if (sandboxMode) {
+            url = partnerMode ? this.payType.partnerSandboxUri(this.weChatServer) :
+                    this.payType.defaultSandboxUri(this.weChatServer);
+        }
+
         Request request = new Request.Builder()
                 .method(payType.method(), RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), this.xml()))
-                .url(payType.defaultUri(WeChatServer.CHINA))
+                .url(url)
                 .build();
         System.out.println("request.toString() = " + request.toString());
         Response response = CLIENT.newCall(request).execute();

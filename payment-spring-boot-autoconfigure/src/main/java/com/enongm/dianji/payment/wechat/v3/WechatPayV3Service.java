@@ -2,10 +2,7 @@ package com.enongm.dianji.payment.wechat.v3;
 
 
 
-import com.enongm.dianji.payment.wechat.v3.filter.BodyMergeFilter;
-import com.enongm.dianji.payment.wechat.v3.filter.HeaderFilter;
-import com.enongm.dianji.payment.wechat.v3.filter.HttpRequestFilter;
-import com.enongm.dianji.payment.wechat.v3.filter.WechatServerFilter;
+import com.enongm.dianji.payment.wechat.v3.filter.*;
 import com.enongm.dianji.payment.wechat.v3.model.BaseModel;
 import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
 
@@ -57,7 +54,7 @@ public class WechatPayV3Service {
      * @param requestFunction the request function
      * @return the executor
      */
-    public <M extends BaseModel, R extends WechatPayRequest> Executor<M, R> request(Function<M, R> requestFunction) {
+    public <M extends BaseModel, R extends V3PayTypeBodyAndConsumer> Executor<M, R> request(Function<M, R> requestFunction) {
         return new Executor<>(this.payFilterChain, requestFunction);
     }
 
@@ -68,7 +65,7 @@ public class WechatPayV3Service {
      * @param <M> the type parameter
      * @param <R> the type parameter
      */
-    public static class Executor<M extends BaseModel, R extends WechatPayRequest> {
+    public static class Executor<M extends BaseModel, R extends V3PayTypeBodyAndConsumer> {
         /**
          * The Pay filter chain.
          */
@@ -95,7 +92,11 @@ public class WechatPayV3Service {
          * @param model the model
          */
         public void withModel(M model) {
-            payFilterChain.doChain(requestFunction.apply(model));
+            R apply = requestFunction.apply(model);
+            WechatPayRequest wechatPayRequest = new WechatPayRequest().v3PayType(apply.getPayType())
+                    .body(apply.getJsonBody())
+                    .responseConsumer(apply.getResponseBodyConsumer());
+            payFilterChain.doChain(wechatPayRequest);
         }
     }
 

@@ -18,6 +18,8 @@ import java.util.function.Consumer;
 @Getter
 public class WechatPayRequest {
     private V3PayType v3PayType;
+    private boolean isSandbox;
+    private boolean isPartner;
     private WeChatServer weChatServer;
     private String body;
     private final Map<String, String> headers = new HashMap<>();
@@ -32,6 +34,28 @@ public class WechatPayRequest {
      */
     public WechatPayRequest v3PayType(V3PayType v3PayType) {
         this.v3PayType = v3PayType;
+        return this;
+    }
+
+    /**
+     * Is sandbox wechat pay request.
+     *
+     * @param isSandbox the is sandbox
+     * @return the wechat pay request
+     */
+    public WechatPayRequest isSandbox(boolean isSandbox) {
+        this.isSandbox = isSandbox;
+        return this;
+    }
+
+    /**
+     * Is partner wechat pay request.
+     *
+     * @param isPartner the is partner
+     * @return the wechat pay request
+     */
+    public WechatPayRequest isPartner(boolean isPartner) {
+        this.isPartner = isPartner;
         return this;
     }
 
@@ -85,6 +109,10 @@ public class WechatPayRequest {
      * @return the string
      */
     public String url() {
+        if (isSandbox) {
+            return isPartner ? this.v3PayType.partnerSandboxUri(this.weChatServer):
+                    this.v3PayType.defaultSandboxUri(this.weChatServer);
+        }
         return this.v3PayType.defaultUri(this.weChatServer);
     }
 

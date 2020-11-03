@@ -19,6 +19,14 @@ public class WechatPayProperties {
     @Data
     public static class V3 {
         /**
+         * set as true in develop mode
+         */
+        private boolean sandboxMode;
+        /**
+         * set as true in partner mode
+         */
+        private boolean partnerMode;
+        /**
          *  app id for wechat pay is required
          */
         private String appId;

@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(WechatPayConfiguration.class)
-public @interface EnableWechatPay {
+@Import(PayConfiguration.class)
+public @interface EnableMobilePay {
 }
