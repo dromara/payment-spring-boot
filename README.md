@@ -5,10 +5,11 @@
 
 - [x] **微信支付V2** 只提供V3不支持的部分，后续全面切向V3。
 - [x] **微信支付V3** 全量支持。
-- [ ] **支付宝**  施工中…… 
+- [x] **支付宝**  提供所有实现，具体以签约项目为准。 
 - [ ] **银联支付**  施工中…… 
 
 ## 采用技术
+- Spring
 - Jackson
 - Okhttp
 - Ali-pay-sdk
@@ -56,7 +57,8 @@ wechat:
 public class PayConfig {
 }
 ```
-### API使用 
+> 请注意：只有`wechat.pay.v3.app-id`设置了有效值才能启用下面的API。
+##### API使用 
 微信支付 V2、V3开放接口引入：
 ```java
     @Autowired
@@ -64,7 +66,7 @@ public class PayConfig {
     @Autowired
     WechatPayV2Service wechatPayV2Service;
 ```
-#### V2
+###### V2
 例如V2转账到微信零钱：
 ```java
         PayToWechatModel model = new PayToWechatModel();
@@ -80,13 +82,11 @@ public class PayConfig {
 
         System.out.println("responseBody = " + responseBody);
 ```
-打印返回：
+打印返回（虚假的openId  预期结果应该是成功的）：
 ```
-
+responseBody = WechatResponseBody(returnCode=SUCCESS, returnMsg=参数错误:openid字段不正确,请检查是否合法, mchAppid=wx55a75ae9fd5d3b98, mchid=1603257459, deviceInfo=null, nonceStr=null, resultCode=FAIL, errCode=PARAM_ERROR, errCodeDes=参数错误:openid输入有误, partnerTradeNo=null, paymentNo=null, paymentTime=null)
 ```
-
-
-#### V3
+###### V3
 例如V3 APP 支付
 
 ```java
@@ -146,4 +146,78 @@ public class PayConfig {
         return appPayModel;
     }
 ```
+
+打印参数：
+```json
+{"prepay_id":"wx0414551907326482fbd40b51189c3e0000"}
+```
+
+#### 支付宝
+##### 使用须知
+请注意因为未来**SHA1withRSA**将被淘汰，因此采用最新的**SHA256withRSA**证书，旧的模式将不提供支持。步骤如下：
+
+1.使用支付宝开发助手申请CSR文件
+![先申请密钥对，再申请csr](./img/csr.png)
+申请成功后看文件说明：
+![](./img/file_info.png)
+2.上传CSR设置证书
+![](./img/set.png) 
+上传成功后需要下载证书，和配置的对应关系为：
+![](./img/cert_path.png)
+3. 其它开发平台商户平台的配置，参考支付宝接入文档。
+##### 项目开发配置
+在Spring Boot项目中的`application.yaml`中配置`ali.pay`相关参数。
+```yaml
+ali:
+  pay:
+    v1:
+# 可以替换为沙箱
+      server-url: https://openapi.alipaydev.com/gateway.do
+# 蚂蚁开放平台申请并认证的应用appId
+      app-id: 2016102700769563
+      app-private-key-path: META-INF/app_rsa
+      alipay-public-cert-path: META-INF/alipayCertPublicKey_RSA2.crt
+      alipay-root-cert-path: META-INF/alipayRootCert.crt
+      app-cert-public-key-path: META-INF/appCertPublicKey_2016102700769563.crt
+      charset: utf-8
+      format: json
+      sign-type: RSA2
+```
+> 请注意：只有`ali.pay.v1.app-id`设置了有效值才能启用下面的API。
+##### API的使用
+
+引入接口：
+```java
+    @Autowired
+    AlipayClient alipayClient;
+```
+调用，以现金红包为例：
+```java
+    @SneakyThrows
+    public void campaignCash() {
+        AlipayMarketingCampaignCashCreateRequest request = new AlipayMarketingCampaignCashCreateRequest();
+        request.setBizContent("{" +
+                "\"coupon_name\":\"XXX周年庆红包\"," +
+                "\"prize_type\":\"random\"," +
+                "\"total_money\":\"10000.00\"," +
+                "\"total_num\":\"1000\"," +
+                "\"prize_msg\":\"XXX送您大红包\"," +
+                "\"start_time\":\"2020-11-02 22:48:30\"," +
+                "\"end_time\":\"2020-12-01 22:48:30\"," +
+                "\"merchant_link\":\"http://www.weibo.com\"," +
+                "\"send_freqency\":\"D3|L10\"" +
+                "  }");
+
+        AlipayMarketingCampaignCashCreateResponse execute = alipayClient.certificateExecute(request);
+
+        System.out.println("execute = " + execute.getBody());
+    }
+```
+打印响应体：
+```json
+{"alipay_marketing_campaign_cash_create_response":{"code":"40004","msg":"Business Failed","sub_code":"isv.UNKNOW_SYSTEM_ERROR","sub_msg":"系统繁忙，请稍后再试"},"alipay_cert_sn":"e65893247c520d9d46db3000158505ee","sign":"M7gyi6ZwnRoHmdzd1IIxLc+XEE1pCx6ptOyQP4aRGMc01bJebNL7PbMpfU7TcB75KHmk3Oor2fYZfVEB7+5gxV9YwMuW3QtZbyACw3Gzt7wz4D1YCXkQD9PRvSsgw8xgNL+WnZxEI2yFdSp47Mc/Um73M101zFeo2dYKYXyVRdsGxnipY8fZs0JaXlX5OoROfHDcbvzBDjQyernspIoFoNiAwpaBwyQcEzh8V34ca4Rep/LSyI4N4VtU0n2nq3dO0Jor36n0o4j0QobWSE3c8StkVjbdP5XJB+adE51MUmh7xDdixQXE2fTRKw5wYlBO9O3bpF/uw78hWW/y3JwG9Q=="}
+```
 ## CHANGELOG
+### 1.0.0.RELEASE
+
+- 支持微信支付、支付宝支付

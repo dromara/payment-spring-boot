@@ -7,6 +7,7 @@ import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 import com.enongm.dianji.payment.PayException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Configuration
+@ConditionalOnProperty(prefix = "ali.pay", name = "v1.app-id")
 @EnableConfigurationProperties(AliPayProperties.class)
 public class AliPayConfiguration {
 
