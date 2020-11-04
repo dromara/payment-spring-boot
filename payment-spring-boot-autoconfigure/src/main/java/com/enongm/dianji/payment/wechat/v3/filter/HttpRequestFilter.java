@@ -1,6 +1,7 @@
 package com.enongm.dianji.payment.wechat.v3.filter;
 
 
+import com.enongm.dianji.payment.PayException;
 import com.enongm.dianji.payment.wechat.v3.PayFilter;
 import com.enongm.dianji.payment.wechat.v3.PayFilterChain;
 import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
@@ -53,14 +54,13 @@ public class HttpRequestFilter implements PayFilter {
 
         try {
             Response response = client.newCall(httpRequest).execute();
-
             ResponseBody responseBody = response.body();
 
             if (Objects.isNull(responseBody)) {
                 throw new IllegalStateException("cant obtain response body");
             }
             // 微信请求回调id
-            String RequestId = response.header("Request-ID");
+//            String RequestId = response.header("Request-ID");
             // 微信平台证书序列号 用来取微信平台证书
             String wechatpaySerial = response.header("Wechatpay-Serial");
             //获取应答签名
@@ -79,12 +79,11 @@ public class HttpRequestFilter implements PayFilter {
                     responseConsumer.accept(body);
                 }
             } else {
-                throw new IllegalArgumentException("签名验证失败");
+                throw new PayException("wechat pay signature failed");
             }
 
-
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new PayException("wechat pay http request failed");
         }
     }
 }

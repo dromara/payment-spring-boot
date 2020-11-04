@@ -1,6 +1,7 @@
 package com.enongm.dianji.payment.wechat.v3;
 
 
+import com.enongm.dianji.payment.PayException;
 import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
 import org.springframework.core.io.ClassPathResource;
 
@@ -52,7 +53,7 @@ public class KeyPairFactory {
             wechatMetaBean.setSerialNumber(serialNumber);
             return wechatMetaBean;
         } catch (Exception e) {
-            throw new IllegalStateException("Cannot load keys from store: " + resource, e);
+            throw new PayException("Cannot load keys from store: " + resource, e);
         }
     }
 }

@@ -1,12 +1,14 @@
-package com.enongm.dianji.payment.autoconfigure;
+package com.enongm.dianji.payment.alipay;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
+ * The type Ali pay properties.
+ *
  * @author Dax
- * @since 14:13
+ * @since 14 :13
  */
 @Data
 @ConfigurationProperties("ali.pay")
@@ -18,6 +20,9 @@ public class AliPayProperties {
     private V1 v1;
 
 
+    /**
+     * The type V 1.
+     */
     @Data
     public static class V1{
         /**
@@ -29,13 +34,21 @@ public class AliPayProperties {
          */
         private String appId;
         /**
-         * your app private key
+         * your app private key, which must be in a single line
          */
-        private String  appPrivateKey;
+        private String  appPrivateKeyPath;
         /**
-         * sign type
+         * sign type default RSA2
          */
-        private String signType = "md5";
+        private String signType = "RSA2";
+        /**
+         *  data format   only json now
+         */
+        private String format ="json";
+        /**
+         * charset  default utf-8
+         */
+        private String charset ="utf-8";
         /**
          * alipay public cert path
          */
@@ -44,6 +57,10 @@ public class AliPayProperties {
          * alipay root cert path
          */
         private String alipayRootCertPath;
+        /**
+         * appCertPublicKey
+         */
+        private String appCertPublicKeyPath;
 
     }
 

@@ -1,6 +1,7 @@
 package com.enongm.dianji.payment.wechat.v2.model;
 
 
+import com.enongm.dianji.payment.PayException;
 import com.enongm.dianji.payment.wechat.enumeration.V2PayType;
 import com.enongm.dianji.payment.wechat.enumeration.WeChatServer;
 import com.enongm.dianji.payment.wechat.v2.WechatResponseBody;
@@ -9,11 +10,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.Getter;
 import lombok.SneakyThrows;
-
 import okhttp3.*;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.MD5Digest;
@@ -21,7 +20,6 @@ import org.bouncycastle.util.encoders.Hex;
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.Assert;
 import org.springframework.util.IdGenerator;
-
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -58,7 +56,9 @@ public class BaseModel {
     private V2PayType payType;
     @JsonIgnore
     private final WeChatServer weChatServer = WeChatServer.CHINA;
+    @JsonIgnore
     private boolean sandboxMode;
+    @JsonIgnore
     private boolean partnerMode;
 
 
@@ -79,6 +79,15 @@ public class BaseModel {
 
     public BaseModel appSecret(String appSecret) {
         this.appSecret = appSecret;
+        return this;
+    }
+
+    public BaseModel sandboxMode(boolean sandboxMode) {
+        this.sandboxMode = sandboxMode;
+        return this;
+    }
+    public BaseModel partnerMode(boolean partnerMode) {
+        this.partnerMode = partnerMode;
         return this;
     }
 
@@ -158,7 +167,7 @@ public class BaseModel {
         if (Objects.nonNull(body)) {
             return MAPPER.readValue(body.string(), WechatResponseBody.class);
         }
-        throw new IllegalStateException("wechat pay response body is empty");
+        throw new PayException("wechat pay response body is empty");
     }
 
 }

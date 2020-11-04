@@ -1,5 +1,7 @@
 package com.enongm.dianji.payment.autoconfigure;
 
+import com.enongm.dianji.payment.alipay.AliPayConfiguration;
+import com.enongm.dianji.payment.wechat.WechatPayConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -8,6 +10,6 @@ import org.springframework.context.annotation.Import;
  * @since 14:47
  */
 @Configuration
-@Import({WechatPayConfiguration.class,AliPayConfiguration.class})
+@Import({WechatPayConfiguration.class, AliPayConfiguration.class})
 public class PayConfiguration {
 }

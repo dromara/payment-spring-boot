@@ -1,6 +1,7 @@
 package com.enongm.dianji.payment.wechat.v3;
 
 
+import com.enongm.dianji.payment.PayException;
 import com.enongm.dianji.payment.wechat.enumeration.V3PayType;
 import com.enongm.dianji.payment.wechat.enumeration.WeChatServer;
 import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
@@ -159,15 +160,16 @@ public class SignatureProvider {
         Response response = new OkHttpClient().newCall(request).execute();
 
         if (Objects.isNull(response.body())) {
-            throw new RuntimeException("cant obtain the response body");
+            throw new PayException("cant obtain the response body");
         }
 
         String body = response.body().string();
-        ObjectMapper MAPPER = new ObjectMapper();
-        ObjectNode bodyObjectNode = MAPPER.readValue(body, ObjectNode.class);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode bodyObjectNode = mapper.readValue(body, ObjectNode.class);
         ArrayNode certificates = bodyObjectNode.withArray("data");
 
         if (certificates.isArray() && certificates.size() > 0) {
+            CERTIFICATE_MAP.clear();
             final CertificateFactory cf = CertificateFactory.getInstance("X509");
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
@@ -184,8 +186,6 @@ public class SignatureProvider {
                     e.printStackTrace();
                 }
                 String responseSerialNo = objectNode.get("serial_no").asText();
-
-                CERTIFICATE_MAP.clear();
                 CERTIFICATE_MAP.put(responseSerialNo, certificate);
             });
 
@@ -217,15 +217,12 @@ public class SignatureProvider {
             try {
                 bytes = cipher.doFinal(Base64Utils.decodeFromString(ciphertext));
             } catch (GeneralSecurityException e) {
-                throw new IllegalArgumentException(e);
+                throw new PayException(e);
             }
-
-
             return new String(bytes, StandardCharsets.UTF_8);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new IllegalStateException(e);
-        } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
-            throw new IllegalArgumentException(e);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException |
+                InvalidKeyException | InvalidAlgorithmParameterException e) {
+            throw new PayException(e);
         }
     }
 

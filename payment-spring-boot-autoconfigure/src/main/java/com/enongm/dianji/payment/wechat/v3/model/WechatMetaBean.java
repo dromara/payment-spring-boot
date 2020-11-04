@@ -1,7 +1,7 @@
 package com.enongm.dianji.payment.wechat.v3.model;
 
 
-import com.enongm.dianji.payment.autoconfigure.WechatPayProperties;
+import com.enongm.dianji.payment.wechat.WechatPayProperties;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;

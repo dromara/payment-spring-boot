@@ -1,7 +1,7 @@
 package com.enongm.dianji.payment.wechat.v3.filter;
 
 
-import com.enongm.dianji.payment.autoconfigure.WechatPayProperties;
+import com.enongm.dianji.payment.wechat.WechatPayProperties;
 import com.enongm.dianji.payment.wechat.v3.PayFilter;
 import com.enongm.dianji.payment.wechat.v3.PayFilterChain;
 import com.enongm.dianji.payment.wechat.v3.WechatPayRequest;

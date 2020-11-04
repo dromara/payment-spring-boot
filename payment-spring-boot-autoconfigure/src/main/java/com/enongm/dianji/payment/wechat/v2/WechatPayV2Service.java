@@ -1,7 +1,7 @@
 package com.enongm.dianji.payment.wechat.v2;
 
 
-import com.enongm.dianji.payment.autoconfigure.WechatPayProperties;
+import com.enongm.dianji.payment.wechat.WechatPayProperties;
 import com.enongm.dianji.payment.wechat.v2.model.BaseModel;
 
 /**

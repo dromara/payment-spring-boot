@@ -1,4 +1,4 @@
-package com.enongm.dianji.payment.autoconfigure;
+package com.enongm.dianji.payment.wechat;
 
 
 

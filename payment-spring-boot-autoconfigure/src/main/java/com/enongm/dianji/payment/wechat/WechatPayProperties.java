@@ -1,4 +1,4 @@
-package com.enongm.dianji.payment.autoconfigure;
+package com.enongm.dianji.payment.wechat;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
