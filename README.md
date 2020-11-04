@@ -35,13 +35,13 @@ wechat:
 #  服务商模式 默认不开启
       partner-mode: false
 #  应用appId 必填
-      app-id: wx55a75ae9fd5d3b98
+      app-id: wx55a89ae92r5d3b98
 #  api 密钥 必填
-      app-secret: Djkjchina19491001
+      app-secret: 13194913301
 #  api v3 密钥 必填
-      app-v3-secret: 0e5f4fac75b2dc7a3b44927e455703ec
+      app-v3-secret: 0e5f4fbd1333a3b44927e4355703ec
 #  微信支付商户号 必填
-      mch-id: 1603257459
+      mch-id: 1602325555
 #  合作商 选填
       partner-key:
 #  商户服务器域名 用于回调  需要放开回调接口的安全策略 必填
