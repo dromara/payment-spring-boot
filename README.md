@@ -20,7 +20,7 @@
 ```xml
       <dependency>
             <groupId>com.enongm.dianji</groupId>
-            <artifactId>payment-spring-boot-autoconfigure</artifactId>
+            <artifactId>payment-spring-boot-starter</artifactId>
             <version>1.0.0.RELEASE</version>
       </dependency>
 ```
