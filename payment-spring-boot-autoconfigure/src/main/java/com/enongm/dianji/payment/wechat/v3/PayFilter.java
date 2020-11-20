@@ -13,6 +13,6 @@ public interface PayFilter {
      * Do filter.
      *  @param requestEntity the request entity
      * @param chain         the chain*/
-    void doFilter(WechatRequestEntity<?> requestEntity, PayFilterChain chain);
+   <T> void doFilter(WechatRequestEntity<T> requestEntity, PayFilterChain chain);
 
 }

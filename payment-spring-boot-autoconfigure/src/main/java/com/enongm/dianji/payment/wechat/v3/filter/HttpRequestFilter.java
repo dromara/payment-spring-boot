@@ -39,7 +39,7 @@ public class HttpRequestFilter implements PayFilter {
     }
 
     @Override
-    public void doFilter(WechatRequestEntity<?> requestEntity, PayFilterChain chain) {
+    public <T> void doFilter(WechatRequestEntity<T> requestEntity, PayFilterChain chain) {
 
         ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
         HttpHeaders headers = responseEntity.getHeaders();

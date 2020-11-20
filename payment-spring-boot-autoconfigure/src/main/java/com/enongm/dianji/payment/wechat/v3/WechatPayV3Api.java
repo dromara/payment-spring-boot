@@ -56,26 +56,30 @@ public class WechatPayV3Api {
      */
     public WechatResponseEntity<?> startStocks(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withPayType(V3PayType.MARKETING_FAVOR_STOCKS_START, stockId)
-                .function((v3PayType, s) -> {
-                    WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
-                    String mchId = v3.getMchId();
-                    String httpUrl = v3PayType.uri(WeChatServer.CHINA);
-                    URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().expand(stockId).toUri();
-
-                    Map<String, String> map = new HashMap<>();
-                    map.put("stock_creator_mchid", mchId);
-                    try {
-                        return RequestEntity.post(uri)
-                                .body(MAPPER.writeValueAsString(map));
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                    throw new PayException("wechat app pay json failed");
-                }).consumer(wechatResponseEntity::convert).request();
-
+        wechatPayV3Client.withType(V3PayType.MARKETING_FAVOR_STOCKS_START, stockId)
+                .function(this::startStocksFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
         return wechatResponseEntity;
     }
+
+    private RequestEntity<?> startStocksFunction(V3PayType type, String stockId) {
+        WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
+        String mchId = v3.getMchId();
+        String httpUrl = type.uri(WeChatServer.CHINA);
+        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().expand(stockId).toUri();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("stock_creator_mchid", mchId);
+        try {
+            return RequestEntity.post(uri)
+                    .body(MAPPER.writeValueAsString(map));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        throw new PayException("wechat app pay json failed");
+    }
+
 
     /**
      * 查询代金券可用商户API
@@ -84,25 +88,30 @@ public class WechatPayV3Api {
      */
     public WechatResponseEntity<?> queryMerchantsByStockId(StocksMchQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withPayType(V3PayType.MARKETING_FAVOR_STOCKS_MERCHANTS, params)
-                .function((v3PayType, par) -> {
-
-                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-                    queryParams.add("offset", String.valueOf(par.getOffset()));
-                    queryParams.add("limit", String.valueOf(par.getLimit()));
-                    queryParams.add("stock_creator_mchid", par.getStockCreatorMchid());
-                    String httpUrl = v3PayType.uri(WeChatServer.CHINA);
-
-                    URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl)
-                            .queryParams(queryParams)
-                            .build()
-                            .expand(par.getStockId()).toUri();
-
-                    return RequestEntity.get(uri).build();
-                }).consumer(wechatResponseEntity::convert).request();
+        wechatPayV3Client.withType(V3PayType.MARKETING_FAVOR_STOCKS_MERCHANTS, params)
+                .function(this::queryMerchantsFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
 
         return wechatResponseEntity;
 
+    }
+
+
+    private RequestEntity<?> queryMerchantsFunction(V3PayType type, StocksMchQueryParams params) {
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("offset", String.valueOf(params.getOffset()));
+        queryParams.add("limit", String.valueOf(params.getLimit()));
+        queryParams.add("stock_creator_mchid", params.getStockCreatorMchid());
+        String httpUrl = type.uri(WeChatServer.CHINA);
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl)
+                .queryParams(queryParams)
+                .build()
+                .expand(params.getStockId()).toUri();
+
+        return RequestEntity.get(uri).build();
     }
 
     /**
@@ -112,22 +121,26 @@ public class WechatPayV3Api {
      */
     public WechatResponseEntity<?> appPay(AppPayParams payParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withPayType(V3PayType.APP, payParams)
-                .function((v3PayType, par) -> {
-                    WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
-                    par.setAppid(v3.getAppId());
-                    par.setMchid(v3.getMchId());
-                    String httpUrl = v3PayType.uri(WeChatServer.CHINA);
-                    URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().toUri();
-                    try {
-                        return RequestEntity.post(uri)
-                                .body(MAPPER.writeValueAsString(par));
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                    throw new PayException("wechat app pay json failed");
-                }).consumer(wechatResponseEntity::convert).request();
-
+        wechatPayV3Client.withType(V3PayType.APP, payParams)
+                .function(this::appPayFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
         return wechatResponseEntity;
     }
+
+    private RequestEntity<?> appPayFunction(V3PayType type, AppPayParams payParams) {
+        WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
+        payParams.setAppid(v3.getAppId());
+        payParams.setMchid(v3.getMchId());
+        String httpUrl = type.uri(WeChatServer.CHINA);
+        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().toUri();
+        try {
+            return RequestEntity.post(uri)
+                    .body(MAPPER.writeValueAsString(payParams));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        throw new PayException("wechat app pay json failed");
+    }
+
 }

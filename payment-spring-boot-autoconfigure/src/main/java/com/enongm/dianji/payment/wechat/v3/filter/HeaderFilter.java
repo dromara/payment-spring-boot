@@ -30,7 +30,7 @@ public class HeaderFilter implements PayFilter {
     }
 
     @Override
-    public void doFilter(WechatRequestEntity<?> requestEntity, PayFilterChain chain) {
+    public <T> void doFilter(WechatRequestEntity<T> requestEntity, PayFilterChain chain) {
 
         UriComponents uri = UriComponentsBuilder.fromUri(requestEntity.getUrl()).build();
         String canonicalUrl = uri.getPath();
@@ -42,14 +42,15 @@ public class HeaderFilter implements PayFilter {
         // 签名
         HttpMethod httpMethod = requestEntity.getMethod();
         Assert.notNull(httpMethod, "httpMethod is required");
-        String body = httpMethod.matches("GET") ? "" : Objects.requireNonNull(requestEntity.getBody()).toString();
+
+        String body = requestEntity.hasBody() ? Objects.requireNonNull(requestEntity.getBody()).toString() : "";
         String authorization = signatureProvider.requestSign(httpMethod.name(), canonicalUrl, body);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Authorization", authorization);
-        headers.add("User-Agent", "pay-service");
+        headers.add("User-Agent", "X-Pay-Service");
 
         chain.doChain(requestEntity.headers(headers));
     }

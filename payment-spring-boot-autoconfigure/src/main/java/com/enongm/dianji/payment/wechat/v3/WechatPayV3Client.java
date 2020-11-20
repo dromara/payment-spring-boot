@@ -43,7 +43,7 @@ public class WechatPayV3Client {
      * @param m         the m
      * @return the executor
      */
-    public <M> Executor<M> withPayType(V3PayType v3PayType,M m) {
+    public <M> Executor<M> withType(V3PayType v3PayType, M m) {
         return new Executor<>(v3PayType,m ,this.payFilterChain);
     }
 
