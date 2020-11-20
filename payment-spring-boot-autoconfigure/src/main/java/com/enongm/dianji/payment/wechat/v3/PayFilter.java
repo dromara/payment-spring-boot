@@ -7,15 +7,12 @@ package com.enongm.dianji.payment.wechat.v3;
  * @author Dax
  * @since 15 :08
  */
-
 public interface PayFilter {
 
     /**
      * Do filter.
-     *
-     * @param request the request
-     * @param chain   the chain
-     */
-    void doFilter(WechatPayRequest request, PayFilterChain chain);
+     *  @param requestEntity the request entity
+     * @param chain         the chain*/
+    void doFilter(WechatRequestEntity<?> requestEntity, PayFilterChain chain);
 
 }

@@ -1,7 +1,6 @@
 package com.enongm.dianji.payment.wechat.v3;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +18,11 @@ public class DefaultPayFilterChain implements PayFilterChain {
     }
 
     @Override
-    public void doChain(WechatPayRequest request) {
+    public void doChain(WechatRequestEntity<?> requestEntity) {
         int size = filters.size();
         if (pos < size) {
             PayFilter payFilter = filters.get(pos++);
-            payFilter.doFilter(request, this);
+            payFilter.doFilter(requestEntity, this);
         }
     }
 

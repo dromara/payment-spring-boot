@@ -12,9 +12,9 @@ public interface PayFilterChain {
     /**
      * Do chain.
      *
-     * @param request the request
+     * @param requestEntity the request entity
      */
-    void doChain(WechatPayRequest request);
+    void doChain(WechatRequestEntity<?> requestEntity);
 
     /**
      * Register.

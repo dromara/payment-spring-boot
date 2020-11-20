@@ -1,5 +1,7 @@
 package com.enongm.dianji.payment.wechat.enumeration;
 
+import org.springframework.http.HttpMethod;
+
 /**
  * The enum Pay type.
  *
@@ -10,32 +12,45 @@ public enum V3PayType {
     /**
      * 获取证书.
      */
-    CERT("GET", "%s/v3/certificates"),
+    CERT(HttpMethod.GET, "%s/v3/certificates"),
 
     /**
      * 微信公众号支付或者小程序支付
      */
-    JSAPI("POST", "%s%s/v3/pay%s/transactions/jsapi"),
+    JSAPI(HttpMethod.POST, "%s/v3/pay/transactions/jsapi"),
 
     /**
      * 微信扫码支付
      */
-    NATIVE("POST", "%s%s/v3/pay%s/transactions/native"),
+    NATIVE(HttpMethod.POST, "%s/v3/pay/transactions/native"),
 
     /**
      * 微信APP支付
      */
-    APP("POST", "%s%s/v3/pay%s/transactions/app"),
+    APP(HttpMethod.POST, "%s/v3/pay/transactions/app"),
 
     /**
      * H5支付
      */
-    MWEB("POST", "%s%s/v3/pay%s/transactions/h5");
+    MWEB(HttpMethod.POST, "%s/v3/pay/transactions/h5"),
+
+
+    /**
+     * 激活代金券批次API
+     */
+    MARKETING_FAVOR_STOCKS_START(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/start"),
+    /**
+     * 查询代金券可用商户
+     */
+    MARKETING_FAVOR_STOCKS_MERCHANTS(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}/merchants");
+
+
+
 
     private final String pattern;
-    private final String method;
+    private final HttpMethod method;
 
-    V3PayType(String method, String pattern) {
+    V3PayType(HttpMethod method, String pattern) {
         this.method = method;
         this.pattern = pattern;
     }
@@ -45,7 +60,7 @@ public enum V3PayType {
      *
      * @return the string
      */
-    public String method() {
+    public HttpMethod method() {
         return this.method;
     }
 
@@ -56,53 +71,8 @@ public enum V3PayType {
      * @param weChatServer the we chat server
      * @return the string
      */
-    public String defaultUri(WeChatServer weChatServer) {
-        return uri(weChatServer, false, false);
+    public String uri(WeChatServer weChatServer) {
+        return  String.format(this.pattern,weChatServer.domain());
     }
 
-    /**
-     * 默认支付沙盒URI.
-     *
-     * @param weChatServer the we chat server
-     * @return the string
-     */
-    public String defaultSandboxUri(WeChatServer weChatServer) {
-        return uri(weChatServer, true, false);
-    }
-
-    /**
-     * 合作商支付URI.
-     *
-     * @param weChatServer the we chat server
-     * @return the string
-     */
-    public String partnerUri(WeChatServer weChatServer) {
-        return uri(weChatServer, false, true);
-    }
-
-    /**
-     * 合作商支付沙盒URI.
-     *
-     * @param weChatServer the we chat server
-     * @return the string
-     */
-    public String partnerSandboxUri(WeChatServer weChatServer) {
-        return uri(weChatServer, true, true);
-    }
-
-    /**
-     * @param isSandbox 是否是沙盒测试
-     * @param isPartner 是否是合作商
-     * @return uri
-     */
-    private String uri(WeChatServer weChatServer, boolean isSandbox, boolean isPartner) {
-
-        if (this.equals(V3PayType.CERT)) {
-            return String.format(this.pattern, WeChatServer.CHINA.domain());
-        }
-
-        final String sandboxKey = isSandbox ? "/sandboxnew" : "";
-        final String partnerKey = isPartner ? "/partner" : "";
-        return String.format(this.pattern, weChatServer.domain(), sandboxKey, partnerKey);
-    }
 }

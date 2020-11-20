@@ -1,18 +1,18 @@
 package com.enongm.dianji.payment.wechat.v3.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+
 import lombok.Data;
-import lombok.SneakyThrows;
 
 /**
+ * The type App pay model.
+ *
  * @author Dax
- * @since 16:34
+ * @since 17 :10
  */
 @Data
-public class BaseModel {
-
+public class AppPayParams {
+    private String appid;
+    private String mchid;
     /**
      * 商品描述
      * Image形象店-深圳腾大-QQ公仔
@@ -44,11 +44,8 @@ public class BaseModel {
      */
     private Amount amount;
 
-    @SneakyThrows
-    public String jsonBody() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return objectMapper.writeValueAsString(this);
-    }
+    private Detail detail;
+    private SceneInfo sceneInfo;
+
+
 }

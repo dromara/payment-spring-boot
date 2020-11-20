@@ -1,9 +1,12 @@
 package com.enongm.dianji.payment.wechat.v3.model;
 
+import lombok.Data;
+
 /**
  * @author Dax
  * @since 17:02
  */
+@Data
 public class Goods {
     /**
      * 商户侧商品编码

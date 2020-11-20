@@ -4,19 +4,18 @@ package com.enongm.dianji.payment.wechat.v3;
 import com.enongm.dianji.payment.PayException;
 import com.enongm.dianji.payment.wechat.enumeration.V3PayType;
 import com.enongm.dianji.payment.wechat.enumeration.WeChatServer;
-import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import org.springframework.http.*;
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.IdGenerator;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -29,6 +28,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +53,7 @@ public class SignatureProvider {
     public static final String APPLICATION_JSON = "application/json";
     private static final IdGenerator ID_GENERATOR = new AlternativeJdkIdGenerator();
     private static final String SCHEMA = "WECHATPAY2-SHA256-RSA2048 ";
+    private final RestOperations restOperations = new RestTemplate();
     /**
      * The constant TOKEN_PATTERN.
      */
@@ -135,39 +136,33 @@ public class SignatureProvider {
      */
     @SneakyThrows
     private synchronized void refreshCertificate() {
-        String url = V3PayType.CERT.defaultUri(WeChatServer.CHINA);
+        String url = V3PayType.CERT.uri(WeChatServer.CHINA);
 
-        HttpUrl httpUrl = HttpUrl.get(url);
+        UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
 
-        String canonicalUrl = httpUrl.encodedPath();
-        String encodedQuery = httpUrl.encodedQuery();
+        String canonicalUrl = uri.getPath();
+        String encodedQuery = uri.getQuery();
+
         if (encodedQuery != null) {
             canonicalUrl += "?" + encodedQuery;
         }
         // 签名
-        String authorization = requestSign(V3PayType.CERT.method(), canonicalUrl, "");
+        HttpMethod httpMethod = V3PayType.CERT.method();
+        String authorization = requestSign(httpMethod.name(), canonicalUrl, "");
 
-        Request request = new Request.Builder()
-                .get()
-                .url(httpUrl)
-                .addHeader("Accept", APPLICATION_JSON)
-                .addHeader("Authorization", authorization)
-                .addHeader("Content-Type", APPLICATION_JSON)
-                .addHeader("User-Agent", "pay-service")
-                .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Authorization", authorization);
+        headers.add("User-Agent", "pay-service");
+        RequestEntity<?> requestEntity = new RequestEntity<>(headers, httpMethod, uri.toUri());
+        ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
+        ObjectNode bodyObjectNode = responseEntity.getBody();
 
-
-        Response response = new OkHttpClient().newCall(request).execute();
-
-        if (Objects.isNull(response.body())) {
+        if (Objects.isNull(bodyObjectNode)) {
             throw new PayException("cant obtain the response body");
         }
-
-        String body = response.body().string();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode bodyObjectNode = mapper.readValue(body, ObjectNode.class);
         ArrayNode certificates = bodyObjectNode.withArray("data");
-
         if (certificates.isArray() && certificates.size() > 0) {
             CERTIFICATE_MAP.clear();
             final CertificateFactory cf = CertificateFactory.getInstance("X509");

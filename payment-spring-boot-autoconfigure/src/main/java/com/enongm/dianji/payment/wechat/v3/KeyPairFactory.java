@@ -2,7 +2,6 @@ package com.enongm.dianji.payment.wechat.v3;
 
 
 import com.enongm.dianji.payment.PayException;
-import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
 import org.springframework.core.io.ClassPathResource;
 
 import java.security.KeyPair;

@@ -2,14 +2,19 @@ package com.enongm.dianji.payment.wechat.v3.filter;
 
 
 import com.enongm.dianji.payment.PayException;
+import com.enongm.dianji.payment.wechat.WechatPayResponseErrorHandler;
 import com.enongm.dianji.payment.wechat.v3.PayFilter;
 import com.enongm.dianji.payment.wechat.v3.PayFilterChain;
 import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
-import com.enongm.dianji.payment.wechat.v3.WechatPayRequest;
+import com.enongm.dianji.payment.wechat.v3.WechatRequestEntity;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -21,69 +26,51 @@ import java.util.function.Consumer;
  */
 @Slf4j
 public class HttpRequestFilter implements PayFilter {
-    private final OkHttpClient client;
+    private final RestOperations restOperations;
     private final SignatureProvider signatureProvider;
 
 
     public HttpRequestFilter(SignatureProvider signatureProvider) {
         this.signatureProvider = signatureProvider;
-        this.client = new OkHttpClient();
-
+        RestTemplate restTemplate = new RestTemplate();
+        DefaultResponseErrorHandler errorHandler = new WechatPayResponseErrorHandler();
+        restTemplate.setErrorHandler(errorHandler);
+        this.restOperations = restTemplate;
     }
-
-    public HttpRequestFilter(SignatureProvider signatureProvider, OkHttpClient client) {
-        this.signatureProvider = signatureProvider;
-        this.client = client;
-    }
-
 
     @Override
-    public void doFilter(WechatPayRequest request, PayFilterChain chain) {
+    public void doFilter(WechatRequestEntity<?> requestEntity, PayFilterChain chain) {
 
-        Request.Builder builder = new Request.Builder()
-                .url(request.url())
-                .headers(Headers.of(request.getHeaders()));
+        ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
+        HttpHeaders headers = responseEntity.getHeaders();
+        ObjectNode body = responseEntity.getBody();
 
-        if (!request.getV3PayType().method().equals("GET")) {
-            RequestBody requestBody =
-                    RequestBody.create(MediaType.parse("application/json"), request.getBody());
-            builder.method(request.getV3PayType().method(), requestBody);
+        if (Objects.isNull(body)) {
+            throw new IllegalStateException("cant obtain response body");
         }
+        // 微信请求回调id
+        // String RequestId = response.header("Request-ID");
+        // 微信平台证书序列号 用来取微信平台证书
+        String wechatpaySerial = headers.getFirst("Wechatpay-Serial");
+        //获取应答签名
+        String wechatpaySignature = headers.getFirst("Wechatpay-Signature");
+        //构造验签名串
+        String wechatpayTimestamp = headers.getFirst("Wechatpay-Timestamp");
+        String wechatpayNonce = headers.getFirst("Wechatpay-Nonce");
 
-        Request httpRequest = builder.build();
-
-        try {
-            Response response = client.newCall(httpRequest).execute();
-            ResponseBody responseBody = response.body();
-
-            if (Objects.isNull(responseBody)) {
-                throw new IllegalStateException("cant obtain response body");
+        // 验证微信服务器签名
+        if (signatureProvider.responseSignVerify(wechatpaySerial,
+                wechatpaySignature,
+                wechatpayTimestamp,
+                wechatpayNonce,
+                body.toString())) {
+            Consumer<ResponseEntity<ObjectNode>> responseConsumer = requestEntity.getResponseBodyConsumer();
+            if (Objects.nonNull(responseConsumer)) {
+                // 验证通过消费
+                responseConsumer.accept(responseEntity);
             }
-            // 微信请求回调id
-//            String RequestId = response.header("Request-ID");
-            // 微信平台证书序列号 用来取微信平台证书
-            String wechatpaySerial = response.header("Wechatpay-Serial");
-            //获取应答签名
-            String wechatpaySignature = response.header("Wechatpay-Signature");
-            String body = responseBody.string();
-
-            //构造验签名串
-            String wechatpayTimestamp = response.header("Wechatpay-Timestamp");
-            String wechatpayNonce = response.header("Wechatpay-Nonce");
-
-            // 验证微信服务器签名
-            if (signatureProvider.responseSignVerify(wechatpaySerial, wechatpaySignature, wechatpayTimestamp, wechatpayNonce, body)) {
-                Consumer<String> responseConsumer = request.getResponseBodyConsumer();
-                if (Objects.nonNull(responseConsumer)) {
-                    // 验证通过消费
-                    responseConsumer.accept(body);
-                }
-            } else {
-                throw new PayException("wechat pay signature failed");
-            }
-
-        } catch (IOException e) {
-            throw new PayException("wechat pay http request failed");
+        } else {
+            throw new PayException("wechat pay signature failed");
         }
     }
 }

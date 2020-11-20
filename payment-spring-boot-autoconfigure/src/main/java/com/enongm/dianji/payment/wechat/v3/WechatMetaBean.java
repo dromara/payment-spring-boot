@@ -1,4 +1,4 @@
-package com.enongm.dianji.payment.wechat.v3.model;
+package com.enongm.dianji.payment.wechat.v3;
 
 
 import com.enongm.dianji.payment.wechat.WechatPayProperties;

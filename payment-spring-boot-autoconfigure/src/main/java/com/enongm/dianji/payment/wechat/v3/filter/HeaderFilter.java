@@ -4,8 +4,16 @@ package com.enongm.dianji.payment.wechat.v3.filter;
 import com.enongm.dianji.payment.wechat.v3.PayFilter;
 import com.enongm.dianji.payment.wechat.v3.PayFilterChain;
 import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
-import com.enongm.dianji.payment.wechat.v3.WechatPayRequest;
-import okhttp3.HttpUrl;
+import com.enongm.dianji.payment.wechat.v3.WechatRequestEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.util.Assert;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Collections;
+import java.util.Objects;
 
 /**
  * 微信支付 给请求添加必要的请求头.
@@ -15,7 +23,6 @@ import okhttp3.HttpUrl;
  * @since 15 :12
  */
 public class HeaderFilter implements PayFilter {
-    private static final String APPLICATION_JSON = "application/json";
     private final SignatureProvider signatureProvider;
 
     public HeaderFilter(SignatureProvider signatureProvider) {
@@ -23,25 +30,28 @@ public class HeaderFilter implements PayFilter {
     }
 
     @Override
-    public void doFilter(WechatPayRequest request, PayFilterChain chain) {
+    public void doFilter(WechatRequestEntity<?> requestEntity, PayFilterChain chain) {
 
-        // 签名
-        HttpUrl url = HttpUrl.get(request.url());
+        UriComponents uri = UriComponentsBuilder.fromUri(requestEntity.getUrl()).build();
+        String canonicalUrl = uri.getPath();
+        String encodedQuery = uri.getQuery();
 
-        String canonicalUrl = url.encodedPath();
-        String encodedQuery = url.encodedQuery();
         if (encodedQuery != null) {
             canonicalUrl += "?" + encodedQuery;
         }
-        String method = request.getV3PayType().method();
-        String body = "GET".equals(method) ? "" : request.getBody();
+        // 签名
+        HttpMethod httpMethod = requestEntity.getMethod();
+        Assert.notNull(httpMethod, "httpMethod is required");
+        String body = httpMethod.matches("GET") ? "" : Objects.requireNonNull(requestEntity.getBody()).toString();
+        String authorization = signatureProvider.requestSign(httpMethod.name(), canonicalUrl, body);
 
-        String authorization = signatureProvider.requestSign(method, canonicalUrl, body);
-        request.addHeader("Accept", APPLICATION_JSON)
-                .addHeader("Authorization", authorization)
-                .addHeader("Content-Type", APPLICATION_JSON)
-                .addHeader("User-Agent", "pay-service");
-        chain.doChain(request);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Authorization", authorization);
+        headers.add("User-Agent", "pay-service");
+
+        chain.doChain(requestEntity.headers(headers));
     }
 
 

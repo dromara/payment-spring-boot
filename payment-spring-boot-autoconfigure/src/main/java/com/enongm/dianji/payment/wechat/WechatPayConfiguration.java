@@ -1,12 +1,7 @@
 package com.enongm.dianji.payment.wechat;
 
 
-
-import com.enongm.dianji.payment.wechat.v2.WechatPayV2Service;
-import com.enongm.dianji.payment.wechat.v3.KeyPairFactory;
-import com.enongm.dianji.payment.wechat.v3.SignatureProvider;
-import com.enongm.dianji.payment.wechat.v3.WechatPayV3Service;
-import com.enongm.dianji.payment.wechat.v3.model.WechatMetaBean;
+import com.enongm.dianji.payment.wechat.v3.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -50,24 +45,25 @@ public class WechatPayConfiguration {
 
 
     /**
-     * 微信支付V2 只实现V3支付没有的支付业务。
-     *
-     * @param wechatPayProperties the wechat pay properties
-     * @return the wechat pay v 2 service
-     */
-    @Bean
-    public WechatPayV2Service wechatPayV2Service(WechatPayProperties wechatPayProperties) {
-        return new WechatPayV2Service(wechatPayProperties);
-    }
-
-    /**
-     * 微信支付V3 全量支持.
+     * 微信支付V3 客户端.
      *
      * @param signatureProvider the signature provider
      * @return the wechat pay service
      */
     @Bean
-    public WechatPayV3Service wechatPayService(SignatureProvider signatureProvider) {
-        return new WechatPayV3Service(signatureProvider);
+    public WechatPayV3Client wechatPayService(SignatureProvider signatureProvider) {
+        return new WechatPayV3Client(signatureProvider);
+    }
+
+    /**
+     * Wechat pay v3 api.
+     *
+     * @param wechatPayV3Client the wechat pay v 3 client
+     * @param wechatMetaBean    the wechat meta bean
+     * @return the wechat pay v 3 api
+     */
+    @Bean
+    public WechatPayV3Api wechatPayV3Api(WechatPayV3Client wechatPayV3Client,WechatMetaBean wechatMetaBean) {
+        return new WechatPayV3Api(wechatPayV3Client,wechatMetaBean);
     }
 }

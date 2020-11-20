@@ -28,7 +28,6 @@
         <lombok.verison>1.18.12</lombok.verison>
         <jackson.version>2.9.10</jackson.version>
         <bcprov.version>1.66</bcprov.version>
-        <okhttp3.version>3.14.9</okhttp3.version>
     </properties>
 
 
@@ -73,11 +72,6 @@
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-xml</artifactId>
                 <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>okhttp</artifactId>
-                <version>${okhttp3.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
