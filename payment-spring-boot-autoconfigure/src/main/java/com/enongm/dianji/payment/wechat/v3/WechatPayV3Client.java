@@ -1,7 +1,7 @@
 package com.enongm.dianji.payment.wechat.v3;
 
 
-import com.enongm.dianji.payment.wechat.enumeration.V3PayType;
+import com.enongm.dianji.payment.wechat.enumeration.WechatPayV3Type;
 import com.enongm.dianji.payment.wechat.v3.filter.HeaderFilter;
 import com.enongm.dianji.payment.wechat.v3.filter.HttpRequestFilter;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -39,12 +39,12 @@ public class WechatPayV3Client {
      * 构造 {@link WechatRequestEntity}.
      *
      * @param <M>       the type parameter
-     * @param v3PayType the v 3 pay type
+     * @param wechatPayV3Type the v 3 pay type
      * @param m         the m
      * @return the executor
      */
-    public <M> Executor<M> withType(V3PayType v3PayType, M m) {
-        return new Executor<>(v3PayType,m ,this.payFilterChain);
+    public <M> Executor<M> withType(WechatPayV3Type wechatPayV3Type, M m) {
+        return new Executor<>(wechatPayV3Type,m ,this.payFilterChain);
     }
 
 
@@ -57,7 +57,7 @@ public class WechatPayV3Client {
         /**
          * The V 3 pay type.
          */
-       private final V3PayType v3PayType;
+       private final WechatPayV3Type wechatPayV3Type;
 
         /**
          * The Pay filter chain.
@@ -68,7 +68,7 @@ public class WechatPayV3Client {
         /**
          * The Request entity bi function.
          */
-        private BiFunction<V3PayType, M, RequestEntity<?>> requestEntityBiFunction;
+        private BiFunction<WechatPayV3Type, M, RequestEntity<?>> requestEntityBiFunction;
 
         /**
          * The Response body consumer.
@@ -78,14 +78,14 @@ public class WechatPayV3Client {
         /**
          * Instantiates a new Executor.
          *
-         * @param v3PayType      the v 3 pay type
+         * @param wechatPayV3Type      the v 3 pay type
          * @param model          the model
          * @param payFilterChain the pay filter chain
          */
-        public Executor(V3PayType v3PayType,
+        public Executor(WechatPayV3Type wechatPayV3Type,
                         M model,
                         PayFilterChain payFilterChain) {
-            this.v3PayType = v3PayType;
+            this.wechatPayV3Type = wechatPayV3Type;
             this.model = model;
             this.payFilterChain = payFilterChain;
         }
@@ -96,7 +96,7 @@ public class WechatPayV3Client {
          * @param requestEntityBiFunction the request entity bi function
          * @return the executor
          */
-        public Executor<M> function(BiFunction<V3PayType, M, RequestEntity<?>> requestEntityBiFunction) {
+        public Executor<M> function(BiFunction<WechatPayV3Type, M, RequestEntity<?>> requestEntityBiFunction) {
             this.requestEntityBiFunction = requestEntityBiFunction;
             return this;
         }
@@ -118,7 +118,7 @@ public class WechatPayV3Client {
          */
         @SneakyThrows
         public void request() {
-            RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.v3PayType, this.model);
+            RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
             payFilterChain.doChain(WechatRequestEntity.of(requestEntity, this.responseBodyConsumer));
         }
     }

@@ -2,7 +2,7 @@ package com.enongm.dianji.payment.wechat.v3;
 
 
 import com.enongm.dianji.payment.PayException;
-import com.enongm.dianji.payment.wechat.enumeration.V3PayType;
+import com.enongm.dianji.payment.wechat.enumeration.WechatPayV3Type;
 import com.enongm.dianji.payment.wechat.enumeration.WeChatServer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -136,7 +136,7 @@ public class SignatureProvider {
      */
     @SneakyThrows
     private synchronized void refreshCertificate() {
-        String url = V3PayType.CERT.uri(WeChatServer.CHINA);
+        String url = WechatPayV3Type.CERT.uri(WeChatServer.CHINA);
 
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
 
@@ -147,7 +147,7 @@ public class SignatureProvider {
             canonicalUrl += "?" + encodedQuery;
         }
         // 签名
-        HttpMethod httpMethod = V3PayType.CERT.method();
+        HttpMethod httpMethod = WechatPayV3Type.CERT.method();
         String authorization = requestSign(httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();

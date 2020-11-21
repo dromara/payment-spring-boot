@@ -8,7 +8,7 @@ import org.springframework.http.HttpMethod;
  * @author Dax
  * @since 14 :25
  */
-public enum V3PayType {
+public enum WechatPayV3Type {
     /**
      * 获取证书.
      */
@@ -40,6 +40,10 @@ public enum V3PayType {
      */
     MARKETING_FAVOR_STOCKS_START(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/start"),
     /**
+     * 发放代金券API.
+     */
+    MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST,"%s/v3/marketing/favor/users/{openid}/coupons"),
+    /**
      * 查询代金券可用商户
      */
     MARKETING_FAVOR_STOCKS_MERCHANTS(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}/merchants");
@@ -50,7 +54,7 @@ public enum V3PayType {
     private final String pattern;
     private final HttpMethod method;
 
-    V3PayType(HttpMethod method, String pattern) {
+    WechatPayV3Type(HttpMethod method, String pattern) {
         this.method = method;
         this.pattern = pattern;
     }

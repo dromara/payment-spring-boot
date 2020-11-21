@@ -2,10 +2,11 @@ package com.enongm.dianji.payment.wechat.v3;
 
 import com.enongm.dianji.payment.PayException;
 import com.enongm.dianji.payment.wechat.WechatPayProperties;
-import com.enongm.dianji.payment.wechat.enumeration.V3PayType;
 import com.enongm.dianji.payment.wechat.enumeration.WeChatServer;
+import com.enongm.dianji.payment.wechat.enumeration.WechatPayV3Type;
 import com.enongm.dianji.payment.wechat.v3.model.AppPayParams;
 import com.enongm.dianji.payment.wechat.v3.model.StocksMchQueryParams;
+import com.enongm.dianji.payment.wechat.v3.model.StocksSendParams;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,17 +54,19 @@ public class WechatPayV3Api {
      * 激活代金券批次API
      *
      * @param stockId the stock id
+     * @return the wechat response entity
      */
-    public WechatResponseEntity<?> startStocks(String stockId) {
+    public WechatResponseEntity<ObjectNode> startStocks(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(V3PayType.MARKETING_FAVOR_STOCKS_START, stockId)
+        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_START, stockId)
                 .function(this::startStocksFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
     }
 
-    private RequestEntity<?> startStocksFunction(V3PayType type, String stockId) {
+
+    private RequestEntity<?> startStocksFunction(WechatPayV3Type type, String stockId) {
         WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
         String mchId = v3.getMchId();
         String httpUrl = type.uri(WeChatServer.CHINA);
@@ -85,10 +88,11 @@ public class WechatPayV3Api {
      * 查询代金券可用商户API
      *
      * @param params the params
+     * @return the wechat response entity
      */
-    public WechatResponseEntity<?> queryMerchantsByStockId(StocksMchQueryParams params) {
+    public WechatResponseEntity<ObjectNode> queryMerchantsByStockId(StocksMchQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(V3PayType.MARKETING_FAVOR_STOCKS_MERCHANTS, params)
+        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_MERCHANTS, params)
                 .function(this::queryMerchantsFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -98,7 +102,7 @@ public class WechatPayV3Api {
     }
 
 
-    private RequestEntity<?> queryMerchantsFunction(V3PayType type, StocksMchQueryParams params) {
+    private RequestEntity<?> queryMerchantsFunction(WechatPayV3Type type, StocksMchQueryParams params) {
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("offset", String.valueOf(params.getOffset()));
@@ -115,20 +119,52 @@ public class WechatPayV3Api {
     }
 
     /**
+     * 发放代金券API.
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> sendStocks(StocksSendParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_USERS_COUPONS, params)
+                .function(this::sendStocksFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+
+    private RequestEntity<?> sendStocksFunction(WechatPayV3Type type,StocksSendParams params){
+
+        String httpUrl = type.uri(WeChatServer.CHINA);
+        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().expand(params.getOpenid()).toUri();
+        params.setOpenid(null);
+        try {
+            return RequestEntity.post(uri)
+                    .body(MAPPER.writeValueAsString(params));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        throw new PayException("wechat app pay json failed");
+    }
+
+
+    /**
      * APP下单API.
      *
      * @param payParams the pay params
+     * @return the wechat response entity
      */
-    public WechatResponseEntity<?> appPay(AppPayParams payParams) {
+    public WechatResponseEntity<ObjectNode> appPay(AppPayParams payParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(V3PayType.APP, payParams)
+        wechatPayV3Client.withType(WechatPayV3Type.APP, payParams)
                 .function(this::appPayFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
     }
 
-    private RequestEntity<?> appPayFunction(V3PayType type, AppPayParams payParams) {
+    private RequestEntity<?> appPayFunction(WechatPayV3Type type, AppPayParams payParams) {
         WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
         payParams.setAppid(v3.getAppId());
         payParams.setMchid(v3.getMchId());
