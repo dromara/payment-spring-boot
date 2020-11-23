@@ -16,6 +16,9 @@ public class WechatPayProperties {
     @NestedConfigurationProperty
     private V3 v3;
 
+    /**
+     * wechat pay v3 properties.
+     */
     @Data
     public static class V3 {
         /**
@@ -27,7 +30,7 @@ public class WechatPayProperties {
          */
         private boolean partnerMode;
         /**
-         *  app id for wechat pay is required
+         * app id for wechat pay is required
          */
         private String appId;
         /**
@@ -47,13 +50,34 @@ public class WechatPayProperties {
          */
         private String partnerKey;
         /**
-         *  wechat pay certificate Path
+         * wechat pay certificate Path
          */
         private String certPath;
         /**
          * your pay server domain
          */
         private String domain;
+        /**
+         * wechat mp binding with mch
+         */
+        private Mp mp;
+
+    }
+
+
+    /**
+     * wechat  mp for send coupons and notification.
+     */
+    @Data
+    public static class Mp {
+        /**
+         * app id for wechat pay is required
+         */
+        private String appId;
+        /**
+         * app secret for wechat pay is required
+         */
+        private String appSecret;
     }
 
 }

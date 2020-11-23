@@ -1,6 +1,7 @@
 package com.enongm.dianji.payment.wechat;
 
 
+import com.enongm.dianji.payment.wechat.oauth2.OAuth2AuthorizationRequestRedirectProvider;
 import com.enongm.dianji.payment.wechat.v3.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -66,4 +67,18 @@ public class WechatPayConfiguration {
     public WechatPayV3Api wechatPayV3Api(WechatPayV3Client wechatPayV3Client,WechatMetaBean wechatMetaBean) {
         return new WechatPayV3Api(wechatPayV3Client,wechatMetaBean);
     }
+
+    /**
+     * 公众号授权工具用于获取用户openId，需要配置{@link WechatPayProperties.Mp}.
+     *
+     * @param wechatPayProperties the wechat pay properties
+     * @return the o auth 2 authorization request redirect provider
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "wechat.pay", name = "v3.mp.app-id")
+    public OAuth2AuthorizationRequestRedirectProvider oAuth2Provider(WechatPayProperties wechatPayProperties){
+        WechatPayProperties.Mp mp = wechatPayProperties.getV3().getMp();
+        return new OAuth2AuthorizationRequestRedirectProvider(mp.getAppId(), mp.getAppSecret());
+    }
+
 }

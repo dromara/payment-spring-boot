@@ -40,13 +40,17 @@ public enum WechatPayV3Type {
      */
     MARKETING_FAVOR_STOCKS_START(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/start"),
     /**
-     * 发放代金券API.
+     * 发放代金券API & 根据商户号查用户的券.
      */
     MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST,"%s/v3/marketing/favor/users/{openid}/coupons"),
     /**
      * 查询代金券可用商户
      */
-    MARKETING_FAVOR_STOCKS_MERCHANTS(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}/merchants");
+    MARKETING_FAVOR_STOCKS_MERCHANTS(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}/merchants"),
+    /**
+     * 条件查询批次列表API.
+     */
+    MARKETING_FAVOR_STOCKS(HttpMethod.GET, "%s/v3/marketing/favor/stocks");
 
 
 

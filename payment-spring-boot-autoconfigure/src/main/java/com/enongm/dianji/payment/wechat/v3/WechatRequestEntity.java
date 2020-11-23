@@ -20,76 +20,9 @@ import java.util.function.Consumer;
  * @since 14 :01
  */
 @Getter
-public class WechatRequestEntity<T>  extends RequestEntity<T> {
+public class WechatRequestEntity<T> extends RequestEntity<T> {
 
     private final Consumer<ResponseEntity<ObjectNode>> responseBodyConsumer;
-
-
-    /**
-     * Instantiates a new Wechat request entity.
-     *
-     * @param method               the method
-     * @param url                  the url
-     * @param responseBodyConsumer the response body consumer
-     */
-    public WechatRequestEntity(HttpMethod method, URI url, Consumer<ResponseEntity<ObjectNode>> responseBodyConsumer) {
-        super(method, url);
-        this.responseBodyConsumer = responseBodyConsumer;
-    }
-
-    /**
-     * Instantiates a new Wechat request entity.
-     *
-     * @param body                 the body
-     * @param method               the method
-     * @param url                  the url
-     * @param responseBodyConsumer the response body consumer
-     */
-    public WechatRequestEntity(T body, HttpMethod method, URI url, Consumer<ResponseEntity<ObjectNode>> responseBodyConsumer) {
-        super(body, method, url);
-        this.responseBodyConsumer = responseBodyConsumer;
-    }
-
-    /**
-     * Instantiates a new Wechat request entity.
-     *
-     * @param body                 the body
-     * @param method               the method
-     * @param url                  the url
-     * @param type                 the type
-     * @param responseBodyConsumer the response body consumer
-     */
-    public WechatRequestEntity(T body, HttpMethod method, URI url, Type type, Consumer<ResponseEntity<ObjectNode>> responseBodyConsumer) {
-        super(body, method, url, type);
-        this.responseBodyConsumer = responseBodyConsumer;
-    }
-
-    /**
-     * Instantiates a new Wechat request entity.
-     *
-     * @param headers              the headers
-     * @param method               the method
-     * @param url                  the url
-     * @param responseBodyConsumer the response body consumer
-     */
-    public WechatRequestEntity(MultiValueMap<String, String> headers, HttpMethod method, URI url, Consumer<ResponseEntity<ObjectNode>> responseBodyConsumer) {
-        super(headers, method, url);
-        this.responseBodyConsumer = responseBodyConsumer;
-    }
-
-    /**
-     * Instantiates a new Wechat request entity.
-     *
-     * @param body                 the body
-     * @param headers              the headers
-     * @param method               the method
-     * @param url                  the url
-     * @param responseBodyConsumer the response body consumer
-     */
-    public WechatRequestEntity(T body, MultiValueMap<String, String> headers, HttpMethod method, URI url, Consumer<ResponseEntity<ObjectNode>> responseBodyConsumer) {
-        super(body, headers, method, url);
-        this.responseBodyConsumer = responseBodyConsumer;
-    }
 
     /**
      * Instantiates a new Wechat request entity.
