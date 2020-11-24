@@ -2,6 +2,7 @@ package com.enongm.dianji.payment.wechat.v3.model;
 
 
 import com.enongm.dianji.payment.wechat.enumeration.CouponBgColor;
+import lombok.Data;
 
 /**
  * 优惠券样式
@@ -9,6 +10,7 @@ import com.enongm.dianji.payment.wechat.enumeration.CouponBgColor;
  * @author Dax
  * @since 15:09
  */
+@Data
 public class PatternInfo {
     /**
      * 背景色

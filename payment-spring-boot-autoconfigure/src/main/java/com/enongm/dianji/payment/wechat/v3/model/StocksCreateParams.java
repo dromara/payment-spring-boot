@@ -2,8 +2,6 @@ package com.enongm.dianji.payment.wechat.v3.model;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * 创建优惠券批次参数.
  *
@@ -25,13 +23,13 @@ public class StocksCreateParams {
      */
     private String belongMerchant;
     /**
-     * 批次开始时间
+     * 批次开始时间 rfc 3339   YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
      */
-    private LocalDateTime availableBeginTime;
+    private String availableBeginTime;
     /**
-     * 批次结束时间
+     * 批次结束时间 rfc 3339   YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
      */
-    private LocalDateTime availableEndTime;
+    private String availableEndTime;
     /**
      * 是否无资金流
      */
@@ -56,5 +54,9 @@ public class StocksCreateParams {
      * 核销规则
      */
     private CouponUseRule couponUseRule;
+    /**
+     * 代金券样式
+     */
+    private PatternInfo patternInfo;
 
 }

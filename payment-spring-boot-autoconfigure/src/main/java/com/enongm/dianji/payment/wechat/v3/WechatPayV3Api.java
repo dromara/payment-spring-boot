@@ -94,9 +94,24 @@ public class WechatPayV3Api {
      * @param stockId the stock id
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> startStocks(String stockId) {
+    public WechatResponseEntity<ObjectNode> startStock(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_START, stockId)
+                .function(this::startStocksFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 查询批次详情API.
+     *
+     * @param stockId the stock id
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> stockDetail(String stockId) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_DETAIL, stockId)
                 .function(this::startStocksFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
