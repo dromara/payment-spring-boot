@@ -6,6 +6,7 @@ import com.enongm.dianji.payment.wechat.enumeration.StockStatus;
 import com.enongm.dianji.payment.wechat.enumeration.WeChatServer;
 import com.enongm.dianji.payment.wechat.enumeration.WechatPayV3Type;
 import com.enongm.dianji.payment.wechat.v3.model.AppPayParams;
+import com.enongm.dianji.payment.wechat.v3.model.StocksCreateParams;
 import com.enongm.dianji.payment.wechat.v3.model.StocksQueryParams;
 import com.enongm.dianji.payment.wechat.v3.model.StocksSendParams;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -56,6 +57,36 @@ public class WechatPayV3Api {
         this.wechatMetaBean = wechatMetaBean;
     }
 
+
+    /**
+     * 创建代金券批次API.
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> createStocks(StocksCreateParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_COUPON_STOCKS, params)
+                .function(this::createStocksFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    private RequestEntity<?> createStocksFunction(WechatPayV3Type type, StocksCreateParams params) {
+        WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
+        String mchId = v3.getMchId();
+        String httpUrl = type.uri(WeChatServer.CHINA);
+        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().toUri();
+        params.setBelongMerchant(mchId);
+        try {
+            return RequestEntity.post(uri)
+                    .body(MAPPER.writeValueAsString(params));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        throw new PayException("wechat app pay json failed");
+    }
 
     /**
      * 激活代金券批次API

@@ -36,6 +36,10 @@ public enum WechatPayV3Type {
 
 
     /**
+     * 创建代金券批次API.
+     */
+    MARKETING_FAVOR_STOCKS_COUPON_STOCKS(HttpMethod.POST,"%s/v3/marketing/favor/coupon-stocks"),
+    /**
      * 激活代金券批次API
      */
     MARKETING_FAVOR_STOCKS_START(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/start"),
