@@ -97,29 +97,13 @@ public class WechatPayV3Api {
     public WechatResponseEntity<ObjectNode> startStock(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_START, stockId)
-                .function(this::startStocksFunction)
+                .function(this::startStockFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
     }
 
-    /**
-     * 查询批次详情API.
-     *
-     * @param stockId the stock id
-     * @return the wechat response entity
-     */
-    public WechatResponseEntity<ObjectNode> stockDetail(String stockId) {
-        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_DETAIL, stockId)
-                .function(this::startStocksFunction)
-                .consumer(wechatResponseEntity::convert)
-                .request();
-        return wechatResponseEntity;
-    }
-
-
-    private RequestEntity<?> startStocksFunction(WechatPayV3Type type, String stockId) {
+    private RequestEntity<?> startStockFunction(WechatPayV3Type type, String stockId) {
         WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
         String mchId = v3.getMchId();
         String httpUrl = type.uri(WeChatServer.CHINA);
@@ -134,6 +118,34 @@ public class WechatPayV3Api {
             e.printStackTrace();
         }
         throw new PayException("wechat app pay json failed");
+    }
+
+    /**
+     * 查询批次详情API.
+     *
+     * @param stockId the stock id
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> stockDetail(String stockId) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_DETAIL, stockId)
+                .function(this::stockDetailFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+
+    private RequestEntity<?> stockDetailFunction(WechatPayV3Type type, String stockId) {
+        WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
+
+        String httpUrl = type.uri(WeChatServer.CHINA);
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("stock_creator_mchid", v3.getMchId());
+        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).queryParams(queryParams).build().expand(stockId).toUri();
+        return RequestEntity.get(uri).build();
+
     }
 
 
