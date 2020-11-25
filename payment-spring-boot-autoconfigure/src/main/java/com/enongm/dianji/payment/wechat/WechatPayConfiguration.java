@@ -64,7 +64,7 @@ public class WechatPayConfiguration {
      * @return the wechat pay v 3 api
      */
     @Bean
-    public WechatPayApi wechatPayV3Api(WechatPayV3Client wechatPayV3Client, WechatMetaBean wechatMetaBean) {
+    public WechatPayApi wechatPayApi(WechatPayV3Client wechatPayV3Client, WechatMetaBean wechatMetaBean) {
         return new WechatPayApi(wechatPayV3Client,wechatMetaBean);
     }
 

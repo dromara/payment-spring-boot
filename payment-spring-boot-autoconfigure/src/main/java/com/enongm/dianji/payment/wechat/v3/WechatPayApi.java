@@ -253,7 +253,6 @@ public class WechatPayApi {
         throw new PayException("wechat app pay json failed");
     }
 
-
     /**
      * APP下单API.
      *

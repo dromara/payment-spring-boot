@@ -58,7 +58,11 @@ public enum WechatPayV3Type {
     /**
      * 查询批次详情API.
      */
-    MARKETING_FAVOR_STOCKS_DETAIL(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}");
+    MARKETING_FAVOR_STOCKS_DETAIL(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}"),
+    /**
+     * 营销图片上传API.
+     */
+    IMAGE_UPLOAD(HttpMethod.POST, "%s/v3/marketing/favor/media/image-upload");
 
 
 

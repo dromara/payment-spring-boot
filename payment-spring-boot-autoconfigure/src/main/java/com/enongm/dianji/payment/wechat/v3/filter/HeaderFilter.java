@@ -46,9 +46,13 @@ public class HeaderFilter implements PayFilter {
         String body = requestEntity.hasBody() ? Objects.requireNonNull(requestEntity.getBody()).toString() : "";
         String authorization = signatureProvider.requestSign(httpMethod.name(), canonicalUrl, body);
 
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = requestEntity.getHeaders();
+
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        // 兼容图片上传，自定义优先级最高
+        if (Objects.isNull(headers.getContentType())) {
+            headers.setContentType(MediaType.APPLICATION_JSON);
+        }
         headers.add("Authorization", authorization);
         headers.add("User-Agent", "X-Pay-Service");
 
