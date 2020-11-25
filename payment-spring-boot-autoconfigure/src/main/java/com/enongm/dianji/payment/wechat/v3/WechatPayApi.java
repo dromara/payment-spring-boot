@@ -35,7 +35,7 @@ import java.util.Objects;
  * @author Dax
  * @since 16 :15
  */
-public class WechatPayV3Api {
+public class WechatPayApi {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private final WechatPayV3Client wechatPayV3Client;
     private final WechatMetaBean wechatMetaBean;
@@ -52,7 +52,7 @@ public class WechatPayV3Api {
      * @param wechatPayV3Client the wechat pay v 3 client
      * @param wechatMetaBean    the wechat meta bean
      */
-    public WechatPayV3Api(WechatPayV3Client wechatPayV3Client, WechatMetaBean wechatMetaBean) {
+    public WechatPayApi(WechatPayV3Client wechatPayV3Client, WechatMetaBean wechatMetaBean) {
         this.wechatPayV3Client = wechatPayV3Client;
         this.wechatMetaBean = wechatMetaBean;
     }
@@ -64,7 +64,7 @@ public class WechatPayV3Api {
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> createStocks(StocksCreateParams params) {
+    public WechatResponseEntity<ObjectNode> createStock(StocksCreateParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_COUPON_STOCKS, params)
                 .function(this::createStocksFunction)
@@ -126,7 +126,7 @@ public class WechatPayV3Api {
      * @param stockId the stock id
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> stockDetail(String stockId) {
+    public WechatResponseEntity<ObjectNode> queryStockDetail(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_DETAIL, stockId)
                 .function(this::stockDetailFunction)
@@ -163,7 +163,6 @@ public class WechatPayV3Api {
                 .request();
 
         return wechatResponseEntity;
-
     }
 
 
