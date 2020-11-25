@@ -240,7 +240,10 @@ public class WechatPayApi {
 
 
     private RequestEntity<?> sendStocksFunction(WechatPayV3Type type, StocksSendParams params) {
-
+        WechatPayProperties.V3 v3 = wechatMetaBean.getWechatPayProperties().getV3();
+        // 服务号
+        params.setAppid(v3.getMp().getAppId());
+        params.setStockCreatorMchid(v3.getMchId());
         String httpUrl = type.uri(WeChatServer.CHINA);
         URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().expand(params.getOpenid()).toUri();
         params.setOpenid(null);
