@@ -52,20 +52,20 @@ public class WechatPayConfiguration {
      * @return the wechat pay service
      */
     @Bean
-    public WechatPayV3Client wechatPayService(SignatureProvider signatureProvider) {
-        return new WechatPayV3Client(signatureProvider);
+    public WechatPayClient wechatPayService(SignatureProvider signatureProvider) {
+        return new WechatPayClient(signatureProvider);
     }
 
     /**
      * Wechat pay v3 api.
      *
-     * @param wechatPayV3Client the wechat pay v 3 client
+     * @param wechatPayClient the wechat pay v 3 client
      * @param wechatMetaBean    the wechat meta bean
      * @return the wechat pay v 3 api
      */
     @Bean
-    public WechatPayApi wechatPayApi(WechatPayV3Client wechatPayV3Client, WechatMetaBean wechatMetaBean) {
-        return new WechatPayApi(wechatPayV3Client,wechatMetaBean);
+    public WechatPayApi wechatPayApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
+        return new WechatPayApi(wechatPayClient,wechatMetaBean);
     }
 
     /**

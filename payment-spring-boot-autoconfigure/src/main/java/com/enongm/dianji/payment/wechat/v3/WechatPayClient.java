@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * @author Dax
  * @since 11 :43
  */
-public class WechatPayV3Client {
+public class WechatPayClient {
     private final PayFilterChain payFilterChain;
 
     /**
@@ -26,10 +26,11 @@ public class WechatPayV3Client {
      *
      * @param signatureProvider the signature provider
      */
-    public WechatPayV3Client(SignatureProvider signatureProvider) {
+    public WechatPayClient(SignatureProvider signatureProvider) {
         DefaultPayFilterChain defaultPayFilterChain = new DefaultPayFilterChain();
         // 构造私钥签名
         defaultPayFilterChain.register(new HeaderFilter(signatureProvider));
+        // 向微信支付服务器发起请求
         defaultPayFilterChain.register(new HttpRequestFilter(signatureProvider));
         this.payFilterChain = defaultPayFilterChain;
     }
@@ -38,9 +39,9 @@ public class WechatPayV3Client {
     /**
      * 构造 {@link WechatRequestEntity}.
      *
-     * @param <M>       the type parameter
+     * @param <M>             the type parameter
      * @param wechatPayV3Type the v 3 pay type
-     * @param m         the m
+     * @param m               the m
      * @return the executor
      */
     public <M> Executor<M> withType(WechatPayV3Type wechatPayV3Type, M m) {
@@ -57,7 +58,7 @@ public class WechatPayV3Client {
         /**
          * The V 3 pay type.
          */
-       private final WechatPayV3Type wechatPayV3Type;
+        private final WechatPayV3Type wechatPayV3Type;
 
         /**
          * The Pay filter chain.
@@ -78,9 +79,9 @@ public class WechatPayV3Client {
         /**
          * Instantiates a new Executor.
          *
-         * @param wechatPayV3Type      the v 3 pay type
-         * @param model          the model
-         * @param payFilterChain the pay filter chain
+         * @param wechatPayV3Type the v 3 pay type
+         * @param model           the model
+         * @param payFilterChain  the pay filter chain
          */
         public Executor(WechatPayV3Type wechatPayV3Type,
                         M model,

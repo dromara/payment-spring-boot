@@ -37,7 +37,7 @@ import java.util.Objects;
  */
 public class WechatPayApi {
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private final WechatPayV3Client wechatPayV3Client;
+    private final WechatPayClient wechatPayClient;
     private final WechatMetaBean wechatMetaBean;
 
     static {
@@ -49,11 +49,11 @@ public class WechatPayApi {
     /**
      * Wechat Pay V3 Api.
      *
-     * @param wechatPayV3Client the wechat pay v 3 client
-     * @param wechatMetaBean    the wechat meta bean
+     * @param wechatPayClient the wechat pay v 3 client
+     * @param wechatMetaBean  the wechat meta bean
      */
-    public WechatPayApi(WechatPayV3Client wechatPayV3Client, WechatMetaBean wechatMetaBean) {
-        this.wechatPayV3Client = wechatPayV3Client;
+    public WechatPayApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
+        this.wechatPayClient = wechatPayClient;
         this.wechatMetaBean = wechatMetaBean;
     }
 
@@ -66,7 +66,7 @@ public class WechatPayApi {
      */
     public WechatResponseEntity<ObjectNode> createStock(StocksCreateParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_COUPON_STOCKS, params)
+        wechatPayClient.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_COUPON_STOCKS, params)
                 .function(this::createStocksFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -96,7 +96,7 @@ public class WechatPayApi {
      */
     public WechatResponseEntity<ObjectNode> startStock(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_START, stockId)
+        wechatPayClient.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_START, stockId)
                 .function(this::startStockFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -128,7 +128,7 @@ public class WechatPayApi {
      */
     public WechatResponseEntity<ObjectNode> queryStockDetail(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_DETAIL, stockId)
+        wechatPayClient.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_DETAIL, stockId)
                 .function(this::stockDetailFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -157,7 +157,7 @@ public class WechatPayApi {
      */
     public WechatResponseEntity<ObjectNode> queryMerchantsByStockId(StocksQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_MERCHANTS, params)
+        wechatPayClient.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_MERCHANTS, params)
                 .function(this::queryStocksFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -174,7 +174,7 @@ public class WechatPayApi {
      */
     public WechatResponseEntity<ObjectNode> queryStocksByMch(StocksQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS, params)
+        wechatPayClient.withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS, params)
                 .function(this::queryStocksFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -231,7 +231,7 @@ public class WechatPayApi {
      */
     public WechatResponseEntity<ObjectNode> sendStocks(StocksSendParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.MARKETING_FAVOR_USERS_COUPONS, params)
+        wechatPayClient.withType(WechatPayV3Type.MARKETING_FAVOR_USERS_COUPONS, params)
                 .function(this::sendStocksFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -264,7 +264,7 @@ public class WechatPayApi {
      */
     public WechatResponseEntity<ObjectNode> appPay(AppPayParams payParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        wechatPayV3Client.withType(WechatPayV3Type.APP, payParams)
+        wechatPayClient.withType(WechatPayV3Type.APP, payParams)
                 .function(this::appPayFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();

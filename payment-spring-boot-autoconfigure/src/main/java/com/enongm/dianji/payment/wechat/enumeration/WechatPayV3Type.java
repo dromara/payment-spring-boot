@@ -3,7 +3,7 @@ package com.enongm.dianji.payment.wechat.enumeration;
 import org.springframework.http.HttpMethod;
 
 /**
- * The enum Pay type.
+ * The Wechat Pay V3 type.
  *
  * @author Dax
  * @since 14 :25
@@ -62,7 +62,7 @@ public enum WechatPayV3Type {
     /**
      * 营销图片上传API.
      */
-    IMAGE_UPLOAD(HttpMethod.POST, "%s/v3/marketing/favor/media/image-upload");
+    MARKETING_IMAGE_UPLOAD(HttpMethod.POST, "%s/v3/marketing/favor/media/image-upload");
 
 
 
