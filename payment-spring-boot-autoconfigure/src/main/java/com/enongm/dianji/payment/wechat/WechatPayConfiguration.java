@@ -60,13 +60,25 @@ public class WechatPayConfiguration {
      * Wechat pay v3 api.
      *
      * @param wechatPayClient the wechat pay v 3 client
-     * @param wechatMetaBean    the wechat meta bean
+     * @param wechatMetaBean  the wechat meta bean
      * @return the wechat pay v 3 api
      */
     @Bean
     public WechatPayApi wechatPayApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
-        return new WechatPayApi(wechatPayClient,wechatMetaBean);
+        return new WechatPayApi(wechatPayClient, wechatMetaBean);
     }
+
+    /**
+     * Wechat pay callback.
+     *
+     * @param signatureProvider the signature provider
+     * @return the wechat pay callback
+     */
+    @Bean
+    public WechatPayCallback wechatPayCallback(SignatureProvider signatureProvider) {
+        return new WechatPayCallback(signatureProvider);
+    }
+
 
     /**
      * 公众号授权工具用于获取用户openId，需要配置{@link WechatPayProperties.Mp}.
@@ -76,7 +88,7 @@ public class WechatPayConfiguration {
      */
     @Bean
     @ConditionalOnProperty(prefix = "wechat.pay", name = "v3.mp.app-id")
-    public OAuth2AuthorizationRequestRedirectProvider oAuth2Provider(WechatPayProperties wechatPayProperties){
+    public OAuth2AuthorizationRequestRedirectProvider oAuth2Provider(WechatPayProperties wechatPayProperties) {
         WechatPayProperties.Mp mp = wechatPayProperties.getV3().getMp();
         return new OAuth2AuthorizationRequestRedirectProvider(mp.getAppId(), mp.getAppSecret());
     }

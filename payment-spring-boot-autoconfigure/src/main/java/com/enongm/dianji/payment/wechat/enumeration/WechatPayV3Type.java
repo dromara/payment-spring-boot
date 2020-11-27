@@ -44,6 +44,10 @@ public enum WechatPayV3Type {
      */
     MARKETING_FAVOR_STOCKS_START(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/start"),
     /**
+     * 重启代金券
+     */
+    MARKETING_FAVOR_STOCKS_RESTART(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/restart"),
+    /**
      * 发放代金券API & 根据商户号查用户的券.
      */
     MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST,"%s/v3/marketing/favor/users/{openid}/coupons"),
@@ -62,7 +66,11 @@ public enum WechatPayV3Type {
     /**
      * 营销图片上传API.
      */
-    MARKETING_IMAGE_UPLOAD(HttpMethod.POST, "%s/v3/marketing/favor/media/image-upload");
+    MARKETING_IMAGE_UPLOAD(HttpMethod.POST, "%s/v3/marketing/favor/media/image-upload"),
+    /**
+     * 设置核销回调通知API.
+     */
+    MARKETING_FAVOR_CALLBACKS(HttpMethod.POST, "%s/v3/marketing/favor/callbacks");
 
 
 

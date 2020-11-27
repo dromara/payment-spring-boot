@@ -4,6 +4,7 @@ package com.enongm.dianji.payment.wechat.oauth2;
 import com.enongm.dianji.payment.PayException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.SneakyThrows;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -11,10 +12,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -48,14 +50,17 @@ public class OAuth2AuthorizationRequestRedirectProvider {
      * @param redirectUri the redirect uri
      * @return uri components
      */
-    public UriComponents redirect(String phoneNumber, String redirectUri) {
+    @SneakyThrows
+    public String redirect(String phoneNumber, String redirectUri) {
+        Assert.hasText(redirectUri, "redirectUri is required");
+        String encode = URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.name());
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("appid", appId);
-        queryParams.add("redirect_uri", redirectUri);
+        queryParams.add("redirect_uri", encode);
         queryParams.add("response_type", "code");
         queryParams.add("scope", "snsapi_base");
         queryParams.add("state", phoneNumber);
-        return UriComponentsBuilder.fromHttpUrl(AUTHORIZATION_URI).queryParams(queryParams).build();
+        return UriComponentsBuilder.fromHttpUrl(AUTHORIZATION_URI).queryParams(queryParams).build().toUriString() + "#wechat_redirect";
     }
 
 

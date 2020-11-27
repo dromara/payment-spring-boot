@@ -2,8 +2,9 @@ package com.enongm.dianji.payment.wechat.v3;
 
 
 import com.enongm.dianji.payment.PayException;
-import com.enongm.dianji.payment.wechat.enumeration.WechatPayV3Type;
 import com.enongm.dianji.payment.wechat.enumeration.WeChatServer;
+import com.enongm.dianji.payment.wechat.enumeration.WechatPayV3Type;
+import com.enongm.dianji.payment.wechat.v3.model.ResponseSignVerifyParams;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -107,27 +108,24 @@ public class SignatureProvider {
     /**
      * 我方对响应验签，和应答签名做比较，使用微信平台证书.
      *
-     * @param wechatpaySerial    response.headers['Wechatpay-Serial']    当前使用的微信平台证书序列号
-     * @param wechatpaySignature response.headers['Wechatpay-Signature']   微信平台签名
-     * @param wechatpayTimestamp response.headers['Wechatpay-Timestamp']  微信服务器的时间戳
-     * @param wechatpayNonce     response.headers['Wechatpay-Nonce']   微信服务器提供的随机串
-     * @param body               response.body 微信服务器的响应体
+     * @param params the params
      * @return the boolean
      */
     @SneakyThrows
-    public boolean responseSignVerify(String wechatpaySerial, String wechatpaySignature, String wechatpayTimestamp, String wechatpayNonce, String body) {
+    public boolean responseSignVerify(ResponseSignVerifyParams params) {
 
+        String wechatpaySerial = params.getWechatpaySerial();
         if (CERTIFICATE_MAP.isEmpty() || !CERTIFICATE_MAP.containsKey(wechatpaySerial)) {
             refreshCertificate();
         }
         Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial);
 
-        final String signatureStr = createSign(wechatpayTimestamp, wechatpayNonce, body);
+        final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
         Signature signer = Signature.getInstance("SHA256withRSA");
         signer.initVerify(certificate);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
 
-        return signer.verify(Base64Utils.decodeFromString(wechatpaySignature));
+        return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
     }
 
 
@@ -207,7 +205,6 @@ public class SignatureProvider {
             cipher.init(Cipher.DECRYPT_MODE, key, spec);
             cipher.updateAAD(associatedData.getBytes(StandardCharsets.UTF_8));
 
-
             byte[] bytes;
             try {
                 bytes = cipher.doFinal(Base64Utils.decodeFromString(ciphertext));
@@ -221,6 +218,11 @@ public class SignatureProvider {
         }
     }
 
+    /**
+     * Gets wechat meta bean.
+     *
+     * @return the wechat meta bean
+     */
     public WechatMetaBean getWechatMetaBean() {
         return wechatMetaBean;
     }
