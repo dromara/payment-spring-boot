@@ -32,6 +32,9 @@ public class WechatResponseEntity<T> {
     }
 
     public boolean successful() {
+        if (log.isDebugEnabled()) {
+            log.debug("wechat httpStatus {}", this.httpStatus);
+        }
         return this.httpStatus == HttpStatus.OK.value();
     }
 }
