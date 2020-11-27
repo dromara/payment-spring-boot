@@ -2,7 +2,10 @@ package com.enongm.dianji.payment.wechat.v3;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Objects;
 
 /**
  * @author Dax
@@ -17,9 +20,18 @@ public class WechatResponseEntity<T> {
 
     public void convert(ResponseEntity<T> responseEntity) {
         if (log.isDebugEnabled()) {
-            log.info("wechat response {}", responseEntity);
+            log.debug("wechat response {}", responseEntity);
         }
-        this.httpStatus = responseEntity.getStatusCodeValue();
-        this.body = responseEntity.getBody();
+        if (Objects.nonNull(responseEntity)) {
+            this.httpStatus = responseEntity.getStatusCodeValue();
+            this.body = responseEntity.getBody();
+        } else {
+            this.httpStatus = HttpStatus.REQUEST_TIMEOUT.value();
+            this.body = null;
+        }
+    }
+
+    public boolean successful() {
+        return this.httpStatus == HttpStatus.OK.value();
     }
 }
