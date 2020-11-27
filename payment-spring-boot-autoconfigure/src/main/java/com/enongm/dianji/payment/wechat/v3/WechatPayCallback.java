@@ -8,12 +8,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author Dax
  * @since 10:21
  */
+@Slf4j
 public class WechatPayCallback {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private final SignatureProvider signatureProvider;
@@ -29,7 +35,7 @@ public class WechatPayCallback {
 
 
     @SneakyThrows
-    public CouponConsumeData wechatPayCouponCallback(ResponseSignVerifyParams params) {
+    public Map<String, ?> wechatPayCouponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> couponConsumeDataConsumer) {
 
         if (signatureProvider.responseSignVerify(params)) {
             CallbackParams callbackParams = MAPPER.readValue(params.getBody(), CallbackParams.class);
@@ -40,7 +46,12 @@ public class WechatPayCallback {
             String ciphertext = resource.getCiphertext();
             String data = signatureProvider.decryptResponseBody(associatedData, nonce, ciphertext);
             Assert.hasText(data, "decryptData is required");
-            return MAPPER.readValue(data, CouponConsumeData.class);
+            CouponConsumeData couponConsumeData = MAPPER.readValue(data, CouponConsumeData.class);
+            couponConsumeDataConsumer.accept(couponConsumeData);
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("code", 200);
+            responseBody.put("message", "核销成功");
+            return responseBody;
         }
         throw new PayException("invalid wechat pay coupon callback");
     }

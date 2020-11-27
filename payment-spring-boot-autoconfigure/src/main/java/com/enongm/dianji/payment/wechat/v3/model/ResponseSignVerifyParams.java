@@ -6,7 +6,7 @@ import lombok.Data;
  * 微信的响应签名校验参数
  *
  * @author Dax
- * @see com.enongm.dianji.payment.wechat.v3.SignatureProvider#responseSignVerify(String, String, String, String, String)
+ * @see com.enongm.dianji.payment.wechat.v3.SignatureProvider#responseSignVerify(ResponseSignVerifyParams)
  * @since 16:32
  */
 @Data
