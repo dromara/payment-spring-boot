@@ -51,7 +51,6 @@ public class SignatureProvider {
     /**
      * The constant APPLICATION_JSON.
      */
-    public static final String APPLICATION_JSON = "application/json";
     private static final IdGenerator ID_GENERATOR = new AlternativeJdkIdGenerator();
     private static final String SCHEMA = "WECHATPAY2-SHA256-RSA2048 ";
     private final RestOperations restOperations = new RestTemplate();
