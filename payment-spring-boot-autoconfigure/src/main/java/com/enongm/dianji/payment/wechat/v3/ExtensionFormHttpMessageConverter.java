@@ -2,8 +2,17 @@ package com.enongm.dianji.payment.wechat.v3;
 
 import org.springframework.http.*;
 import org.springframework.http.converter.*;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.http.converter.json.JsonbHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.smile.MappingJackson2SmileHttpMessageConverter;
+import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StreamUtils;
 
@@ -16,25 +25,76 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The type Upload http message converter.
+ * @see AllEncompassingFormHttpMessageConverter
  */
-final class UploadHttpMessageConverter extends FormHttpMessageConverter {
+final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
     private static final String BOUNDARY = "boundary";
+
+
+    private static final boolean jaxb2Present;
+
+    private static final boolean jackson2Present;
+
+    private static final boolean jackson2XmlPresent;
+
+    private static final boolean jackson2SmilePresent;
+
+    private static final boolean gsonPresent;
+
+    private static final boolean jsonbPresent;
+
     private final List<HttpMessageConverter<?>> partConverters = new ArrayList<>();
+
+    static {
+        ClassLoader classLoader = AllEncompassingFormHttpMessageConverter.class.getClassLoader();
+        jaxb2Present = ClassUtils.isPresent("javax.xml.bind.Binder", classLoader);
+        jackson2Present = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", classLoader) &&
+                ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", classLoader);
+        jackson2XmlPresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.xml.XmlMapper", classLoader);
+        jackson2SmilePresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.smile.SmileFactory", classLoader);
+        gsonPresent = ClassUtils.isPresent("com.google.gson.Gson", classLoader);
+        jsonbPresent = ClassUtils.isPresent("javax.json.bind.Jsonb", classLoader);
+    }
 
     /**
      * Instantiates a new Upload http message converter.
      */
-    public UploadHttpMessageConverter() {
+    public ExtensionFormHttpMessageConverter() {
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
         stringHttpMessageConverter.setWriteAcceptCharset(false);  // see SPR-7316
 
         this.partConverters.add(new ByteArrayHttpMessageConverter());
         this.partConverters.add(stringHttpMessageConverter);
         this.partConverters.add(new ResourceHttpMessageConverter());
+        try {
+            this.partConverters.add(new SourceHttpMessageConverter<>());
+        } catch (Error err) {
+            // Ignore when no TransformerFactory implementation is available
+        }
 
+        if (jaxb2Present && !jackson2XmlPresent) {
+            this.partConverters.add(new Jaxb2RootElementHttpMessageConverter());
+        }
+
+        if (jackson2Present) {
+            this.partConverters.add(new MappingJackson2HttpMessageConverter());
+        } else if (gsonPresent) {
+            this.partConverters.add(new GsonHttpMessageConverter());
+        } else if (jsonbPresent) {
+            this.partConverters.add(new JsonbHttpMessageConverter());
+        }
+
+        if (jackson2XmlPresent) {
+            this.partConverters.add(new MappingJackson2XmlHttpMessageConverter());
+        }
+
+        if (jackson2SmilePresent) {
+            this.partConverters.add(new MappingJackson2SmileHttpMessageConverter());
+        }
+        this.setPartConverters(this.partConverters);
         applyDefaultCharset();
     }
+
 
     /**
      * Apply the configured charset as a default to registered part converters.
@@ -50,6 +110,7 @@ final class UploadHttpMessageConverter extends FormHttpMessageConverter {
             }
         }
     }
+
     @Override
     @SuppressWarnings("unchecked")
     public void write(MultiValueMap<String, ?> map, @Nullable MediaType contentType, HttpOutputMessage outputMessage)
@@ -190,6 +251,7 @@ final class UploadHttpMessageConverter extends FormHttpMessageConverter {
         os.write('\r');
         os.write('\n');
     }
+
     private static class MultipartHttpOutputMessage implements HttpOutputMessage {
 
         private final OutputStream outputStream;

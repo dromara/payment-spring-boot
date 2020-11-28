@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
@@ -30,6 +31,7 @@ import java.util.function.Consumer;
  */
 public class WechatPayClient {
     private final SignatureProvider signatureProvider;
+    private RestOperations restOperations;
 
     /**
      * Instantiates a new Wechat pay service.
@@ -38,6 +40,7 @@ public class WechatPayClient {
      */
     public WechatPayClient(SignatureProvider signatureProvider) {
         this.signatureProvider = signatureProvider;
+        applyDefaultRestTemplate();
     }
 
 
@@ -50,7 +53,7 @@ public class WechatPayClient {
      * @return the executor
      */
     public <M> Executor<M> withType(WechatPayV3Type wechatPayV3Type, M m) {
-        return new Executor<>(wechatPayV3Type, m, this.signatureProvider);
+        return new Executor<>(wechatPayV3Type, m, this.signatureProvider,this.restOperations);
     }
 
 
@@ -61,10 +64,10 @@ public class WechatPayClient {
      */
     public static class Executor<M> {
         /**
-         * The V 3 pay type.
+         * The V3 pay type.
          */
         private final WechatPayV3Type wechatPayV3Type;
-        private RestOperations restOperations;
+        private final RestOperations restOperations;
         private final SignatureProvider signatureProvider;
         private final M model;
 
@@ -85,14 +88,13 @@ public class WechatPayClient {
          * @param model             the model
          * @param signatureProvider the signature provider
          */
-        public Executor(WechatPayV3Type wechatPayV3Type,
+         Executor(WechatPayV3Type wechatPayV3Type,
                         M model,
-                        SignatureProvider signatureProvider) {
+                        SignatureProvider signatureProvider, RestOperations restOperations) {
             this.wechatPayV3Type = wechatPayV3Type;
             this.model = model;
             this.signatureProvider = signatureProvider;
-
-            applyDefaultRestTemplate();
+            this.restOperations = restOperations;
         }
 
         /**
@@ -128,16 +130,6 @@ public class WechatPayClient {
             this.doExecute(this.header(wechatRequestEntity));
         }
 
-        private void applyDefaultRestTemplate() {
-            RestTemplate restTemplate = new RestTemplate();
-            DefaultResponseErrorHandler errorHandler = new WechatPayResponseErrorHandler();
-            restTemplate.setErrorHandler(errorHandler);
-            List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
-            // upload
-            messageConverters.add(new UploadHttpMessageConverter());
-            restTemplate.setMessageConverters(messageConverters);
-            this.restOperations = restTemplate;
-        }
 
         /**
          * 构造私钥签名.
@@ -215,4 +207,15 @@ public class WechatPayClient {
 
     }
 
+    private void applyDefaultRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        DefaultResponseErrorHandler errorHandler = new WechatPayResponseErrorHandler();
+        restTemplate.setErrorHandler(errorHandler);
+        List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+
+        messageConverters.removeIf(httpMessageConverter -> httpMessageConverter instanceof AllEncompassingFormHttpMessageConverter);
+        messageConverters.add(new ExtensionFormHttpMessageConverter());
+        restTemplate.setMessageConverters(messageConverters);
+        this.restOperations = restTemplate;
+    }
 }
