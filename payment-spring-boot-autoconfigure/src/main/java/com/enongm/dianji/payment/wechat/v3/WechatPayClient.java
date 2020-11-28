@@ -177,7 +177,7 @@ public class WechatPayClient {
                 throw new PayException("wechat pay server error,result : " + body);
             }
             if (Objects.isNull(body)) {
-                throw new IllegalStateException("cant obtain response body");
+                throw new PayException("cant obtain wechat response body");
             }
 
 
