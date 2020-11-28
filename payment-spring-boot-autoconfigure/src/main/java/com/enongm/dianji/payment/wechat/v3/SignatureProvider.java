@@ -152,7 +152,7 @@ public class SignatureProvider {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Authorization", authorization);
-        headers.add("User-Agent", "pay-service");
+        headers.add("User-Agent", "X-Pay-Service");
         RequestEntity<?> requestEntity = new RequestEntity<>(headers, httpMethod, uri.toUri());
         ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
         ObjectNode bodyObjectNode = responseEntity.getBody();
