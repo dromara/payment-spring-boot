@@ -8,6 +8,7 @@ import com.enongm.dianji.payment.wechat.v3.model.ResponseSignVerifyParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -62,7 +64,7 @@ public class WechatPayClient {
          * The V 3 pay type.
          */
         private final WechatPayV3Type wechatPayV3Type;
-        private final RestOperations restOperations;
+        private RestOperations restOperations;
         private final SignatureProvider signatureProvider;
         private final M model;
 
@@ -89,10 +91,8 @@ public class WechatPayClient {
             this.wechatPayV3Type = wechatPayV3Type;
             this.model = model;
             this.signatureProvider = signatureProvider;
-            RestTemplate restTemplate = new RestTemplate();
-            DefaultResponseErrorHandler errorHandler = new WechatPayResponseErrorHandler();
-            restTemplate.setErrorHandler(errorHandler);
-            this.restOperations = restTemplate;
+
+            applyDefaultRestTemplate();
         }
 
         /**
@@ -128,6 +128,16 @@ public class WechatPayClient {
             this.doExecute(this.header(wechatRequestEntity));
         }
 
+        private void applyDefaultRestTemplate() {
+            RestTemplate restTemplate = new RestTemplate();
+            DefaultResponseErrorHandler errorHandler = new WechatPayResponseErrorHandler();
+            restTemplate.setErrorHandler(errorHandler);
+            List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+            // upload
+            messageConverters.add(new UploadHttpMessageConverter());
+            restTemplate.setMessageConverters(messageConverters);
+            this.restOperations = restTemplate;
+        }
 
         /**
          * 构造私钥签名.
