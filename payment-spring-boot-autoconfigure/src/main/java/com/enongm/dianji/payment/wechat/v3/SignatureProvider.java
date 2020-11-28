@@ -48,9 +48,7 @@ import java.util.stream.Collectors;
  * @since 16 :48
  */
 public class SignatureProvider {
-    /**
-     * The constant APPLICATION_JSON.
-     */
+
     private static final IdGenerator ID_GENERATOR = new AlternativeJdkIdGenerator();
     private static final String SCHEMA = "WECHATPAY2-SHA256-RSA2048 ";
     private final RestOperations restOperations = new RestTemplate();
