@@ -142,15 +142,21 @@ public class WechatPayClient {
             UriComponents uri = UriComponentsBuilder.fromUri(requestEntity.getUrl()).build();
             String canonicalUrl = uri.getPath();
             String encodedQuery = uri.getQuery();
-
+           Assert.notNull(canonicalUrl,"canonicalUrl is required");
             if (encodedQuery != null) {
                 canonicalUrl += "?" + encodedQuery;
             }
+
+
             // 签名
             HttpMethod httpMethod = requestEntity.getMethod();
             Assert.notNull(httpMethod, "httpMethod is required");
 
-            String body = requestEntity.hasBody() ? Objects.requireNonNull(requestEntity.getBody()).toString() : "";
+            T entityBody = requestEntity.getBody();
+            String body = requestEntity.hasBody() ? Objects.requireNonNull(entityBody).toString() : "";
+            if (WechatPayV3Type.MARKETING_IMAGE_UPLOAD.pattern().contains(canonicalUrl)) {
+                 body = Objects.requireNonNull(requestEntity.getHeaders().get("Meta-Info")).get(0);
+            }
             String authorization = signatureProvider.requestSign(httpMethod.name(), canonicalUrl, body);
 
             HttpHeaders httpHeaders = new HttpHeaders();

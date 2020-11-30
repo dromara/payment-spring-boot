@@ -8,10 +8,15 @@ import com.enongm.dianji.payment.wechat.v3.model.StocksCreateParams;
 import com.enongm.dianji.payment.wechat.v3.model.StocksQueryParams;
 import com.enongm.dianji.payment.wechat.v3.model.StocksSendParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.SneakyThrows;
+import org.bouncycastle.jcajce.provider.digest.SHA256;
+import org.bouncycastle.util.encoders.Hex;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -20,14 +25,23 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
+ * The type Wechat marketing api.
+ *
  * @author Dax
- * @since 18:22
+ * @since 18 :22
  */
 public class WechatMarketingApi extends AbstractApi {
+    /**
+     * Instantiates a new Wechat marketing api.
+     *
+     * @param wechatPayClient the wechat pay client
+     * @param wechatMetaBean  the wechat meta bean
+     */
     public WechatMarketingApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
         super(wechatPayClient, wechatMetaBean);
     }
@@ -198,7 +212,6 @@ public class WechatMarketingApi extends AbstractApi {
         return RequestEntity.get(uri).build();
     }
 
-
     /**
      * 发放代金券API.
      *
@@ -226,6 +239,40 @@ public class WechatMarketingApi extends AbstractApi {
         return postRequestEntity(uri, params);
     }
 
+    /**
+     * 营销图片上传API.
+     *
+     * @param file the file
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> marketingImageUpload(MultipartFile file) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.getWechatPayClient().withType(WechatPayV3Type.MARKETING_IMAGE_UPLOAD, file)
+                .function(this::marketingImageUploadFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+
+    @SneakyThrows
+    private RequestEntity<?> marketingImageUploadFunction(WechatPayV3Type type, MultipartFile file) {
+
+        Map<String, Object> meta = new LinkedHashMap<>(2);
+        meta.put("filename", file.getOriginalFilename());
+
+        byte[] digest = SHA256.Digest.getInstance("SHA-256").digest(file.getBytes());
+        meta.put("sha256", Hex.toHexString(digest));
+        String httpUrl = type.uri(WeChatServer.CHINA);
+        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().toUri();
+        MultiValueMap<Object, Object> body = new LinkedMultiValueMap<>();
+        body.add("meta", meta);
+        body.add("file", file.getResource());
+        // 签名
+        String metaStr = this.getMapper().writeValueAsString(meta);
+        return RequestEntity.post(uri).header("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE)
+                .header("Meta-Info",metaStr).body(body);
+    }
 
     /**
      * 代金券核销回调通知.

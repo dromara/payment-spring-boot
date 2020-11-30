@@ -92,6 +92,15 @@ public enum WechatPayV3Type {
         return this.method;
     }
 
+    /**
+     * Pattern string.
+     *
+     * @return the string
+     */
+    public String pattern() {
+        return this.pattern;
+    }
+
 
     /**
      * 默认支付URI.
