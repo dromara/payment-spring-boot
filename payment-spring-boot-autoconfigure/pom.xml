@@ -5,7 +5,7 @@
 
     <groupId>com.enongm.dianji</groupId>
     <artifactId>payment-spring-boot-autoconfigure</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>1.0.1.RELEASE</version>
     <build>
         <plugins>
             <plugin>
@@ -21,12 +21,24 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
+    <distributionManagement>
+        <repository>
+            <id>hndpx-release</id>
+            <name>Release Repository</name>
+            <url>http://dev.enongm.com/nexus3/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>hndpx-snapshots</id>
+            <name>Snapshots Repository</name>
+            <url>http://dev.enongm.com/nexus3/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.enongm.dianji</groupId>
                 <artifactId>payment-spring-boot</artifactId>
-                <version>1.0.0.RELEASE</version>
+                <version>1.0.1.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
