@@ -69,6 +69,18 @@ public class WechatPayConfiguration {
     }
 
     /**
+     * Wechat marketing api wechat marketing api.
+     *
+     * @param wechatPayClient the wechat pay client
+     * @param wechatMetaBean  the wechat meta bean
+     * @return the wechat marketing api
+     */
+    @Bean
+    public WechatMarketingApi wechatMarketingApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
+        return new WechatMarketingApi(wechatPayClient, wechatMetaBean);
+    }
+
+    /**
      * Wechat pay callback.
      *
      * @param signatureProvider the signature provider
