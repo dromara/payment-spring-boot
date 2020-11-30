@@ -270,8 +270,10 @@ public class WechatMarketingApi extends AbstractApi {
         body.add("file", file.getResource());
         // 签名
         String metaStr = this.getMapper().writeValueAsString(meta);
-        return RequestEntity.post(uri).header("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE)
-                .header("Meta-Info",metaStr).body(body);
+        return RequestEntity.post(uri)
+                .header("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE)
+                .header("Meta-Info",metaStr)
+                .body(body);
     }
 
     /**

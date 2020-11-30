@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 /**
- * The type Wechat pay v 3 api.
+ * The type Wechat pay api.
  *
  * @author Dax
  * @since 16 :15

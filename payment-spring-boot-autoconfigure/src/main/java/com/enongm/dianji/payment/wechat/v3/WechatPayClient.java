@@ -146,8 +146,6 @@ public class WechatPayClient {
             if (encodedQuery != null) {
                 canonicalUrl += "?" + encodedQuery;
             }
-
-
             // 签名
             HttpMethod httpMethod = requestEntity.getMethod();
             Assert.notNull(httpMethod, "httpMethod is required");

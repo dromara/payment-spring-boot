@@ -20,8 +20,8 @@ public class WechatMetaBean implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(wechatPayProperties, "wechatPayProperties must not be null");
-        Assert.notNull(keyPair, "wechat pay p12 certificate has not loaded");
-        Assert.hasText(serialNumber, "wechat pay p12 certificate SerialNumber must not null");
+        Assert.notNull(wechatPayProperties, "wechatPayProperties is required");
+        Assert.notNull(keyPair, "wechat pay p12 certificate is required");
+        Assert.hasText(serialNumber, "wechat pay p12 certificate SerialNumber is required");
     }
 }
