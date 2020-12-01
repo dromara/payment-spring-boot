@@ -17,7 +17,7 @@
 
 ```xml
       <dependency>
-            <groupId>com.enongm.dianji</groupId>
+            <groupId>cn.felord</groupId>
             <artifactId>payment-spring-boot-starter</artifactId>
             <version>1.0.0.RELEASE</version>
       </dependency>
@@ -60,7 +60,9 @@ public class PayConfig {
 微信支付V3开放接口引入：
 ```java
     @Autowired
-    WechatPayApi wechatPayV3Api;
+    WechatPayApi wechatPayV3Api;    
+    @Autowired
+    WechatMarketingApi  wchatMarketingApi; 
 ```
 ###### V3
 例如V3 APP 支付
