@@ -31,15 +31,15 @@ public abstract class AbstractApi {
         return mapper;
     }
 
-    public WechatPayClient getWechatPayClient() {
+    public WechatPayClient client() {
         return wechatPayClient;
     }
 
-    public WechatMetaBean getWechatMetaBean() {
+    public WechatMetaBean meta() {
         return wechatMetaBean;
     }
 
-    protected RequestEntity<?> postRequestEntity(URI uri, Object params) {
+    protected RequestEntity<?> post(URI uri, Object params) {
         try {
             return RequestEntity.post(uri)
                     .body(mapper.writeValueAsString(params));

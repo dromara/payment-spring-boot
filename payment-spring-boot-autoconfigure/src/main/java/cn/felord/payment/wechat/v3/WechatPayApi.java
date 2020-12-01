@@ -31,7 +31,7 @@ public class WechatPayApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> appPay(AppPayParams payParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.getWechatPayClient().withType(WechatPayV3Type.APP, payParams)
+        this.client().withType(WechatPayV3Type.APP, payParams)
                 .function(this::appPayFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -39,11 +39,11 @@ public class WechatPayApi extends AbstractApi {
     }
 
     private RequestEntity<?> appPayFunction(WechatPayV3Type type, AppPayParams payParams) {
-        WechatPayProperties.V3 v3 = this.getWechatMetaBean().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
         payParams.setAppid(v3.getAppId());
         payParams.setMchid(v3.getMchId());
         String httpUrl = type.uri(WeChatServer.CHINA);
         URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().toUri();
-        return postRequestEntity(uri, payParams);
+        return post(uri, payParams);
     }
 }
