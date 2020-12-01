@@ -218,7 +218,7 @@ public class WechatMarketingApi extends AbstractApi {
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> sendStocks(StocksSendParams params) {
+    public WechatResponseEntity<ObjectNode> sendStock(StocksSendParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.getWechatPayClient().withType(WechatPayV3Type.MARKETING_FAVOR_USERS_COUPONS, params)
                 .function(this::sendStocksFunction)

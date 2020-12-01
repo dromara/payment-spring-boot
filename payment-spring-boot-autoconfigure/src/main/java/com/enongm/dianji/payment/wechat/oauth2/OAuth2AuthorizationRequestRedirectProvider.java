@@ -2,8 +2,9 @@ package com.enongm.dianji.payment.wechat.oauth2;
 
 
 import com.enongm.dianji.payment.PayException;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.SneakyThrows;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ import java.util.Objects;
 
 /**
  * OAuth2 获取用户的公众号授权openid.
+ * 1.需要微信公众号服务号
+ * 2.需要微信公众号服务号绑定微信开放平台
+ * 3.需要正确设置授权回调
  *
  * @author Dax
  * @since 11 :39
@@ -29,7 +33,7 @@ public class OAuth2AuthorizationRequestRedirectProvider {
     private static final String AUTHORIZATION_URI = "https://open.weixin.qq.com/connect/oauth2/authorize";
     private static final String TOKEN_URI = "https://api.weixin.qq.com/sns/oauth2/access_token";
     private final RestOperations restOperations = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final String appId;
     private final String secret;
 
@@ -40,6 +44,9 @@ public class OAuth2AuthorizationRequestRedirectProvider {
      * @param secret the secret
      */
     public OAuth2AuthorizationRequestRedirectProvider(String appId, String secret) {
+        this.objectMapper = new ObjectMapper();
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         this.appId = appId;
         this.secret = secret;
     }
@@ -72,7 +79,7 @@ public class OAuth2AuthorizationRequestRedirectProvider {
      * @return the string
      */
     @SneakyThrows
-    public ObjectNode openId(String code, String state)  {
+    public OAuth2Exchange exchange(String code, String state) {
         Assert.hasText(code, "wechat pay oauth2 code is required");
         Assert.hasText(state, "wechat pay oauth2 state is required");
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -91,7 +98,7 @@ public class OAuth2AuthorizationRequestRedirectProvider {
 
         String body = responseEntity.getBody();
         if (Objects.nonNull(body)) {
-            return objectMapper.readValue(body, ObjectNode.class);
+            return objectMapper.readValue(body, OAuth2Exchange.class);
         }
         throw new PayException("Wechat OAuth2 Authorization failed");
     }
