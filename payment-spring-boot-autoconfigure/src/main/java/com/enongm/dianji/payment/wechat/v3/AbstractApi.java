@@ -44,8 +44,7 @@ public abstract class AbstractApi {
             return RequestEntity.post(uri)
                     .body(mapper.writeValueAsString(params));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new PayException("wechat app pay json failed");
         }
-        throw new PayException("wechat app pay json failed");
     }
 }

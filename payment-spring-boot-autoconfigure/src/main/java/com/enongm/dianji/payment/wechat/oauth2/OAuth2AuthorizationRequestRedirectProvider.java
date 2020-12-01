@@ -2,7 +2,7 @@ package com.enongm.dianji.payment.wechat.oauth2;
 
 
 import com.enongm.dianji.payment.PayException;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import org.springframework.http.RequestEntity;
@@ -29,6 +29,7 @@ public class OAuth2AuthorizationRequestRedirectProvider {
     private static final String AUTHORIZATION_URI = "https://open.weixin.qq.com/connect/oauth2/authorize";
     private static final String TOKEN_URI = "https://api.weixin.qq.com/sns/oauth2/access_token";
     private final RestOperations restOperations = new RestTemplate();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final String appId;
     private final String secret;
 
@@ -46,12 +47,12 @@ public class OAuth2AuthorizationRequestRedirectProvider {
     /**
      * 拼接微信公众号授权的url,用以触发用户点击跳转微信授权.
      *
-     * @param phoneNumber the phone number
+     * @param state       the state
      * @param redirectUri the redirect uri
      * @return uri components
      */
     @SneakyThrows
-    public String redirect(String phoneNumber, String redirectUri) {
+    public String redirect(String state, String redirectUri) {
         Assert.hasText(redirectUri, "redirectUri is required");
         String encode = URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.name());
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -59,7 +60,7 @@ public class OAuth2AuthorizationRequestRedirectProvider {
         queryParams.add("redirect_uri", encode);
         queryParams.add("response_type", "code");
         queryParams.add("scope", "snsapi_base");
-        queryParams.add("state", phoneNumber);
+        queryParams.add("state", state);
         return UriComponentsBuilder.fromHttpUrl(AUTHORIZATION_URI).queryParams(queryParams).build().toUriString() + "#wechat_redirect";
     }
 
@@ -70,12 +71,15 @@ public class OAuth2AuthorizationRequestRedirectProvider {
      * @param code the code
      * @return the string
      */
-    public String openId(String code) {
+    @SneakyThrows
+    public ObjectNode openId(String code, String state)  {
         Assert.hasText(code, "wechat pay oauth2 code is required");
+        Assert.hasText(state, "wechat pay oauth2 state is required");
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("appid", appId);
         queryParams.add("secret", secret);
         queryParams.add("code", code);
+        queryParams.add("state", state);
         queryParams.add("grant_type", "authorization_code");
         URI uri = UriComponentsBuilder.fromHttpUrl(TOKEN_URI)
                 .queryParams(queryParams)
@@ -83,13 +87,13 @@ public class OAuth2AuthorizationRequestRedirectProvider {
                 .toUri();
 
         RequestEntity<Void> requestEntity = RequestEntity.get(uri).build();
-        ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
-        ObjectNode body = responseEntity.getBody();
+        ResponseEntity<String> responseEntity = restOperations.exchange(requestEntity, String.class);
+
+        String body = responseEntity.getBody();
         if (Objects.nonNull(body)) {
-            JsonNode openid = body.get("openid");
-            return openid.asText();
+            return objectMapper.readValue(body, ObjectNode.class);
         }
-        throw new PayException("OpenId Not Available");
+        throw new PayException("Wechat OAuth2 Authorization failed");
     }
 
 

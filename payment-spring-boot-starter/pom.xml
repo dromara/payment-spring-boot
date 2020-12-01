@@ -5,7 +5,7 @@
 
     <groupId>com.enongm.dianji</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.1.RELEASE</version>
+    <version>1.0.0.RELEASE</version>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,7 +26,7 @@
             <dependency>
                 <groupId>com.enongm.dianji</groupId>
                 <artifactId>payment-spring-boot</artifactId>
-                <version>1.0.1.RELEASE</version>
+                <version>1.0.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
