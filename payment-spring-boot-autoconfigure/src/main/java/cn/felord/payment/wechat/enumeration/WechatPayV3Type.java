@@ -53,13 +53,9 @@ public enum WechatPayV3Type {
      */
     MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST,"%s/v3/marketing/favor/users/{openid}/coupons"),
     /**
-     * 重启代金券
+     * 重启代金券API
      */
     MARKETING_FAVOR_STOCKS_RESTART(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/restart"),
-    /**
-     * 查询代金券可用商户.
-     */
-    MARKETING_FAVOR_STOCKS_MERCHANTS(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}/merchants"),
     /**
      * 条件查询批次列表API.
      */
@@ -68,6 +64,18 @@ public enum WechatPayV3Type {
      * 查询批次详情API.
      */
     MARKETING_FAVOR_STOCKS_DETAIL(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}"),
+    /**
+     * 查询代金券详情API
+     */
+    MARKETING_FAVOR_USERS_COUPONS_DETAIL(HttpMethod.GET, "%s/v3/marketing/favor/users/{openid}/coupons/{coupon_id}"),
+    /**
+     * 查询代金券可用商户API.
+     */
+    MARKETING_FAVOR_STOCKS_MERCHANTS(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}/merchants"),
+    /**
+     * 查询代金券可用单品API.
+     */
+    MARKETING_FAVOR_STOCKS_ITEMS(HttpMethod.GET, "%s/v3/marketing/favor/stocks/{stock_id}/items"),
     /**
      * 营销图片上传API.
      */
