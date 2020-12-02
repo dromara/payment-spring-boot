@@ -58,7 +58,7 @@ public class WechatPayConfiguration {
     }
 
     /**
-     * Wechat pay v3 api.
+     * 微信支付API.
      *
      * @param wechatPayClient the wechat pay v 3 client
      * @param wechatMetaBean  the wechat meta bean
@@ -70,7 +70,7 @@ public class WechatPayConfiguration {
     }
 
     /**
-     * Wechat marketing api wechat marketing api.
+     * 微信营销API.
      *
      * @param wechatPayClient the wechat pay client
      * @param wechatMetaBean  the wechat meta bean
@@ -82,7 +82,7 @@ public class WechatPayConfiguration {
     }
 
     /**
-     * Wechat pay callback.
+     * 微信支付回调工具.
      *
      * @param signatureProvider the signature provider
      * @return the wechat pay callback

@@ -44,13 +44,18 @@ public enum WechatPayV3Type {
      */
     MARKETING_FAVOR_STOCKS_START(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/start"),
     /**
-     * 重启代金券
+     * 暂停代金券批次API.
      */
-    MARKETING_FAVOR_STOCKS_RESTART(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/restart"),
+    MARKETING_FAVOR_STOCKS_PAUSE(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/pause"),
+
     /**
      * 发放代金券API & 根据商户号查用户的券.
      */
     MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST,"%s/v3/marketing/favor/users/{openid}/coupons"),
+    /**
+     * 重启代金券
+     */
+    MARKETING_FAVOR_STOCKS_RESTART(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/restart"),
     /**
      * 查询代金券可用商户.
      */

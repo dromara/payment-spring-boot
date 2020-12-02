@@ -16,8 +16,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
+ * The type Wechat pay callback.
+ *
  * @author Dax
- * @since 10:21
+ * @since 10 :21
  */
 @Slf4j
 public class WechatPayCallback {
@@ -29,11 +31,23 @@ public class WechatPayCallback {
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
+    /**
+     * Instantiates a new Wechat pay callback.
+     *
+     * @param signatureProvider the signature provider
+     */
     public WechatPayCallback(SignatureProvider signatureProvider) {
         this.signatureProvider = signatureProvider;
     }
 
 
+    /**
+     * 微信支付代金券核销回调工具.
+     *
+     * @param params                    the params
+     * @param couponConsumeDataConsumer the coupon consume data consumer
+     * @return the map
+     */
     @SneakyThrows
     public Map<String, ?> wechatPayCouponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> couponConsumeDataConsumer) {
 

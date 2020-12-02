@@ -65,7 +65,7 @@ public class PayConfig {
     WechatMarketingApi  wchatMarketingApi; 
 ```
 ###### V3
-例如V3 APP 支付
+例如V3 查询商户下的优惠券
 
 ```java
      // 查询商户下的优惠券
@@ -74,7 +74,7 @@ public class PayConfig {
          StocksQueryParams params = new StocksQueryParams();
          params.setOffset(0);
          params.setLimit(10);
-         WechatResponseEntity<ObjectNode> objectNodeWechatResponseEntity = wechatPayV3Api.queryStocksByMch(params);
+         WechatResponseEntity<ObjectNode> objectNodeWechatResponseEntity = wchatMarketingApi.queryStocksByMch(params);
          System.out.println("objectNodeWechatResponseEntity = " + objectNodeWechatResponseEntity);
      }
 ```
