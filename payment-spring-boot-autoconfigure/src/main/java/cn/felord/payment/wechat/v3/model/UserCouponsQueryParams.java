@@ -1,6 +1,5 @@
 package cn.felord.payment.wechat.v3.model;
 
-import cn.felord.payment.wechat.enumeration.CouponStatus;
 import lombok.Data;
 
 /**
@@ -24,7 +23,7 @@ public class UserCouponsQueryParams {
     /**
      * 券状态  null 不生效
      */
-    private CouponStatus status;
+    private Status status;
     /**
      * 创建批次的商户号
      */
@@ -40,9 +39,16 @@ public class UserCouponsQueryParams {
     /**
      * 分页页码
      */
-    private int offset = 0;
+    private Integer offset = 0;
     /**
      * 分页大小
      */
-    private int limit = 20;
+    private Integer limit = 20;
+
+
+   public enum Status{
+        SENDED,
+        USED
+    }
+
 }

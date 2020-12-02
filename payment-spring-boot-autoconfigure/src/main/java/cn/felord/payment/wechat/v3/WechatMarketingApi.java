@@ -4,10 +4,7 @@ import cn.felord.payment.wechat.WechatPayProperties;
 import cn.felord.payment.wechat.enumeration.StockStatus;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
-import cn.felord.payment.wechat.v3.model.CouponDetailsQueryParams;
-import cn.felord.payment.wechat.v3.model.StocksCreateParams;
-import cn.felord.payment.wechat.v3.model.StocksQueryParams;
-import cn.felord.payment.wechat.v3.model.StocksSendParams;
+import cn.felord.payment.wechat.v3.model.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
@@ -29,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * The type Wechat marketing api.
@@ -48,7 +46,7 @@ public class WechatMarketingApi extends AbstractApi {
     }
 
     /**
-     * 创建代金券批次API.
+     * 创建代金券批次API
      *
      * @param params the params
      * @return the wechat response entity
@@ -89,7 +87,7 @@ public class WechatMarketingApi extends AbstractApi {
 
 
     /**
-     * 发放代金券API.
+     * 发放代金券API
      *
      * @param params the params
      * @return the wechat response entity
@@ -118,7 +116,7 @@ public class WechatMarketingApi extends AbstractApi {
     }
 
     /**
-     * 暂停代金券批次API.
+     * 暂停代金券批次API
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -133,7 +131,7 @@ public class WechatMarketingApi extends AbstractApi {
     }
 
     /**
-     * 重启代金券批次API.
+     * 重启代金券批次API
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -161,7 +159,7 @@ public class WechatMarketingApi extends AbstractApi {
     }
 
     /**
-     * 条件查询批次列表API.
+     * 条件查询批次列表API
      *
      * @param params the params
      * @return the wechat response entity
@@ -217,7 +215,7 @@ public class WechatMarketingApi extends AbstractApi {
     }
 
     /**
-     * 查询批次详情API.
+     * 查询批次详情API
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -319,19 +317,95 @@ public class WechatMarketingApi extends AbstractApi {
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> queryUserCouponsByMchId(StocksQueryParams params) {
+    public WechatResponseEntity<ObjectNode> queryUserCouponsByMchId(UserCouponsQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_ITEMS, params)
-                .function(this::queryStocksFunction)
+        this.client().withType(WechatPayV3Type.MARKETING_FAVOR_USERS_COUPONS, params)
+                .function(this::queryUserCouponsFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
 
         return wechatResponseEntity;
     }
 
+    private RequestEntity<?> queryUserCouponsFunction(WechatPayV3Type type, UserCouponsQueryParams params) {
+        final String ignore = "available_mchid";
+        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("appid", v3.getMp().getAppId());
+        String stockId = params.getStockId();
+        if (StringUtils.hasText(stockId)) {
+            queryParams.add("stock_id", stockId);
+        }
+        String status = Objects.nonNull(params.getStatus()) ? params.getStatus().name() : ignore;
+        queryParams.add("status", status);
+        String creatorMchId = params.getCreatorMchId();
+        if (StringUtils.hasText(creatorMchId)) {
+            queryParams.add("creator_mchid", creatorMchId);
+        }
+        String senderMchId = params.getSenderMchId();
+        if (StringUtils.hasText(senderMchId)) {
+            queryParams.add("sender_mchid", senderMchId);
+        }
+        String availableMchId = params.getAvailableMchId();
+        if (StringUtils.hasText(availableMchId)) {
+            queryParams.add("available_mchid", availableMchId);
+        }
+        String offset = Objects.isNull(params.getOffset()) ? ignore : params.getOffset().toString();
+        queryParams.add("offset", offset);
+        String limit = Objects.isNull(params.getLimit()) ? ignore : params.getLimit().toString();
+        queryParams.add("limit", limit);
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParams(queryParams)
+                .build()
+                .expand(params.getOpenId())
+                .toUri();
+        return RequestEntity.get(uri).build();
+
+    }
 
     /**
-     * 营销图片上传API.
+     * 下载批次核销明细API
+     *
+     * @param stockId the stock id
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> downloadStockUseFlow(String stockId) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_USE_FLOW, stockId)
+                .function(this::downloadFlowFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 下载批次退款明细API
+     *
+     * @param stockId the stock id
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> downloadStockRefundFlow(String stockId) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_REFUND_FLOW, stockId)
+                .function(this::downloadFlowFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    private RequestEntity<?> downloadFlowFunction(WechatPayV3Type type, String stockId) {
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .build()
+                .expand(stockId)
+                .toUri();
+        return RequestEntity.get(uri).build();
+    }
+
+    /**
+     * 营销图片上传API
      *
      * @param file the file
      * @return the wechat response entity
@@ -368,21 +442,21 @@ public class WechatMarketingApi extends AbstractApi {
     }
 
     /**
-     * 代金券核销回调通知.
-     *
+     * 代金券核销回调通知API
      * @param notifyUrl the notify url
+     * @see WechatPayCallback#wechatPayCouponCallback(ResponseSignVerifyParams, Consumer)
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> marketingFavorCallback(String notifyUrl) {
+    public WechatResponseEntity<ObjectNode> setMarketingFavorCallback(String notifyUrl) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.MARKETING_FAVOR_CALLBACKS, notifyUrl)
-                .function(this::marketingFavorCallbackFunction)
+                .function(this::setMarketingFavorCallbackFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
     }
 
-    private RequestEntity<?> marketingFavorCallbackFunction(WechatPayV3Type type, String notifyUrl) {
+    private RequestEntity<?> setMarketingFavorCallbackFunction(WechatPayV3Type type, String notifyUrl) {
         WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
         Map<String, Object> body = new HashMap<>(3);
         body.put("mchid", v3.getMchId());

@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
  */
 @Data
 public class StocksQueryParams {
-    private int offset =0;
-    private int limit = 10;
+    private Integer offset =0;
+    private Integer limit = 10;
     private String stockId;
     private LocalDateTime createStartTime;
     private LocalDateTime createEndTime;
