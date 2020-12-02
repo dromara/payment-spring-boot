@@ -3,7 +3,6 @@ package cn.felord.payment.wechat;
 
 import cn.felord.payment.wechat.oauth2.OAuth2AuthorizationRequestRedirectProvider;
 import cn.felord.payment.wechat.v3.*;
-import cn.felord.payment.wechat.v3.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -77,8 +76,8 @@ public class WechatPayConfiguration {
      * @return the wechat marketing api
      */
     @Bean
-    public WechatMarketingApi wechatMarketingApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
-        return new WechatMarketingApi(wechatPayClient, wechatMetaBean);
+    public WechatMarketingFavorApi wechatMarketingApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
+        return new WechatMarketingFavorApi(wechatPayClient, wechatMetaBean);
     }
 
     /**

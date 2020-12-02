@@ -29,19 +29,19 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * The type Wechat marketing api.
+ * 微信支付营销代金券API
  *
  * @author Dax
  * @since 18 :22
  */
-public class WechatMarketingApi extends AbstractApi {
+public class WechatMarketingFavorApi extends AbstractApi {
     /**
      * Instantiates a new Wechat marketing api.
      *
      * @param wechatPayClient the wechat pay client
      * @param wechatMetaBean  the wechat meta bean
      */
-    public WechatMarketingApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
+    public WechatMarketingFavorApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
         super(wechatPayClient, wechatMetaBean);
     }
 

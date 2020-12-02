@@ -5,7 +5,9 @@
 
 - [x] **微信支付V3** 全量支持。
 - [x] **支付宝**  提供所有实现，具体以签约项目为准。 
-- [ ] **银联支付**  施工中…… 
+## 进度
+- 微信支付营销-代金券 `WechatMarketingFavorApi` 100%
+- 微信支付 支付功能 `WechatPayApi` app预支付
 
 ## 采用技术
 - Spring
@@ -62,7 +64,7 @@ public class PayConfig {
     @Autowired
     WechatPayApi wechatPayV3Api;    
     @Autowired
-    WechatMarketingApi  wchatMarketingApi; 
+    WechatMarketingFavorApi  wechatMarketingFavorApi; 
 ```
 ###### V3
 例如V3 查询商户下的优惠券
@@ -74,7 +76,7 @@ public class PayConfig {
          StocksQueryParams params = new StocksQueryParams();
          params.setOffset(0);
          params.setLimit(10);
-         WechatResponseEntity<ObjectNode> objectNodeWechatResponseEntity = wchatMarketingApi.queryStocksByMch(params);
+         WechatResponseEntity<ObjectNode> objectNodeWechatResponseEntity = wechatMarketingFavorApi.queryStocksByMch(params);
          System.out.println("objectNodeWechatResponseEntity = " + objectNodeWechatResponseEntity);
      }
 ```
