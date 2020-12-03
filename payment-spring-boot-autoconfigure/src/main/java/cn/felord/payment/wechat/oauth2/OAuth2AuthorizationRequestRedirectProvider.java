@@ -2,6 +2,7 @@ package cn.felord.payment.wechat.oauth2;
 
 
 import cn.felord.payment.PayException;
+import cn.felord.payment.wechat.WechatPayProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -18,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -34,21 +36,18 @@ public class OAuth2AuthorizationRequestRedirectProvider {
     private static final String TOKEN_URI = "https://api.weixin.qq.com/sns/oauth2/access_token";
     private final RestOperations restOperations = new RestTemplate();
     private final ObjectMapper objectMapper;
-    private final String appId;
-    private final String secret;
+    private final Map<String, WechatPayProperties.V3> v3Map;
 
     /**
      * Instantiates a new O auth 2 authorization request redirect provider.
      *
-     * @param appId  the app id
-     * @param secret the secret
+     * @param v3Map the v 3 map
      */
-    public OAuth2AuthorizationRequestRedirectProvider(String appId, String secret) {
+    public OAuth2AuthorizationRequestRedirectProvider(Map<String, WechatPayProperties.V3> v3Map) {
         this.objectMapper = new ObjectMapper();
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        this.appId = appId;
-        this.secret = secret;
+        this.v3Map = v3Map;
     }
 
     /**
@@ -59,11 +58,12 @@ public class OAuth2AuthorizationRequestRedirectProvider {
      * @return uri components
      */
     @SneakyThrows
-    public String redirect(String state, String redirectUri) {
+    public String redirect(String tenantId,String state, String redirectUri) {
         Assert.hasText(redirectUri, "redirectUri is required");
         String encode = URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.name());
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("appid", appId);
+        WechatPayProperties.V3 v3 = v3Map.get(tenantId);
+        queryParams.add("appid", v3.getMp().getAppId());
         queryParams.add("redirect_uri", encode);
         queryParams.add("response_type", "code");
         queryParams.add("scope", "snsapi_base");
@@ -75,16 +75,19 @@ public class OAuth2AuthorizationRequestRedirectProvider {
     /**
      * 微信服务器授权成功后调用redirectUri的处理逻辑.
      *
-     * @param code the code
+     * @param code  the code
+     * @param state the state
      * @return the string
      */
     @SneakyThrows
-    public OAuth2Exchange exchange(String code, String state) {
+    public OAuth2Exchange exchange(String tenantId,String code, String state) {
         Assert.hasText(code, "wechat pay oauth2 code is required");
         Assert.hasText(state, "wechat pay oauth2 state is required");
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("appid", appId);
-        queryParams.add("secret", secret);
+        WechatPayProperties.V3 v3 = v3Map.get(tenantId);
+        WechatPayProperties.Mp mp = v3.getMp();
+        queryParams.add("appid", mp.getAppId());
+        queryParams.add("secret", mp.getAppSecret());
         queryParams.add("code", code);
         queryParams.add("state", state);
         queryParams.add("grant_type", "authorization_code");

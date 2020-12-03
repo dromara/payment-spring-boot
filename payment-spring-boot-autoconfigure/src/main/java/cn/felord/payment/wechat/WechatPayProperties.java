@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+import java.util.Map;
+
 /**
  * The type Wechat pay properties.
  */
@@ -14,7 +16,7 @@ public class WechatPayProperties {
      * wechat pay V3 properties
      */
     @NestedConfigurationProperty
-    private V3 v3;
+    private Map<String,V3> v3;
 
     /**
      * wechat pay v3 properties.

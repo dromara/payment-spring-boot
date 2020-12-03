@@ -10,7 +10,7 @@ import lombok.Data;
  * @since 17 :10
  */
 @Data
-public class AppPayParams {
+public class PayParams {
     private String appid;
     private String mchid;
     /**

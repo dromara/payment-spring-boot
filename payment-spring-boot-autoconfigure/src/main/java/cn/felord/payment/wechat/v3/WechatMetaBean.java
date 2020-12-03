@@ -16,12 +16,14 @@ import java.security.KeyPair;
 public class WechatMetaBean implements InitializingBean {
     private KeyPair keyPair;
     private String serialNumber;
-    private WechatPayProperties wechatPayProperties;
+    private String tenantId;
+    private WechatPayProperties.V3 v3;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(wechatPayProperties, "wechatPayProperties is required");
+        Assert.notNull(v3, "wechatPayProperties.V3 is required");
         Assert.notNull(keyPair, "wechat pay p12 certificate is required");
         Assert.hasText(serialNumber, "wechat pay p12 certificate SerialNumber is required");
+        Assert.hasText(tenantId, "wechat pay tenantId is required");
     }
 }

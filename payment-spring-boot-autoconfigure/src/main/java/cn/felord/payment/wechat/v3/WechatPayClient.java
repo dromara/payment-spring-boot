@@ -11,6 +11,7 @@ import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.util.Assert;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
@@ -148,17 +149,22 @@ public class WechatPayClient {
             }
             // 签名
             HttpMethod httpMethod = requestEntity.getMethod();
+
             Assert.notNull(httpMethod, "httpMethod is required");
+            HttpHeaders headers = requestEntity.getHeaders();
 
             T entityBody = requestEntity.getBody();
             String body = requestEntity.hasBody() ? Objects.requireNonNull(entityBody).toString() : "";
             if (WechatPayV3Type.MARKETING_IMAGE_UPLOAD.pattern().contains(canonicalUrl)) {
-                 body = Objects.requireNonNull(requestEntity.getHeaders().get("Meta-Info")).get(0);
+                 body = Objects.requireNonNull(headers.get("Meta-Info")).get(0);
             }
-            String authorization = signatureProvider.requestSign(httpMethod.name(), canonicalUrl, body);
+            MultiValueMap<String, String> queryParams = uri.getQueryParams();
+            String  tenantId = queryParams.getFirst("pay_tenantId");
+            Assert.notNull(tenantId, "tenantId is required");
+            String authorization = signatureProvider.requestSign(tenantId,httpMethod.name(), canonicalUrl, body);
 
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.addAll(requestEntity.getHeaders());
+            httpHeaders.addAll(headers);
             httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             // 兼容图片上传，自定义优先级最高
             if (Objects.isNull(httpHeaders.getContentType())) {
@@ -209,6 +215,10 @@ public class WechatPayClient {
             }
         }
 
+    }
+
+    public SignatureProvider signatureProvider() {
+        return signatureProvider;
     }
 
     private void applyDefaultRestTemplate() {

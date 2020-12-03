@@ -1,5 +1,6 @@
 package cn.felord.payment.wechat.v3;
 
+import cn.felord.payment.PayException;
 import cn.felord.payment.wechat.WechatPayProperties;
 import cn.felord.payment.wechat.enumeration.StockStatus;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
@@ -35,15 +36,12 @@ import java.util.function.Consumer;
  * @since 18 :22
  */
 public class WechatMarketingFavorApi extends AbstractApi {
-    /**
-     * Instantiates a new Wechat marketing api.
-     *
-     * @param wechatPayClient the wechat pay client
-     * @param wechatMetaBean  the wechat meta bean
-     */
-    public WechatMarketingFavorApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
-        super(wechatPayClient, wechatMetaBean);
+
+
+    public WechatMarketingFavorApi(WechatPayClient wechatPayClient, String tenantId) {
+        super(wechatPayClient,tenantId);
     }
+
 
     /**
      * 创建代金券批次API
@@ -61,9 +59,11 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
     private RequestEntity<?> createStocksFunction(WechatPayV3Type type, StocksCreateParams params) {
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+
         String mchId = v3.getMchId();
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParam("pay_tenantId", this.tenantId())
                 .build()
                 .toUri();
         params.setBelongMerchant(mchId);
@@ -103,11 +103,12 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
 
     private RequestEntity<?> sendStocksFunction(WechatPayV3Type type, StocksSendParams params) {
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
         // 服务号
         params.setAppid(v3.getMp().getAppId());
         params.setStockCreatorMchid(v3.getMchId());
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParam("pay_tenantId", this.tenantId())
                 .build()
                 .expand(params.getOpenid())
                 .toUri();
@@ -146,12 +147,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
     private RequestEntity<?> startAndRestartAndPauseStockFunction(WechatPayV3Type type, String stockId) {
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
         String mchId = v3.getMchId();
         Map<String, String> body = new HashMap<>();
         body.put("stock_creator_mchid", mchId);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParam("pay_tenantId", this.tenantId())
                 .build()
                 .expand(stockId)
                 .toUri();
@@ -178,9 +180,11 @@ public class WechatMarketingFavorApi extends AbstractApi {
     private RequestEntity<?> queryStocksFunction(WechatPayV3Type type, StocksQueryParams params) {
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("pay_tenantId", this.tenantId());
         queryParams.add("offset", String.valueOf(params.getOffset()));
         queryParams.add("limit", String.valueOf(params.getLimit()));
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+
         queryParams.add("stock_creator_mchid", v3.getMchId());
         LocalDateTime createStartTime = params.getCreateStartTime();
         if (Objects.nonNull(createStartTime)) {
@@ -231,10 +235,12 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
 
     private RequestEntity<?> stockDetailFunction(WechatPayV3Type type, String stockId) {
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("stock_creator_mchid", v3.getMchId());
+        queryParams.add("pay_tenantId", this.tenantId());
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
@@ -263,10 +269,12 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     private RequestEntity<?> couponDetailFunction(WechatPayV3Type type, CouponDetailsQueryParams params) {
 
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("appid", v3.getMp().getAppId());
+        queryParams.add("pay_tenantId", this.tenantId());
 
         MultiValueMap<String, String> pathParams = new LinkedMultiValueMap<>();
         pathParams.add("openid", params.getOpenId());
@@ -329,10 +337,12 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     private RequestEntity<?> queryUserCouponsFunction(WechatPayV3Type type, UserCouponsQueryParams params) {
         final String ignore = "available_mchid";
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("appid", v3.getMp().getAppId());
+        queryParams.add("pay_tenantId", this.tenantId());
         String stockId = params.getStockId();
         if (StringUtils.hasText(stockId)) {
             queryParams.add("stock_id", stockId);
@@ -398,6 +408,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     private RequestEntity<?> downloadFlowFunction(WechatPayV3Type type, String stockId) {
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParam("pay_tenantId", this.tenantId())
                 .build()
                 .expand(stockId)
                 .toUri();
@@ -428,13 +439,16 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
         byte[] digest = SHA256.Digest.getInstance("SHA-256").digest(file.getBytes());
         meta.put("sha256", Hex.toHexString(digest));
-        String httpUrl = type.uri(WeChatServer.CHINA);
-        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().toUri();
         MultiValueMap<Object, Object> body = new LinkedMultiValueMap<>();
         body.add("meta", meta);
         body.add("file", file.getResource());
         // 签名
         String metaStr = this.getMapper().writeValueAsString(meta);
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParam("pay_tenantId", this.tenantId())
+                .build()
+                .toUri();
         return RequestEntity.post(uri)
                 .header("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE)
                 .header("Meta-Info", metaStr)
@@ -443,9 +457,10 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 代金券核销回调通知API
+     *
      * @param notifyUrl the notify url
-     * @see WechatPayCallback#wechatPayCouponCallback(ResponseSignVerifyParams, Consumer)
      * @return the wechat response entity
+     * @see WechatPayCallback#wechatPayCouponCallback(String, ResponseSignVerifyParams, Consumer) WechatPayCallback#wechatPayCouponCallback(ResponseSignVerifyParams, Consumer)
      */
     public WechatResponseEntity<ObjectNode> setMarketingFavorCallback(String notifyUrl) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -457,13 +472,16 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
     private RequestEntity<?> setMarketingFavorCallbackFunction(WechatPayV3Type type, String notifyUrl) {
-        WechatPayProperties.V3 v3 = this.meta().getWechatPayProperties().getV3();
+        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+
         Map<String, Object> body = new HashMap<>(3);
         body.put("mchid", v3.getMchId());
         body.put("notify_url", notifyUrl);
         body.put("switch", true);
-        String httpUrl = type.uri(WeChatServer.CHINA);
-        URI uri = UriComponentsBuilder.fromHttpUrl(httpUrl).build().toUri();
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParam("pay_tenantId", this.tenantId())
+                .build()
+                .toUri();
         return post(uri, body);
     }
 

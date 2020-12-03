@@ -51,38 +51,41 @@ public class SignatureProvider {
 
     private static final IdGenerator ID_GENERATOR = new AlternativeJdkIdGenerator();
     private static final String SCHEMA = "WECHATPAY2-SHA256-RSA2048 ";
-    private final RestOperations restOperations = new RestTemplate();
     /**
      * The constant TOKEN_PATTERN.
      */
     public static final String TOKEN_PATTERN = "mchid=\"%s\",nonce_str=\"%s\",timestamp=\"%d\",serial_no=\"%s\",signature=\"%s\"";
-    private final WechatMetaBean wechatMetaBean;
     /**
      * 微信平台证书容器  key = 序列号  value = 证书对象
      */
     private static final Map<String, Certificate> CERTIFICATE_MAP = new ConcurrentHashMap<>();
+    private final RestOperations restOperations = new RestTemplate();
+    private final WechatMetaContainer wechatMetaContainer;
 
     /**
      * Instantiates a new Signature provider.
      *
-     * @param wechatMetaBean the wechat meta bean
+     * @param wechatMetaContainer the wechat meta container
      */
-    public SignatureProvider(WechatMetaBean wechatMetaBean) {
-        this.wechatMetaBean = wechatMetaBean;
+    public SignatureProvider(WechatMetaContainer wechatMetaContainer) {
+        this.wechatMetaContainer = wechatMetaContainer;
+        wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
     }
 
 
     /**
      * 我方请求时加签，使用API证书.
      *
+     * @param tenantId     the properties key
      * @param method       the method
      * @param canonicalUrl the canonical url
      * @param body         the body
      * @return the string
      */
     @SneakyThrows
-    public String requestSign(String method, String canonicalUrl, String body) {
+    public String requestSign(String tenantId,String method, String canonicalUrl, String body) {
         Signature signer = Signature.getInstance("SHA256withRSA");
+        WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
         signer.initSign(wechatMetaBean.getKeyPair().getPrivate());
 
         long timestamp = System.currentTimeMillis() / 1000;
@@ -97,7 +100,7 @@ public class SignatureProvider {
         String serialNo = wechatMetaBean.getSerialNumber();
         // 生成token
         String token = String.format(TOKEN_PATTERN,
-                wechatMetaBean.getWechatPayProperties().getV3().getMchId(),
+                wechatMetaBean.getV3().getMchId(),
                 nonceStr, timestamp, serialNo, encode);
         return SCHEMA.concat(token);
     }
@@ -113,7 +116,7 @@ public class SignatureProvider {
 
         String wechatpaySerial = params.getWechatpaySerial();
         if (CERTIFICATE_MAP.isEmpty() || !CERTIFICATE_MAP.containsKey(wechatpaySerial)) {
-            refreshCertificate();
+            wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
         }
         Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial);
 
@@ -130,7 +133,7 @@ public class SignatureProvider {
      * 当我方服务器不存在平台证书或者证书同当前响应报文中的证书序列号不一致时应当刷新  调用/v3/certificates
      */
     @SneakyThrows
-    private synchronized void refreshCertificate() {
+    private synchronized void refreshCertificate(String propertiesKey) {
         String url = WechatPayV3Type.CERT.uri(WeChatServer.CHINA);
 
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
@@ -143,7 +146,7 @@ public class SignatureProvider {
         }
         // 签名
         HttpMethod httpMethod = WechatPayV3Type.CERT.method();
-        String authorization = requestSign(httpMethod.name(), canonicalUrl, "");
+        String authorization = requestSign(propertiesKey,httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -166,7 +169,7 @@ public class SignatureProvider {
                 String associatedData = encryptCertificate.get("associated_data").asText();
                 String nonce = encryptCertificate.get("nonce").asText();
                 String ciphertext = encryptCertificate.get("ciphertext").asText();
-                String publicKey = decryptResponseBody(associatedData, nonce, ciphertext);
+                String publicKey = decryptResponseBody(propertiesKey,associatedData, nonce, ciphertext);
 
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(publicKey.getBytes(StandardCharsets.UTF_8));
                 Certificate certificate = null;
@@ -187,15 +190,16 @@ public class SignatureProvider {
     /**
      * 解密响应体.
      *
+     * @param tenantId       the properties key
      * @param associatedData the associated data
      * @param nonce          the nonce
      * @param ciphertext     the ciphertext
      * @return the string
      */
-    public String decryptResponseBody(String associatedData, String nonce, String ciphertext) {
+    public String decryptResponseBody(String tenantId,String associatedData, String nonce, String ciphertext) {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-            String apiV3Key = wechatMetaBean.getWechatPayProperties().getV3().getAppV3Secret();
+            String apiV3Key = wechatMetaContainer.getWechatMeta(tenantId).getV3().getAppV3Secret();
             SecretKeySpec key = new SecretKeySpec(apiV3Key.getBytes(StandardCharsets.UTF_8), "AES");
             GCMParameterSpec spec = new GCMParameterSpec(128, nonce.getBytes(StandardCharsets.UTF_8));
 
@@ -215,13 +219,14 @@ public class SignatureProvider {
         }
     }
 
+
     /**
-     * Gets wechat meta bean.
+     * Wechat meta container.
      *
-     * @return the wechat meta bean
+     * @return the wechat meta container
      */
-    public WechatMetaBean getWechatMetaBean() {
-        return wechatMetaBean;
+    public WechatMetaContainer wechatMetaContainer() {
+        return wechatMetaContainer;
     }
 
     /**

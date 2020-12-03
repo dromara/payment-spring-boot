@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+
 /**
  * The type Wechat pay configuration.
  */
@@ -24,24 +26,32 @@ public class WechatPayConfiguration {
      * @return the wechat cert bean
      */
     @Bean
-    WechatMetaBean wechatMetaBean(WechatPayProperties wechatPayProperties) {
+    WechatMetaContainer wechatMetaContainer(WechatPayProperties wechatPayProperties) {
 
-        String certPath = wechatPayProperties.getV3().getCertPath();
-        String mchId = wechatPayProperties.getV3().getMchId();
-        WechatMetaBean wechatMetaBean = new KeyPairFactory().createPKCS12(certPath, CERT_ALIAS, mchId);
-        wechatMetaBean.setWechatPayProperties(wechatPayProperties);
-        return wechatMetaBean;
+        Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
+        WechatMetaContainer container = new WechatMetaContainer();
+        v3Map.keySet().forEach(tenantId -> {
+            WechatPayProperties.V3 v3 = v3Map.get(tenantId);
+            String certPath = v3.getCertPath();
+            String mchId = v3.getMchId();
+            WechatMetaBean wechatMetaBean = new KeyPairFactory().createPKCS12(certPath, CERT_ALIAS, mchId);
+            wechatMetaBean.setV3(v3);
+            wechatMetaBean.setTenantId(tenantId);
+            container.addWechatMeta(tenantId, wechatMetaBean);
+            container.addTenant(tenantId);
+        });
+        return container;
     }
 
     /**
      * 微信支付V3签名工具.
      *
-     * @param wechatMetaBean the wechat meta bean
+     * @param wechatMetaContainer the wechat meta container
      * @return the signature provider
      */
     @Bean
-    SignatureProvider signatureProvider(WechatMetaBean wechatMetaBean) {
-        return new SignatureProvider(wechatMetaBean);
+    SignatureProvider signatureProvider(WechatMetaContainer wechatMetaContainer) {
+        return new SignatureProvider(wechatMetaContainer);
     }
 
 
@@ -52,32 +62,8 @@ public class WechatPayConfiguration {
      * @return the wechat pay service
      */
     @Bean
-    public WechatPayClient wechatPayService(SignatureProvider signatureProvider) {
+    public WechatPayClient wechatPayClient(SignatureProvider signatureProvider) {
         return new WechatPayClient(signatureProvider);
-    }
-
-    /**
-     * 微信支付API.
-     *
-     * @param wechatPayClient the wechat pay v 3 client
-     * @param wechatMetaBean  the wechat meta bean
-     * @return the wechat pay v 3 api
-     */
-    @Bean
-    public WechatPayApi wechatPayApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
-        return new WechatPayApi(wechatPayClient, wechatMetaBean);
-    }
-
-    /**
-     * 微信营销API.
-     *
-     * @param wechatPayClient the wechat pay client
-     * @param wechatMetaBean  the wechat meta bean
-     * @return the wechat marketing api
-     */
-    @Bean
-    public WechatMarketingFavorApi wechatMarketingApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
-        return new WechatMarketingFavorApi(wechatPayClient, wechatMetaBean);
     }
 
     /**
@@ -99,10 +85,9 @@ public class WechatPayConfiguration {
      * @return the o auth 2 authorization request redirect provider
      */
     @Bean
-    @ConditionalOnProperty(prefix = "wechat.pay", name = "v3.mp.app-id")
     public OAuth2AuthorizationRequestRedirectProvider oAuth2Provider(WechatPayProperties wechatPayProperties) {
-        WechatPayProperties.Mp mp = wechatPayProperties.getV3().getMp();
-        return new OAuth2AuthorizationRequestRedirectProvider(mp.getAppId(), mp.getAppSecret());
+        Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
+        return new OAuth2AuthorizationRequestRedirectProvider(v3Map);
     }
 
 }

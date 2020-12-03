@@ -44,12 +44,13 @@ public class WechatPayCallback {
     /**
      * 微信支付代金券核销回调工具.
      *
+     * @param tenantId                  the tenant id
      * @param params                    the params
      * @param couponConsumeDataConsumer the coupon consume data consumer
      * @return the map
      */
     @SneakyThrows
-    public Map<String, ?> wechatPayCouponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> couponConsumeDataConsumer) {
+    public Map<String, ?> wechatPayCouponCallback(String tenantId, ResponseSignVerifyParams params, Consumer<CouponConsumeData> couponConsumeDataConsumer) {
 
         if (signatureProvider.responseSignVerify(params)) {
             CallbackParams callbackParams = MAPPER.readValue(params.getBody(), CallbackParams.class);
@@ -58,7 +59,7 @@ public class WechatPayCallback {
             String associatedData = resource.getAssociatedData();
             String nonce = resource.getNonce();
             String ciphertext = resource.getCiphertext();
-            String data = signatureProvider.decryptResponseBody(associatedData, nonce, ciphertext);
+            String data = signatureProvider.decryptResponseBody(tenantId,associatedData, nonce, ciphertext);
             Assert.hasText(data, "decryptData is required");
             CouponConsumeData couponConsumeData = MAPPER.readValue(data, CouponConsumeData.class);
             couponConsumeDataConsumer.accept(couponConsumeData);

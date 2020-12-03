@@ -16,15 +16,22 @@ import java.net.URI;
 public abstract class AbstractApi {
     private final ObjectMapper mapper;
     private final WechatPayClient wechatPayClient;
-    private final WechatMetaBean wechatMetaBean;
+    private final String tenantId;
 
 
-    public AbstractApi(WechatPayClient wechatPayClient, WechatMetaBean wechatMetaBean) {
+
+
+    public AbstractApi(WechatPayClient wechatPayClient,String tenantId) {
         this.mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         this.wechatPayClient = wechatPayClient;
-        this.wechatMetaBean = wechatMetaBean;
+
+        if (!container().getTenantIds().contains(tenantId)) {
+            throw new PayException("tenantId is not in wechatMetaContainer ");
+        }
+        this.tenantId = tenantId;
+
     }
 
     public ObjectMapper getMapper() {
@@ -35,8 +42,12 @@ public abstract class AbstractApi {
         return wechatPayClient;
     }
 
-    public WechatMetaBean meta() {
-        return wechatMetaBean;
+    public String tenantId() {
+        return tenantId;
+    }
+
+    public WechatMetaContainer container() {
+        return wechatPayClient.signatureProvider().wechatMetaContainer();
     }
 
     protected RequestEntity<?> post(URI uri, Object params) {
