@@ -67,6 +67,17 @@ public class WechatPayConfiguration {
     }
 
     /**
+     * 多租户接口Provider.
+     *
+     * @param wechatPayClient the wechat pay client
+     * @return the wechat api provider
+     */
+    @Bean
+    public WechatApiProvider wechatApiProvider(WechatPayClient wechatPayClient){
+        return new WechatApiProvider(wechatPayClient);
+    }
+
+    /**
      * 微信支付回调工具.
      *
      * @param signatureProvider the signature provider
