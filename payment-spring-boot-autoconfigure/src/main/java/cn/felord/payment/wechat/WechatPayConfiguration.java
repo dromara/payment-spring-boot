@@ -14,7 +14,6 @@ import java.util.Map;
  * The type Wechat pay configuration.
  */
 @Configuration
-@ConditionalOnProperty(prefix = "wechat.pay", name = "v3.app-id")
 @EnableConfigurationProperties(WechatPayProperties.class)
 public class WechatPayConfiguration {
     private static final String CERT_ALIAS = "Tenpay Certificate";
