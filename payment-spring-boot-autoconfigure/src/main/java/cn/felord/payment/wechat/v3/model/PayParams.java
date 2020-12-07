@@ -43,8 +43,17 @@ public class PayParams {
      * 支付金额
      */
     private Amount amount;
-
+    /**
+     * 支付者  JSAPI/小程序下单 必传
+     */
+    private Payer payer;
+    /**
+     * 优惠功能
+     */
     private Detail detail;
+    /**
+     * 场景信息
+     */
     private SceneInfo sceneInfo;
 
 

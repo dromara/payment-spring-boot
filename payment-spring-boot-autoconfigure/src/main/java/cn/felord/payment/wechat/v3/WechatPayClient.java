@@ -158,9 +158,8 @@ public class WechatPayClient {
             if (WechatPayV3Type.MARKETING_IMAGE_UPLOAD.pattern().contains(canonicalUrl)) {
                  body = Objects.requireNonNull(headers.get("Meta-Info")).get(0);
             }
-            MultiValueMap<String, String> queryParams = uri.getQueryParams();
-            String  tenantId = queryParams.getFirst("pay_tenantId");
-            Assert.notNull(tenantId, "tenantId is required");
+
+            String  tenantId =  Objects.requireNonNull(headers.get("Pay-TenantId")).get(0);
             String authorization = signatureProvider.requestSign(tenantId,httpMethod.name(), canonicalUrl, body);
 
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -172,7 +171,8 @@ public class WechatPayClient {
             }
             httpHeaders.add("Authorization", authorization);
             httpHeaders.add("User-Agent", "X-Pay-Service");
-
+            httpHeaders.remove("Meta-Info");
+            httpHeaders.remove("Pay-TenantId");
             return requestEntity.headers(httpHeaders);
 
         }

@@ -15,6 +15,11 @@ public enum WechatPayV3Type {
     CERT(HttpMethod.GET, "%s/v3/certificates"),
 
     /**
+     * 文件下载
+     */
+    FILE_DOWNLOAD(HttpMethod.GET,"%s/v3/billdownload/file"),
+
+    /**
      * 微信公众号支付或者小程序支付.
      */
     JSAPI(HttpMethod.POST, "%s/v3/pay/transactions/jsapi"),
@@ -33,6 +38,14 @@ public enum WechatPayV3Type {
      * H5支付.
      */
     MWEB(HttpMethod.POST, "%s/v3/pay/transactions/h5"),
+    /**
+     * 微信支付订单号查询.
+     */
+    TRANSACTION_TRANSACTION_ID(HttpMethod.GET, "%s/v3/pay/transactions/id/{transaction_id}"),
+    /**
+     * 商户订单号查询.
+     */
+    TRANSACTION_OUT_TRADE_NO(HttpMethod.GET, "%s/v3/pay/transactions/out-trade-no/{out_trade_no}"),
 
 
     /**
@@ -53,7 +66,7 @@ public enum WechatPayV3Type {
      */
     MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST,"%s/v3/marketing/favor/users/{openid}/coupons"),
     /**
-     * 重启代金券API
+     * 重启代金券API.
      */
     MARKETING_FAVOR_STOCKS_RESTART(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/restart"),
     /**

@@ -50,9 +50,9 @@ public abstract class AbstractApi {
         return wechatPayClient.signatureProvider().wechatMetaContainer();
     }
 
-    protected RequestEntity<?> post(URI uri, Object params) {
+    protected RequestEntity<?> post(URI uri, Object params,String tenantId) {
         try {
-            return RequestEntity.post(uri)
+            return RequestEntity.post(uri).header("Pay-TenantId",tenantId)
                     .body(mapper.writeValueAsString(params));
         } catch (JsonProcessingException e) {
             throw new PayException("wechat app pay json failed");

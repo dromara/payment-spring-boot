@@ -1,5 +1,5 @@
-# 移动支付 Spring Boot 组件
-提供聚合支付能力。
+# 移动支付 Spring Boot 组件 多租户版
+为了满足业务中出现app支付、公众号支付、小程序支付等多appid并存的场景，对原有的进行了增强开发出了多租户版本。
 
 ## 支持类型
 
@@ -31,6 +31,8 @@
 wechat:
   pay:
     v3:
+#    租户id  
+     <tentantID>: 
 #  应用appId 必填
       app-id: xxxxxxxx
 #  api 密钥 必填
@@ -62,9 +64,7 @@ public class PayConfig {
 微信支付V3开放接口引入：
 ```java
     @Autowired
-    WechatPayApi wechatPayV3Api;    
-    @Autowired
-    WechatMarketingFavorApi  wechatMarketingFavorApi; 
+    WechatApiProvider wechatApiProvider;
 ```
 ###### V3
 例如V3 查询商户下的优惠券
@@ -73,11 +73,13 @@ public class PayConfig {
      // 查询商户下的优惠券
      @Test
      public void v3MchStocks() {
-         StocksQueryParams params = new StocksQueryParams();
-         params.setOffset(0);
-         params.setLimit(10);
-         WechatResponseEntity<ObjectNode> objectNodeWechatResponseEntity = wechatMarketingFavorApi.queryStocksByMch(params);
-         System.out.println("objectNodeWechatResponseEntity = " + objectNodeWechatResponseEntity);
+        // 配置文件中对应的tenantID:
+        String tenantId =<tenantID>;
+        StocksQueryParams params = new StocksQueryParams();
+        params.setOffset(0);
+        params.setLimit(10);
+        WechatResponseEntity<ObjectNode> objectNodeWechatResponseEntity = wechatApiProvider.favorApi(tenantId).queryStocksByMch(params);
+        System.out.println("objectNodeWechatResponseEntity = " + objectNodeWechatResponseEntity);
      }
 ```
  
