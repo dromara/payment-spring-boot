@@ -39,7 +39,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
 
     public WechatMarketingFavorApi(WechatPayClient wechatPayClient, String tenantId) {
-        super(wechatPayClient,tenantId);
+        super(wechatPayClient, tenantId);
     }
 
 
@@ -66,7 +66,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .toUri();
         params.setBelongMerchant(mchId);
-        return post(uri, params,tenantId());
+        return post(uri, params, tenantId());
     }
 
     /**
@@ -111,7 +111,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .expand(params.getOpenid())
                 .toUri();
         params.setOpenid(null);
-        return post(uri, params,tenantId());
+        return post(uri, params, tenantId());
     }
 
     /**
@@ -154,7 +154,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .expand(stockId)
                 .toUri();
-        return post(uri, body,tenantId());
+        return post(uri, body, tenantId());
     }
 
     /**
@@ -211,7 +211,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
         URI uri = uriComponents
                 .toUri();
-        return RequestEntity.get(uri).header("Pay-TenantId",tenantId()).build();
+        return RequestEntity.get(uri).header("Pay-TenantId", tenantId()).build();
     }
 
     /**
@@ -242,7 +242,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .expand(stockId)
                 .toUri();
-        return RequestEntity.get(uri).header("Pay-TenantId",tenantId()).build();
+        return RequestEntity.get(uri).header("Pay-TenantId", tenantId()).build();
 
     }
 
@@ -279,7 +279,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .expand(pathParams)
                 .toUri();
-        return RequestEntity.get(uri).header("Pay-TenantId",tenantId()).build();
+        return RequestEntity.get(uri).header("Pay-TenantId", tenantId()).build();
 
     }
 
@@ -364,7 +364,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .expand(params.getOpenId())
                 .toUri();
-        return RequestEntity.get(uri).header("Pay-TenantId",tenantId()).build();
+        return RequestEntity.get(uri).header("Pay-TenantId", tenantId()).build();
 
     }
 
@@ -380,7 +380,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .function(this::downloadFlowFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
-
+        String csv = billDownload(wechatResponseEntity.getBody().get("url").asText());
+        wechatResponseEntity.getBody().put("csv", csv);
         return wechatResponseEntity;
     }
 
@@ -396,6 +397,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .function(this::downloadFlowFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
+        String csv = billDownload(wechatResponseEntity.getBody().get("url").asText());
+        wechatResponseEntity.getBody().put("csv", csv);
         return wechatResponseEntity;
     }
 
@@ -404,7 +407,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .expand(stockId)
                 .toUri();
-        return RequestEntity.get(uri).header("Pay-TenantId",tenantId()).build();
+        return RequestEntity.get(uri).header("Pay-TenantId", tenantId()).build();
     }
 
     /**
@@ -444,7 +447,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
         return RequestEntity.post(uri)
                 .header("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE)
                 .header("Meta-Info", metaStr)
-                .header("Pay-TenantId",tenantId())
+                .header("Pay-TenantId", tenantId())
                 .body(body);
     }
 
@@ -474,9 +477,22 @@ public class WechatMarketingFavorApi extends AbstractApi {
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
                 .toUri();
-        return post(uri, body,tenantId());
+        return post(uri, body, tenantId());
     }
 
+    public String billDownload(String link) {
+        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
+                .function(this::billDownloadFunction)
+                .download();
+    }
+
+
+    private RequestEntity<?> billDownloadFunction(WechatPayV3Type type, String link) {
+        URI uri = UriComponentsBuilder.fromHttpUrl(link)
+                .build()
+                .toUri();
+        return RequestEntity.get(uri).header("Pay-TenantId", tenantId()).build();
+    }
 }
 
 

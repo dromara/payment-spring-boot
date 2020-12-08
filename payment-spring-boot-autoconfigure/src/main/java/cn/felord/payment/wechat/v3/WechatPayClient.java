@@ -11,6 +11,7 @@ import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.util.Assert;
+import org.springframework.util.MimeType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
@@ -54,7 +55,7 @@ public class WechatPayClient {
      * @return the executor
      */
     public <M> Executor<M> withType(WechatPayV3Type wechatPayV3Type, M m) {
-        return new Executor<>(wechatPayV3Type, m, this.signatureProvider,this.restOperations);
+        return new Executor<>(wechatPayV3Type, m, this.signatureProvider, this.restOperations);
     }
 
 
@@ -88,10 +89,11 @@ public class WechatPayClient {
          * @param wechatPayV3Type   the v 3 pay type
          * @param model             the model
          * @param signatureProvider the signature provider
+         * @param restOperations    the rest operations
          */
-         Executor(WechatPayV3Type wechatPayV3Type,
-                        M model,
-                        SignatureProvider signatureProvider, RestOperations restOperations) {
+        Executor(WechatPayV3Type wechatPayV3Type,
+                 M model,
+                 SignatureProvider signatureProvider, RestOperations restOperations) {
             this.wechatPayV3Type = wechatPayV3Type;
             this.model = model;
             this.signatureProvider = signatureProvider;
@@ -124,11 +126,22 @@ public class WechatPayClient {
         /**
          * Request.
          */
-        @SneakyThrows
         public void request() {
             RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
             this.doExecute(this.header(wechatRequestEntity));
+        }
+
+
+        /**
+         * Download string.
+         *
+         * @return the string
+         */
+        public String download() {
+            RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
+            WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
+            return this.doDownload(this.header(wechatRequestEntity));
         }
 
 
@@ -143,7 +156,7 @@ public class WechatPayClient {
             UriComponents uri = UriComponentsBuilder.fromUri(requestEntity.getUrl()).build();
             String canonicalUrl = uri.getPath();
             String encodedQuery = uri.getQuery();
-           Assert.notNull(canonicalUrl,"canonicalUrl is required");
+            Assert.notNull(canonicalUrl, "canonicalUrl is required");
             if (encodedQuery != null) {
                 canonicalUrl += "?" + encodedQuery;
             }
@@ -156,11 +169,11 @@ public class WechatPayClient {
             T entityBody = requestEntity.getBody();
             String body = requestEntity.hasBody() ? Objects.requireNonNull(entityBody).toString() : "";
             if (WechatPayV3Type.MARKETING_IMAGE_UPLOAD.pattern().contains(canonicalUrl)) {
-                 body = Objects.requireNonNull(headers.get("Meta-Info")).get(0);
+                body = Objects.requireNonNull(headers.get("Meta-Info")).get(0);
             }
 
-            String  tenantId =  Objects.requireNonNull(headers.get("Pay-TenantId")).get(0);
-            String authorization = signatureProvider.requestSign(tenantId,httpMethod.name(), canonicalUrl, body);
+            String tenantId = Objects.requireNonNull(headers.get("Pay-TenantId")).get(0);
+            String authorization = signatureProvider.requestSign(tenantId, httpMethod.name(), canonicalUrl, body);
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.addAll(headers);
@@ -215,8 +228,27 @@ public class WechatPayClient {
             }
         }
 
+        private <T> String doDownload(WechatRequestEntity<T> requestEntity) {
+
+            ResponseEntity<String> responseEntity = restOperations.exchange(requestEntity, String.class);
+
+            String body = responseEntity.getBody();
+            if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+                throw new PayException("wechat pay server error,result : " + body);
+            }
+            if (Objects.isNull(body)) {
+                throw new PayException("cant obtain wechat response body");
+            }
+                return body;
+        }
+
     }
 
+    /**
+     * Signature provider signature provider.
+     *
+     * @return the signature provider
+     */
     public SignatureProvider signatureProvider() {
         return signatureProvider;
     }
@@ -229,6 +261,7 @@ public class WechatPayClient {
 
         messageConverters.removeIf(httpMessageConverter -> httpMessageConverter instanceof AllEncompassingFormHttpMessageConverter);
         messageConverters.add(new ExtensionFormHttpMessageConverter());
+//        messageConverters.add(new DownloadHttpMessageConverter(MediaType.asMediaType(MimeType.valueOf("text/plain;charset=utf-8"))));
         restTemplate.setMessageConverters(messageConverters);
         this.restOperations = restTemplate;
     }
