@@ -1,9 +1,7 @@
 package cn.felord.payment.wechat;
 
 
-import cn.felord.payment.wechat.oauth2.OAuth2AuthorizationRequestRedirectProvider;
 import cn.felord.payment.wechat.v3.*;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -86,18 +84,4 @@ public class WechatPayConfiguration {
     public WechatPayCallback wechatPayCallback(SignatureProvider signatureProvider) {
         return new WechatPayCallback(signatureProvider);
     }
-
-
-    /**
-     * 公众号授权工具用于获取用户openId，需要配置{@link WechatPayProperties.Mp}.
-     *
-     * @param wechatPayProperties the wechat pay properties
-     * @return the o auth 2 authorization request redirect provider
-     */
-    @Bean
-    public OAuth2AuthorizationRequestRedirectProvider oAuth2Provider(WechatPayProperties wechatPayProperties) {
-        Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
-        return new OAuth2AuthorizationRequestRedirectProvider(v3Map);
-    }
-
 }

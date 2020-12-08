@@ -52,9 +52,9 @@ public class WechatPayProperties {
          */
         private String domain;
         /**
-         * wechat mp binding with mch
+         * app in winxin open platform
          */
-        private Mp mp;
+        private App app;
 
     }
 
@@ -63,13 +63,13 @@ public class WechatPayProperties {
      * wechat  mp for send coupons and notification.
      */
     @Data
-    public static class Mp {
+    public static class App {
         /**
-         * app id for wechat pay is required
+         * app id
          */
         private String appId;
         /**
-         * app secret for wechat pay is required
+         * app secret
          */
         private String appSecret;
     }

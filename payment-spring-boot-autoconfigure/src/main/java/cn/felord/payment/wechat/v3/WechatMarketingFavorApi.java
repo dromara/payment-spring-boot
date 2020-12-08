@@ -103,8 +103,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     private RequestEntity<?> sendStocksFunction(WechatPayV3Type type, StocksSendParams params) {
         WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
-        // 服务号
-        params.setAppid(v3.getMp().getAppId());
+
+        params.setAppid(v3.getApp().getAppId());
         params.setStockCreatorMchid(v3.getMchId());
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
@@ -268,7 +268,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("appid", v3.getMp().getAppId());
+        queryParams.add("appid", v3.getApp().getAppId());
 
 
         MultiValueMap<String, String> pathParams = new LinkedMultiValueMap<>();
@@ -331,21 +331,12 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
     private RequestEntity<?> queryUserCouponsFunction(WechatPayV3Type type, UserCouponsQueryParams params) {
-        final String ignore = "available_mchid";
+
         WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("appid", v3.getMp().getAppId());
-        String stockId = params.getStockId();
-        if (StringUtils.hasText(stockId)) {
-            queryParams.add("stock_id", stockId);
-        }
-        String status = Objects.nonNull(params.getStatus()) ? params.getStatus().name() : ignore;
-        queryParams.add("status", status);
-        String creatorMchId = params.getCreatorMchId();
-        if (StringUtils.hasText(creatorMchId)) {
-            queryParams.add("creator_mchid", creatorMchId);
-        }
+        queryParams.add("appid", v3.getApp().getAppId());
+        queryParams.add("creator_mchid", v3.getMchId());
         String senderMchId = params.getSenderMchId();
         if (StringUtils.hasText(senderMchId)) {
             queryParams.add("sender_mchid", senderMchId);
@@ -353,11 +344,19 @@ public class WechatMarketingFavorApi extends AbstractApi {
         String availableMchId = params.getAvailableMchId();
         if (StringUtils.hasText(availableMchId)) {
             queryParams.add("available_mchid", availableMchId);
+        } else {
+            String offset = Objects.isNull(params.getOffset()) ? null : params.getOffset().toString();
+            queryParams.add("offset", offset);
+            String limit = Objects.isNull(params.getLimit()) ? null : params.getLimit().toString();
+            queryParams.add("limit", limit);
+            String status = Objects.nonNull(params.getStatus()) ? params.getStatus().name() : null;
+            queryParams.add("status", status);
+            String stockId = params.getStockId();
+            if (StringUtils.hasText(stockId)) {
+                queryParams.add("stock_id", stockId);
+            }
         }
-        String offset = Objects.isNull(params.getOffset()) ? ignore : params.getOffset().toString();
-        queryParams.add("offset", offset);
-        String limit = Objects.isNull(params.getLimit()) ? ignore : params.getLimit().toString();
-        queryParams.add("limit", limit);
+
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
