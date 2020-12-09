@@ -103,7 +103,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
     private RequestEntity<?> sendStocksFunction(WechatPayV3Type type, StocksSendParams params) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
-        params.setAppid(v3.getApp().getAppId());
+        params.setAppid(v3.getAppId());
         params.setStockCreatorMchid(v3.getMchId());
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
@@ -265,7 +265,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("appid", v3.getApp().getAppId());
+        queryParams.add("appid", v3.getAppId());
 
         MultiValueMap<String, String> pathParams = new LinkedMultiValueMap<>();
         pathParams.add("openid", params.getOpenId());
@@ -331,7 +331,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("appid", v3.getApp().getAppId());
+        queryParams.add("appid", v3.getAppId());
         queryParams.add("creator_mchid", v3.getMchId());
         String senderMchId = params.getSenderMchId();
         if (StringUtils.hasText(senderMchId)) {
@@ -451,7 +451,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param notifyUrl the notify url
      * @return the wechat response entity
-     * @see WechatPayCallback#wechatPayCouponCallback(String, ResponseSignVerifyParams, Consumer) WechatPayCallback#wechatPayCouponCallback(ResponseSignVerifyParams, Consumer)
+     * @see WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer)
      */
     public WechatResponseEntity<ObjectNode> setMarketingFavorCallback(String notifyUrl) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();

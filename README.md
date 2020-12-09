@@ -47,10 +47,7 @@ wechat:
       domain: https://xxxx.xxx.com
 #  商户 api 证书 必填
       cert-path: apiclient_cert.p12
-#  微信服务号 优惠券必须
-      mp:
-        app-id: xxxxxxxxx
-        app-secret: xxxxxxxxxxxxxxxxxxx
+ 
 ```
 然后启用`@EnableWechatPay`注解：
 ```java
