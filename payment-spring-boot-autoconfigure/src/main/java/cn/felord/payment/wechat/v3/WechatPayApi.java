@@ -92,13 +92,13 @@ public class WechatPayApi extends AbstractApi {
     }
 
     private RequestEntity<?> payFunction(WechatPayV3Type type, PayParams payParams) {
-        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
         payParams.setAppid(v3.getAppId());
         payParams.setMchid(v3.getMchId());
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
                 .toUri();
-        return post(uri, payParams,tenantId());
+        return Post(uri, payParams);
     }
 
     /**
@@ -132,17 +132,46 @@ public class WechatPayApi extends AbstractApi {
     }
 
     private RequestEntity<?> queryTransactionFunction(WechatPayV3Type type, TransactionQueryParams params) {
-        WechatPayProperties.V3 v3 = this.container().getWechatMeta(tenantId()).getV3();
+        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("mchid", params.getMchId());
+        queryParams.add("mchid", v3.getMchId());
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
                 .build()
                 .expand(params.getTransactionIdOrOutTradeNo())
                 .toUri();
-        return RequestEntity.get(uri).header("Pay-TenantId",tenantId()).build();
+        return Get(uri);
+    }
+
+    /**
+     * 关单API
+     *
+     * @param outTradeNo the out trade no
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> closeByOutTradeNo(String outTradeNo) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.CLOSE, outTradeNo)
+                .function(this::closeByOutTradeNoFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    private RequestEntity<?> closeByOutTradeNoFunction(WechatPayV3Type type, String outTradeNo) {
+        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("mchid", v3.getMchId());
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParams(queryParams)
+                .build()
+                .expand(outTradeNo)
+                .toUri();
+        return Post(uri,queryParams);
     }
 
 }

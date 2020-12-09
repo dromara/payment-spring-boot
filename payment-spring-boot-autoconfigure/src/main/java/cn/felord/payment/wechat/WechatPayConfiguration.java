@@ -73,15 +73,4 @@ public class WechatPayConfiguration {
     public WechatApiProvider wechatApiProvider(WechatPayClient wechatPayClient){
         return new WechatApiProvider(wechatPayClient);
     }
-
-    /**
-     * 微信支付回调工具.
-     *
-     * @param signatureProvider the signature provider
-     * @return the wechat pay callback
-     */
-    @Bean
-    public WechatPayCallback wechatPayCallback(SignatureProvider signatureProvider) {
-        return new WechatPayCallback(signatureProvider);
-    }
 }

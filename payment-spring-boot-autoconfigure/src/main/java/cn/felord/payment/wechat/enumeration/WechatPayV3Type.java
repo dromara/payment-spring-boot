@@ -39,6 +39,10 @@ public enum WechatPayV3Type {
      */
     MWEB(HttpMethod.POST, "%s/v3/pay/transactions/h5"),
     /**
+     * 关闭订单.
+     */
+    CLOSE(HttpMethod.POST, "%s/v3/pay/transactions/out-trade-no/{out_trade_no}/close"),
+    /**
      * 微信支付订单号查询.
      */
     TRANSACTION_TRANSACTION_ID(HttpMethod.GET, "%s/v3/pay/transactions/id/{transaction_id}"),
