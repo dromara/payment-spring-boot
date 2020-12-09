@@ -1,19 +1,3 @@
-# 移动支付 Spring Boot 组件 
-为了满足业务中出现app支付、公众号支付、小程序支付等多appid并存的场景，对原有的进行了增强开发出了多租户版本。
-
-## 支持类型
-
-- [x] **微信支付V3** 全量支持，并支持多租户。
-- [x] **支付宝**  集成SDK，作简单适配。 
-## 进度
-- 微信支付营销-代金券 `WechatMarketingFavorApi` 100%
-- 微信支付 支付功能-普通支付直连模式 `WechatDirectPayApi` 100%
-
-## 采用技术
-- Spring
-- Jackson
-- Ali-pay-sdk
-## 使用方法
 ### 集成
 以**Spring Boot Starter**的形式集成到项目中。
 
@@ -57,7 +41,7 @@ public class PayConfig {
 }
 ```
 > 请注意：只有`wechat.pay.v3.app-id`设置了有效值才能启用下面的API。
-##### API使用 
+##### API使用
 微信支付V3开放接口引入：
 ```java
     @Autowired
@@ -79,7 +63,7 @@ public class PayConfig {
         System.out.println("objectNodeWechatResponseEntity = " + objectNodeWechatResponseEntity);
      }
 ```
- 
+
 
 #### 支付宝
 ##### 使用须知
@@ -87,18 +71,18 @@ public class PayConfig {
 
 1.使用支付宝开发助手申请CSR文件
 
-![先申请密钥对，再申请csr](docs/img/csr.png)
+![先申请密钥对，再申请csr](./img/csr.png)
 申请成功后看文件说明：
 
-![](docs/img/file_info.png)
+![](./img/file_info.png)
 
 2.上传CSR设置证书
 
-![](docs/img/set.png) 
+![](./img/set.png)
 
 上传成功后需要下载证书，和配置的对应关系为：
 
-![](docs/img/cert_path.png)
+![](./img/cert_path.png)
 3. 其它开发平台商户平台的配置，参考支付宝接入文档。
 ##### 项目开发配置
 在Spring Boot项目中的`application.yaml`中配置`ali.pay`相关参数。
