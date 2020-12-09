@@ -10,4 +10,4 @@
 
 [GitHub](https://github.com/docsifyjs/docsify/)
 [GitHub](https://github.com/docsifyjs/docsify/)
-[Get Started](/quick_start.md)
+[Get Started](quick_start.md)
