@@ -14,12 +14,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 /**
- * The type Wechat pay api.
+ * 普通支付-直连模式.
  *
  * @author Dax
  * @since 16 :15
  */
-public class WechatPayApi extends AbstractApi {
+public class WechatDirectPayApi extends AbstractApi {
 
     /**
      * Instantiates a new Wechat pay api.
@@ -27,7 +27,7 @@ public class WechatPayApi extends AbstractApi {
      * @param wechatPayClient the wechat pay client
      * @param tenantId        the tenant id
      */
-    public WechatPayApi(WechatPayClient wechatPayClient, String tenantId) {
+    public WechatDirectPayApi(WechatPayClient wechatPayClient, String tenantId) {
         super(wechatPayClient, tenantId);
     }
 

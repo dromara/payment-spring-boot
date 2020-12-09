@@ -261,7 +261,6 @@ public class WechatPayClient {
 
         messageConverters.removeIf(httpMessageConverter -> httpMessageConverter instanceof AllEncompassingFormHttpMessageConverter);
         messageConverters.add(new ExtensionFormHttpMessageConverter());
-//        messageConverters.add(new DownloadHttpMessageConverter(MediaType.asMediaType(MimeType.valueOf("text/plain;charset=utf-8"))));
         restTemplate.setMessageConverters(messageConverters);
         this.restOperations = restTemplate;
     }

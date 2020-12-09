@@ -1,7 +1,7 @@
 package cn.felord.payment.wechat.v3;
 
 /**
- * The type Wechat api provider.
+ * 微信支付工具.
  *
  * @author Dax
  * @since 17 :32
@@ -29,13 +29,13 @@ public class WechatApiProvider {
     }
 
     /**
-     * 支付.
+     * 普通支付-直连模式.
      *
      * @param tenantId the tenant id
      * @return the wechat pay api
      */
-    public WechatPayApi payApi(String tenantId){
-        return new WechatPayApi(wechatPayClient,tenantId);
+    public WechatDirectPayApi directPayApi(String tenantId){
+        return new WechatDirectPayApi(wechatPayClient,tenantId);
     }
 
     /**
