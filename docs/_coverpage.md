@@ -8,6 +8,5 @@
 - 配置简单、只依赖Spring框架
 
 
-[GitHub](https://github.com/docsifyjs/docsify/)
-[GitHub](https://github.com/docsifyjs/docsify/)
-[Get Started](quick_start.md)
+[GitHub](https://github.com/NotFound403/payment-spring-boot)
+[Get Started](README.md)
