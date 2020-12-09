@@ -1,7 +1,4 @@
 <!-- _coverpage.md -->
-
-
-
 # payment spring boot 
 
 > Spring Boot 风格支付开发包。
