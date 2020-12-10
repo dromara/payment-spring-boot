@@ -11,6 +11,31 @@
     <name>payment-spring-boot</name>
     <description>payment sdk</description>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>felord</name>
+            <email>felord@qq.com</email>
+            <organization>felord.cn</organization>
+        </developer>
+    </developers>
+
+    <scm>
+        <tag>payment-spring-boot-1.0.0.RELEASE</tag>
+        <url>https://github.com/NotFound403/payment-spring-boot</url>
+        <connection>scm:git:https://github.com/NotFound403/payment-spring-boot.git</connection>
+        <developerConnection>scm:git:https://github.com/NotFound403/payment-spring-boot.git</developerConnection>
+    </scm>
+
+
     <modules>
         <module>payment-spring-boot-autoconfigure</module>
         <module>payment-spring-boot-starter</module>
