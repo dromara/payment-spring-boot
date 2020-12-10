@@ -7,6 +7,7 @@ import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
@@ -196,13 +197,13 @@ public class WechatPayClient {
             ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
             HttpHeaders headers = responseEntity.getHeaders();
             ObjectNode body = responseEntity.getBody();
-            if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-                throw new PayException("wechat pay server error,result : " + body);
+            HttpStatus statusCode = responseEntity.getStatusCode();
+            if (!statusCode.is2xxSuccessful()) {
+                throw new PayException("wechat pay server error,statusCode "+ statusCode +",result : " + body);
             }
             if (Objects.isNull(body)) {
                 throw new PayException("cant obtain wechat response body");
             }
-
 
             ResponseSignVerifyParams params = new ResponseSignVerifyParams();
             // 微信请求回调id
@@ -233,8 +234,9 @@ public class WechatPayClient {
             ResponseEntity<String> responseEntity = restOperations.exchange(requestEntity, String.class);
 
             String body = responseEntity.getBody();
-            if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-                throw new PayException("wechat pay server error,result : " + body);
+            HttpStatus statusCode = responseEntity.getStatusCode();
+            if (!statusCode.is2xxSuccessful()) {
+                throw new PayException("wechat pay server error,statusCode "+ statusCode +",result : " + body);
             }
             if (Objects.isNull(body)) {
                 throw new PayException("cant obtain wechat response body");
