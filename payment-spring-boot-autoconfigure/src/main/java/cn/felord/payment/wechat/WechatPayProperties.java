@@ -51,27 +51,5 @@ public class WechatPayProperties {
          * your pay server domain
          */
         private String domain;
-        /**
-         * app in winxin open platform
-         */
-        private App app;
-
     }
-
-
-    /**
-     * wechat  mp for send coupons and notification.
-     */
-    @Data
-    public static class App {
-        /**
-         * app id
-         */
-        private String appId;
-        /**
-         * app secret
-         */
-        private String appSecret;
-    }
-
 }

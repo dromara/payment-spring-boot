@@ -1,1 +1,5 @@
+* [首页](/)
+* [项目简介](README.md)
 * [快速接入](quick_start.md)
+* [日常踩坑](stackoverflow.md)
+* [更新日志](changelog.md)
