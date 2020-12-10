@@ -98,3 +98,14 @@
 
 `WechatResponseEntity<ObjectNode> closeByOutTradeNo(String outTradeNo)`
 
+### 回调API
+
+所有需要回调处理的微信支付业务通过`WechatPayCallback`来进行处理。
+
+#### 微信支付代金券核销回调API
+
+`Map<String, ?> couponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> couponConsumeDataConsumer)`
+
+#### 微信支付普通支付回调API
+
+`Map<String, ?> transactionCallback(ResponseSignVerifyParams params, Consumer<TransactionConsumeData> couponConsumeDataConsumer)`
