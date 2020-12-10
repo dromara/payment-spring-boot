@@ -33,6 +33,6 @@
 
 本项目采用[Apache2.0](https://www.apache.org/licenses/LICENSE-2.0)开源协议。
 
-## 免责声明
+## **免责声明**
 
 **<span style="color:red;">本项目涉及到资金交易，开发者需要经严格测试后方能用于生产环境，本项目不对使用者的行为负责。</span>**
