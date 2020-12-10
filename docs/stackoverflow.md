@@ -1,6 +1,8 @@
 ## 微信
-
-施工中……
+### 微信支付技术分享
+- [Java中的微信支付（1）：API V3版本签名详解](https://mp.weixin.qq.com/s/iiTCr57FgbAb6s0P0hT-9Q)
+- [Java中的微信支付（2）：API V3 微信平台证书的获取与刷新](https://mp.weixin.qq.com/s/O_YcnIRcl2MltElBupm3Hg)
+- [Java中的微信支付（3）：API V3对微信服务器响应进行签名验证](https://mp.weixin.qq.com/s/cb2eTTRjHifNYUGpQETMCQ)
 
 ## 支付宝
 
