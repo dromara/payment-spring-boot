@@ -31,7 +31,7 @@
 
 ## 开源协议
 
-本项目采用Apache2.0开源协议。
+本项目采用[Apache2.0](https://www.apache.org/licenses/LICENSE-2.0)开源协议。
 
 ## 免责声明
 
