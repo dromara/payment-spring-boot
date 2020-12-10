@@ -129,7 +129,7 @@ public class PayConfig {
 ```
 
 
-#### 支付宝
+### 支付宝
 当[启用配置](/quick_start?id=启用配置)步骤完成后会初始化支付宝支付客户端接口`AlipayClient`并注入**Spring IoC**，可通过以下形式引入：
 ```java
     @Autowired
