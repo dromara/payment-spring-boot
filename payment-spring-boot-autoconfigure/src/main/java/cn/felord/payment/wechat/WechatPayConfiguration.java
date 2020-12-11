@@ -2,6 +2,7 @@ package cn.felord.payment.wechat;
 
 
 import cn.felord.payment.wechat.v3.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,19 +24,20 @@ public class WechatPayConfiguration {
      * @return the wechat cert bean
      */
     @Bean
+    @ConditionalOnMissingBean
     WechatMetaContainer wechatMetaContainer(WechatPayProperties wechatPayProperties) {
 
         Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
         WechatMetaContainer container = new WechatMetaContainer();
+        KeyPairFactory keyPairFactory = new KeyPairFactory();
         v3Map.keySet().forEach(tenantId -> {
             WechatPayProperties.V3 v3 = v3Map.get(tenantId);
             String certPath = v3.getCertPath();
             String mchId = v3.getMchId();
-            WechatMetaBean wechatMetaBean = new KeyPairFactory().createPKCS12(certPath, CERT_ALIAS, mchId);
+            WechatMetaBean wechatMetaBean = keyPairFactory.createPKCS12(certPath, CERT_ALIAS, mchId);
             wechatMetaBean.setV3(v3);
             wechatMetaBean.setTenantId(tenantId);
             container.addWechatMeta(tenantId, wechatMetaBean);
-            container.addTenant(tenantId);
         });
         return container;
     }

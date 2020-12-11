@@ -1,6 +1,5 @@
 package cn.felord.payment.wechat.v3;
 
-import lombok.Data;
 
 import java.util.*;
 
@@ -18,12 +17,13 @@ public class WechatMetaContainer {
     /**
      * Add wechat meta boolean.
      *
-     * @param tenantId            the tenantId
+     * @param tenantId       the tenantId
      * @param wechatMetaBean the wechat meta bean
      * @return the boolean
      */
-    public boolean addWechatMeta(String tenantId, WechatMetaBean wechatMetaBean) {
-        return Objects.nonNull(this.wechatMetaBeanMap.put(tenantId, wechatMetaBean));
+    public WechatMetaBean addWechatMeta(String tenantId, WechatMetaBean wechatMetaBean) {
+        tenantIds.add(tenantId);
+        return this.wechatMetaBeanMap.put(tenantId, wechatMetaBean);
     }
 
     /**
@@ -33,6 +33,7 @@ public class WechatMetaContainer {
      * @return the wechat meta bean
      */
     public WechatMetaBean removeWechatMeta(String tenantId) {
+        tenantIds.remove(tenantId);
         return this.wechatMetaBeanMap.remove(tenantId);
     }
 
@@ -44,16 +45,6 @@ public class WechatMetaContainer {
      */
     public WechatMetaBean getWechatMeta(String tenantId) {
         return Objects.requireNonNull(this.wechatMetaBeanMap.get(tenantId));
-    }
-
-    /**
-     * Add key boolean.
-     *
-     * @param tenantId the tenant id
-     * @return the boolean
-     */
-    public boolean addTenant(String tenantId) {
-        return tenantIds.add(tenantId);
     }
 
     /**

@@ -2,6 +2,18 @@
 
 >  ❗注意：<span style= 'color:red;'>目前并没有上传到Maven中央仓库，等稳定后会进行支持。</span>
 
+
+## Spring Boot 版本适配
+
+克隆项目后修改根目录下的`pom.xml`以下配置项：
+```xml
+    <properties>
+        <!--  修改为你对应的Spring Boot版本号 -->
+        <spring-boot.version>2.4.0</spring-boot.version>
+    </properties>
+```
+
+
 ## 自行安装
 
 以**Spring Boot Starter**的形式集成到项目中。从[GitHub项目地址](https://github.com/NotFound403/payment-spring-boot)拉取`release`分支到本地后使用以下两种方式之一进行环境集成：
