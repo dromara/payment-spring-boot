@@ -5,7 +5,7 @@
 
 - 快速接入微信支付V3、支付宝支付
 - Spring Boot Starter 风格  
-- 配置简单、只依赖Spring框架
+- 配置简单、只依赖 Spring 框架
 
 
 [Star](https://github.com/NotFound403/payment-spring-boot)
