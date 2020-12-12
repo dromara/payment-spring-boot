@@ -1,11 +1,12 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.WechatPayProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.RequestEntity;
 import org.springframework.util.Assert;
 
@@ -31,16 +32,22 @@ public abstract class AbstractApi {
      */
     public AbstractApi(WechatPayClient wechatPayClient, String tenantId) {
         this.mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        applyObjectMapper(this.mapper);
         this.wechatPayClient = wechatPayClient;
         Assert.hasText(tenantId, "tenantId is required");
         if (!container().getTenantIds().contains(tenantId)) {
             throw new PayException("tenantId is not in wechatMetaContainer");
         }
         this.tenantId = tenantId;
-
     }
+
+    private void applyObjectMapper(ObjectMapper mapper) {
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        SimpleModule module = new JavaTimeModule();
+        mapper.registerModule(module);
+    }
+
 
     /**
      * Gets mapper.

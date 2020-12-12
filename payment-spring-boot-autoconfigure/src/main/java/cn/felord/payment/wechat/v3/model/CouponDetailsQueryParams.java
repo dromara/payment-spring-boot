@@ -11,7 +11,8 @@ import lombok.Data;
 @Data
 public class CouponDetailsQueryParams {
     /**
-     * 用户在公众号服务号配置{@link cn.felord.payment.wechat.WechatPayProperties.Mp}下授权得到的openid
+     * 用户在appid下授权得到的openid
+     * <p>
      * 参考发券
      */
     private String openId;

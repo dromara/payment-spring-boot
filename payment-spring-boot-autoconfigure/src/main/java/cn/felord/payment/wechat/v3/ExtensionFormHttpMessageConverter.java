@@ -25,24 +25,50 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 用于微信支付处理上传的自定义消息转换器.
+ *
  * @see AllEncompassingFormHttpMessageConverter
  */
 final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
+    /**
+     * The constant BOUNDARY.
+     */
     private static final String BOUNDARY = "boundary";
 
 
+    /**
+     * The constant jaxb2Present.
+     */
     private static final boolean jaxb2Present;
 
+    /**
+     * The constant jackson2Present.
+     */
     private static final boolean jackson2Present;
 
+    /**
+     * The constant jackson2XmlPresent.
+     */
     private static final boolean jackson2XmlPresent;
 
+    /**
+     * The constant jackson2SmilePresent.
+     */
     private static final boolean jackson2SmilePresent;
 
+    /**
+     * The constant gsonPresent.
+     */
     private static final boolean gsonPresent;
 
+    /**
+     * The constant jsonbPresent.
+     */
     private static final boolean jsonbPresent;
 
+    /**
+     * The Part converters.
+     */
     private final List<HttpMessageConverter<?>> partConverters = new ArrayList<>();
 
     static {
@@ -123,6 +149,13 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         }
     }
 
+    /**
+     * Is multipart boolean.
+     *
+     * @param map         the map
+     * @param contentType the content type
+     * @return the boolean
+     */
     private boolean isMultipart(MultiValueMap<String, ?> map, @Nullable MediaType contentType) {
         if (contentType != null) {
             return MediaType.MULTIPART_FORM_DATA.includes(contentType);
@@ -137,6 +170,14 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         return false;
     }
 
+    /**
+     * Write form.
+     *
+     * @param formData      the form data
+     * @param contentType   the content type
+     * @param outputMessage the output message
+     * @throws IOException the io exception
+     */
     private void writeForm(MultiValueMap<String, Object> formData, @Nullable MediaType contentType,
                            HttpOutputMessage outputMessage) throws IOException {
 
@@ -157,6 +198,12 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         }
     }
 
+    /**
+     * Gets media type.
+     *
+     * @param mediaType the media type
+     * @return the media type
+     */
     private MediaType getMediaType(@Nullable MediaType mediaType) {
         if (mediaType == null) {
             return new MediaType(MediaType.APPLICATION_FORM_URLENCODED, DEFAULT_CHARSET);
@@ -167,6 +214,13 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         }
     }
 
+    /**
+     * Write multipart.
+     *
+     * @param parts         the parts
+     * @param outputMessage the output message
+     * @throws IOException the io exception
+     */
     private void writeMultipart(final MultiValueMap<String, Object> parts, HttpOutputMessage outputMessage)
             throws IOException {
 
@@ -192,6 +246,14 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         }
     }
 
+    /**
+     * Write parts.
+     *
+     * @param os       the os
+     * @param parts    the parts
+     * @param boundary the boundary
+     * @throws IOException the io exception
+     */
     private void writeParts(OutputStream os, MultiValueMap<String, Object> parts, byte[] boundary) throws IOException {
         for (Map.Entry<String, List<Object>> entry : parts.entrySet()) {
             String name = entry.getKey();
@@ -205,6 +267,14 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         }
     }
 
+    /**
+     * Write part.
+     *
+     * @param name       the name
+     * @param partEntity the part entity
+     * @param os         the os
+     * @throws IOException the io exception
+     */
     @SuppressWarnings("unchecked")
     private void writePart(String name, HttpEntity<?> partEntity, OutputStream os) throws IOException {
         Object partBody = partEntity.getBody();
@@ -231,6 +301,13 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
     }
 
 
+    /**
+     * Write boundary.
+     *
+     * @param os       the os
+     * @param boundary the boundary
+     * @throws IOException the io exception
+     */
     private void writeBoundary(OutputStream os, byte[] boundary) throws IOException {
         os.write('-');
         os.write('-');
@@ -238,6 +315,13 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         writeNewLine(os);
     }
 
+    /**
+     * Write end.
+     *
+     * @param os       the os
+     * @param boundary the boundary
+     * @throws IOException the io exception
+     */
     private static void writeEnd(OutputStream os, byte[] boundary) throws IOException {
         os.write('-');
         os.write('-');
@@ -247,19 +331,40 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         writeNewLine(os);
     }
 
+    /**
+     * Write new line.
+     *
+     * @param os the os
+     * @throws IOException the io exception
+     */
     private static void writeNewLine(OutputStream os) throws IOException {
         os.write('\r');
         os.write('\n');
     }
 
+    /**
+     * The type Multipart http output message.
+     */
     private static class MultipartHttpOutputMessage implements HttpOutputMessage {
 
+        /**
+         * The Output stream.
+         */
         private final OutputStream outputStream;
 
+        /**
+         * The Charset.
+         */
         private final Charset charset;
 
+        /**
+         * The Headers.
+         */
         private final HttpHeaders headers = new HttpHeaders();
 
+        /**
+         * The Headers written.
+         */
         private boolean headersWritten = false;
 
         /**
@@ -284,6 +389,11 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
             return this.outputStream;
         }
 
+        /**
+         * Write headers.
+         *
+         * @throws IOException the io exception
+         */
         private void writeHeaders() throws IOException {
             if (!this.headersWritten) {
                 for (Map.Entry<String, List<String>> entry : this.headers.entrySet()) {
@@ -302,6 +412,12 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
             }
         }
 
+        /**
+         * Get bytes byte [ ].
+         *
+         * @param name the name
+         * @return the byte [ ]
+         */
         private byte[] getBytes(String name) {
             return name.getBytes(this.charset);
         }

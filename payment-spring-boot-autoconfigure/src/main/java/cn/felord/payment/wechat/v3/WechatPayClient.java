@@ -6,14 +6,10 @@ import cn.felord.payment.wechat.WechatPayResponseErrorHandler;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.util.Assert;
-import org.springframework.util.MimeType;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
@@ -33,7 +29,13 @@ import java.util.function.Consumer;
  * @since 11 :43
  */
 public class WechatPayClient {
+    /**
+     * The Signature provider.
+     */
     private final SignatureProvider signatureProvider;
+    /**
+     * The Rest operations.
+     */
     private RestOperations restOperations;
 
     /**
@@ -70,8 +72,17 @@ public class WechatPayClient {
          * The V3 pay type.
          */
         private final WechatPayV3Type wechatPayV3Type;
+        /**
+         * The Rest operations.
+         */
         private final RestOperations restOperations;
+        /**
+         * The Signature provider.
+         */
         private final SignatureProvider signatureProvider;
+        /**
+         * The Model.
+         */
         private final M model;
 
         /**
@@ -151,6 +162,7 @@ public class WechatPayClient {
          *
          * @param <T>           the type parameter
          * @param requestEntity the request entity
+         * @return the wechat request entity
          */
         private <T> WechatRequestEntity<T> header(WechatRequestEntity<T> requestEntity) {
 
@@ -192,6 +204,12 @@ public class WechatPayClient {
         }
 
 
+        /**
+         * Do execute.
+         *
+         * @param <T>           the type parameter
+         * @param requestEntity the request entity
+         */
         private <T> void doExecute(WechatRequestEntity<T> requestEntity) {
 
             ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
@@ -229,6 +247,13 @@ public class WechatPayClient {
             }
         }
 
+        /**
+         * Do download string.
+         *
+         * @param <T>           the type parameter
+         * @param requestEntity the request entity
+         * @return the string
+         */
         private <T> String doDownload(WechatRequestEntity<T> requestEntity) {
 
             ResponseEntity<String> responseEntity = restOperations.exchange(requestEntity, String.class);
@@ -255,6 +280,9 @@ public class WechatPayClient {
         return signatureProvider;
     }
 
+    /**
+     * Apply default rest template.
+     */
     private void applyDefaultRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         DefaultResponseErrorHandler errorHandler = new WechatPayResponseErrorHandler();

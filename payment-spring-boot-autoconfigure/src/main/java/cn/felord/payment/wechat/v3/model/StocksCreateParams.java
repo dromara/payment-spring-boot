@@ -1,6 +1,9 @@
 package cn.felord.payment.wechat.v3.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.time.OffsetDateTime;
 
 /**
  * 创建优惠券批次参数.
@@ -23,13 +26,15 @@ public class StocksCreateParams {
      */
     private String belongMerchant;
     /**
-     * 批次开始时间 rfc 3339   YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
+     * 批次开始时间 rfc 3339   yyyy-mm-ddthh:mm:ss.sss+timezone
      */
-    private String availableBeginTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
+    private OffsetDateTime availableBeginTime;
     /**
      * 批次结束时间 rfc 3339   YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
      */
-    private String availableEndTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
+    private OffsetDateTime availableEndTime;
     /**
      * 是否无资金流
      */

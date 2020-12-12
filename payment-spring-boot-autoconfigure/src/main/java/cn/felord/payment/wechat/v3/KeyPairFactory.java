@@ -11,7 +11,7 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 /**
- * KeyPairFactory
+ * 证书工具
  *
  * @author dax
  * @since 13:41

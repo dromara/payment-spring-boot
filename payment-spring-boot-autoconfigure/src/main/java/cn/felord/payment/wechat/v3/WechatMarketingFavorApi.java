@@ -19,8 +19,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -181,20 +180,20 @@ public class WechatMarketingFavorApi extends AbstractApi {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
         queryParams.add("stock_creator_mchid", v3.getMchId());
-        LocalDateTime createStartTime = params.getCreateStartTime();
+        OffsetDateTime createStartTime = params.getCreateStartTime();
         if (Objects.nonNull(createStartTime)) {
             //rfc 3339   YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
-            queryParams.add("create_start_time", createStartTime.atOffset(ZoneOffset.ofHours(8))
+            queryParams.add("create_start_time", createStartTime
                     .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
-        LocalDateTime createEndTime = params.getCreateEndTime();
+        OffsetDateTime createEndTime = params.getCreateEndTime();
         if (Objects.nonNull(createEndTime)) {
             //rfc 3339   YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
-            queryParams.add("create_end_time", createEndTime.atOffset(ZoneOffset.ofHours(8))
+            queryParams.add("create_end_time", createEndTime
                     .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
         StockStatus status = params.getStatus();
-        if (Objects.nonNull(status)) {
+        if (Objects.nonNull(status) && Objects.equals(WechatPayV3Type.MARKETING_FAVOR_STOCKS, type)) {
             queryParams.add("status", status.value());
         }
 
@@ -204,12 +203,11 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .queryParams(queryParams)
                 .build();
 
-        if (StringUtils.hasText(stockId)) {
+        if (StringUtils.hasText(stockId) && !Objects.equals(WechatPayV3Type.MARKETING_FAVOR_STOCKS, type)) {
             uriComponents = uriComponents.expand(stockId);
         }
 
-        URI uri = uriComponents
-                .toUri();
+        URI uri = uriComponents.toUri();
         return Get(uri);
     }
 

@@ -3,27 +3,32 @@ package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.WechatPayProperties;
 import lombok.Data;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 import java.security.KeyPair;
 
 /**
+ * 微信支付元数据Bean.
+ *
  * @author Dax
- * @since 15:50
+ * @since 15 :50
  */
 @Data
-public class WechatMetaBean implements InitializingBean {
+public class WechatMetaBean {
+    /**
+     * The Key pair.
+     */
     private KeyPair keyPair;
+    /**
+     * The Serial number.
+     */
     private String serialNumber;
+    /**
+     * The Tenant id.
+     */
     private String tenantId;
+    /**
+     * The V3.
+     */
     private WechatPayProperties.V3 v3;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Assert.notNull(v3, "wechatPayProperties.V3 is required");
-        Assert.notNull(keyPair, "wechat pay p12 certificate is required");
-        Assert.hasText(serialNumber, "wechat pay p12 certificate SerialNumber is required");
-        Assert.hasText(tenantId, "wechat pay tenantId is required");
-    }
 }

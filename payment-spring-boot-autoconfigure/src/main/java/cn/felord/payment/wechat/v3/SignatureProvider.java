@@ -49,7 +49,13 @@ import java.util.stream.Collectors;
  */
 public class SignatureProvider {
 
+    /**
+     * The constant ID_GENERATOR.
+     */
     private static final IdGenerator ID_GENERATOR = new AlternativeJdkIdGenerator();
+    /**
+     * The constant SCHEMA.
+     */
     private static final String SCHEMA = "WECHATPAY2-SHA256-RSA2048 ";
     /**
      * The constant TOKEN_PATTERN.
@@ -59,7 +65,13 @@ public class SignatureProvider {
      * 微信平台证书容器  key = 序列号  value = 证书对象
      */
     private static final Map<String, Certificate> CERTIFICATE_MAP = new ConcurrentHashMap<>();
+    /**
+     * The Rest operations.
+     */
     private final RestOperations restOperations = new RestTemplate();
+    /**
+     * The Wechat meta container.
+     */
     private final WechatMetaContainer wechatMetaContainer;
 
     /**
@@ -131,9 +143,11 @@ public class SignatureProvider {
 
     /**
      * 当我方服务器不存在平台证书或者证书同当前响应报文中的证书序列号不一致时应当刷新  调用/v3/certificates
+     *
+     * @param tenantId tenantId
      */
     @SneakyThrows
-    private synchronized void refreshCertificate(String propertiesKey) {
+    private synchronized void refreshCertificate(String tenantId) {
         String url = WechatPayV3Type.CERT.uri(WeChatServer.CHINA);
 
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
@@ -146,7 +160,7 @@ public class SignatureProvider {
         }
         // 签名
         HttpMethod httpMethod = WechatPayV3Type.CERT.method();
-        String authorization = requestSign(propertiesKey,httpMethod.name(), canonicalUrl, "");
+        String authorization = requestSign(tenantId,httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -169,7 +183,7 @@ public class SignatureProvider {
                 String associatedData = encryptCertificate.get("associated_data").asText();
                 String nonce = encryptCertificate.get("nonce").asText();
                 String ciphertext = encryptCertificate.get("ciphertext").asText();
-                String publicKey = decryptResponseBody(propertiesKey,associatedData, nonce, ciphertext);
+                String publicKey = decryptResponseBody(tenantId,associatedData, nonce, ciphertext);
 
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(publicKey.getBytes(StandardCharsets.UTF_8));
                 Certificate certificate = null;

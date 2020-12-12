@@ -27,6 +27,7 @@
 `WechatResponseEntity<ObjectNode> restartStock(String stockId)`
 
 #### 条件查询批次列表API
+通过此接口可查询多个批次的信息，包括批次的配置信息以及批次概况数据。
 
 `WechatResponseEntity<ObjectNode> queryStocksByMch(StocksQueryParams params)`
 
