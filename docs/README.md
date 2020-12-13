@@ -21,6 +21,7 @@
 ## 微信支付V3进度
 - 微信支付营销-代金券 `WechatMarketingFavorApi` 100%
 - 微信支付 支付功能-普通支付直连模式 `WechatDirectPayApi` 100%
+- 微信合单支付 `WechatCombinePayApi` 100% 
 
 ## 采用技术
 只依赖了 **Spring**已有的东西，做到了低依赖。
