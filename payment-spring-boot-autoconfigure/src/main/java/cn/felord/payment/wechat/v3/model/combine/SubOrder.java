@@ -1,6 +1,7 @@
 
 package cn.felord.payment.wechat.v3.model.combine;
 
+import cn.felord.payment.wechat.v3.model.SettleInfo;
 import lombok.Data;
 
 /**
@@ -45,5 +46,9 @@ public class SubOrder {
      */
     private String subMchid;
 
+    /**
+     * 结算信息，选填
+     */
+    private SettleInfo settleInfo;
 
 }

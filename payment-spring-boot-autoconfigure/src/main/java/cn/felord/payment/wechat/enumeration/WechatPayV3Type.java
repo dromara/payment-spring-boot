@@ -17,7 +17,7 @@ public enum WechatPayV3Type {
     /**
      * 文件下载
      */
-    FILE_DOWNLOAD(HttpMethod.GET,"%s/v3/billdownload/file"),
+    FILE_DOWNLOAD(HttpMethod.GET, "%s/v3/billdownload/file"),
 
     /**
      * 微信公众号支付或者小程序支付.
@@ -33,11 +33,6 @@ public enum WechatPayV3Type {
      * 微信APP支付.
      */
     APP(HttpMethod.POST, "%s/v3/pay/transactions/app"),
-
-    /**
-     * 合单下单-APP支付API.
-     */
-    COMBINE_APP(HttpMethod.POST, "%s/v3/combine-transactions/app"),
 
     /**
      * H5支付.
@@ -58,26 +53,54 @@ public enum WechatPayV3Type {
 
 
     /**
+     * 合单下单-APP支付API.
+     */
+    COMBINE_APP(HttpMethod.POST, "%s/v3/combine-transactions/app"),
+
+    /**
+     * 合单下单-微信公众号支付或者小程序支付.
+     */
+    COMBINE_JSAPI(HttpMethod.POST, "%s/v3/pay/combine-transactions/jsapi"),
+    /**
+     * 合单下单-H5支付API.
+     */
+    COMBINE_MWEB(HttpMethod.POST, "%s/v3/pay/combine-transactions/h5"),
+    /**
+     * 合单下单-Native支付API. /v3/combine-transactions/out-trade-no/{combine_out_trade_no}
+     */
+    COMBINE_NATIVE(HttpMethod.POST, "%s/v3/pay/combine-transactions/native"),
+    /**
+     * 合单查询订单API.
+     */
+    COMBINE_TRANSACTION_OUT_TRADE_NO(HttpMethod.GET, "%s/v3/combine-transactions/out-trade-no/{combine_out_trade_no}"),
+
+    /**
+     * 合单关闭订单API.
+     */
+    COMBINE_CLOSE(HttpMethod.POST, "%s/v3/combine-transactions/out-trade-no/{combine_out_trade_no}/close"),
+
+
+    /**
      * 创建代金券批次API.
      */
-    MARKETING_FAVOR_STOCKS_COUPON_STOCKS(HttpMethod.POST,"%s/v3/marketing/favor/coupon-stocks"),
+    MARKETING_FAVOR_STOCKS_COUPON_STOCKS(HttpMethod.POST, "%s/v3/marketing/favor/coupon-stocks"),
     /**
      * 激活代金券批次API.
      */
-    MARKETING_FAVOR_STOCKS_START(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/start"),
+    MARKETING_FAVOR_STOCKS_START(HttpMethod.POST, "%s/v3/marketing/favor/stocks/{stock_id}/start"),
     /**
      * 暂停代金券批次API.
      */
-    MARKETING_FAVOR_STOCKS_PAUSE(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/pause"),
+    MARKETING_FAVOR_STOCKS_PAUSE(HttpMethod.POST, "%s/v3/marketing/favor/stocks/{stock_id}/pause"),
 
     /**
      * 发放代金券API、根据商户号查用户的券.
      */
-    MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST,"%s/v3/marketing/favor/users/{openid}/coupons"),
+    MARKETING_FAVOR_USERS_COUPONS(HttpMethod.POST, "%s/v3/marketing/favor/users/{openid}/coupons"),
     /**
      * 重启代金券API.
      */
-    MARKETING_FAVOR_STOCKS_RESTART(HttpMethod.POST,"%s/v3/marketing/favor/stocks/{stock_id}/restart"),
+    MARKETING_FAVOR_STOCKS_RESTART(HttpMethod.POST, "%s/v3/marketing/favor/stocks/{stock_id}/restart"),
     /**
      * 条件查询批次列表API.
      */
@@ -162,7 +185,7 @@ public enum WechatPayV3Type {
      * @return the string
      */
     public String uri(WeChatServer weChatServer) {
-        return  String.format(this.pattern,weChatServer.domain());
+        return String.format(this.pattern, weChatServer.domain());
     }
 
 }

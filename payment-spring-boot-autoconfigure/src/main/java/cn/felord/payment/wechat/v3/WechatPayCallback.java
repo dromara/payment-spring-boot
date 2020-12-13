@@ -1,10 +1,7 @@
 package cn.felord.payment.wechat.v3;
 
-import cn.felord.payment.wechat.v3.model.CouponConsumeData;
-import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.v3.model.CallbackParams;
-import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
+import cn.felord.payment.wechat.v3.model.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -26,8 +23,17 @@ import java.util.function.Consumer;
  */
 @Slf4j
 public class WechatPayCallback {
+    /**
+     * The constant MAPPER.
+     */
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    /**
+     * The Signature provider.
+     */
     private final SignatureProvider signatureProvider;
+    /**
+     * The Tenant id.
+     */
     private final String tenantId;
 
     static {
@@ -72,20 +78,44 @@ public class WechatPayCallback {
      * <p>
      * 无需开发者判断，只有扣款成功微信才会回调此接口
      *
-     * @param params                    the params
-     * @param couponConsumeDataConsumer the coupon consume data consumer
+     * @param params                         the params
+     * @param transactionConsumeDataConsumer the transaction consume data consumer
      * @return the map
      */
     @SneakyThrows
-    public Map<String, ?> transactionCallback(ResponseSignVerifyParams params, Consumer<TransactionConsumeData> couponConsumeDataConsumer) {
+    public Map<String, ?> transactionCallback(ResponseSignVerifyParams params, Consumer<TransactionConsumeData> transactionConsumeDataConsumer) {
         String data = callback(params, EventType.TRANSACTION);
         TransactionConsumeData transactionConsumeData = MAPPER.readValue(data, TransactionConsumeData.class);
-        couponConsumeDataConsumer.accept(transactionConsumeData);
+        transactionConsumeDataConsumer.accept(transactionConsumeData);
         return Collections.singletonMap("code", "SUCCESS");
 
     }
 
+    /**
+     * 微信合单支付成功回调.
+     * <p>
+     * 无需开发者判断，只有扣款成功微信才会回调此接口
+     *
+     * @param params                                the params
+     * @param combineTransactionConsumeDataConsumer the combine transaction consume data consumer
+     * @return the map
+     */
+    @SneakyThrows
+    public Map<String, ?> combineTransactionCallback(ResponseSignVerifyParams params, Consumer<CombineTransactionConsumeData> combineTransactionConsumeDataConsumer) {
+        String data = callback(params, EventType.TRANSACTION);
+        CombineTransactionConsumeData combineTransactionConsumeData = MAPPER.readValue(data, CombineTransactionConsumeData.class);
+        combineTransactionConsumeDataConsumer.accept(combineTransactionConsumeData);
+        return Collections.singletonMap("code", "SUCCESS");
 
+    }
+
+    /**
+     * Callback string.
+     *
+     * @param params    the params
+     * @param eventType the event type
+     * @return the string
+     */
     @SneakyThrows
     private String callback(ResponseSignVerifyParams params, EventType eventType) {
         if (signatureProvider.responseSignVerify(params)) {
@@ -122,8 +152,16 @@ public class WechatPayCallback {
          */
         TRANSACTION("TRANSACTION.SUCCESS");
 
+        /**
+         * The Event.
+         */
         private final String event;
 
+        /**
+         * Instantiates a new Event type.
+         *
+         * @param event the event
+         */
         EventType(String event) {
             this.event = event;
         }

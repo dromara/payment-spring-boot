@@ -219,10 +219,7 @@ public class WechatPayClient {
             ObjectNode body = responseEntity.getBody();
             HttpStatus statusCode = responseEntity.getStatusCode();
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error,statusCode "+ statusCode +",result : " + body);
-            }
-            if (Objects.isNull(body)) {
-                throw new PayException("cant obtain wechat response body");
+                throw new PayException("wechat pay server error,statusCode " + statusCode + ",result : " + body);
             }
 
             ResponseSignVerifyParams params = new ResponseSignVerifyParams();
@@ -235,7 +232,9 @@ public class WechatPayClient {
             //构造验签名串
             params.setWechatpayTimestamp(headers.getFirst("Wechatpay-Timestamp"));
             params.setWechatpayNonce(headers.getFirst("Wechatpay-Nonce"));
-            params.setBody(body.toString());
+
+            String content = Objects.isNull(body) ? "" : body.toString();
+            params.setBody(content);
 
             // 验证微信服务器签名
             if (signatureProvider.responseSignVerify(params)) {
@@ -263,12 +262,12 @@ public class WechatPayClient {
             String body = responseEntity.getBody();
             HttpStatus statusCode = responseEntity.getStatusCode();
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error,statusCode "+ statusCode +",result : " + body);
+                throw new PayException("wechat pay server error,statusCode " + statusCode + ",result : " + body);
             }
             if (Objects.isNull(body)) {
                 throw new PayException("cant obtain wechat response body");
             }
-                return body;
+            return body;
         }
 
     }

@@ -7,6 +7,9 @@ package cn.felord.payment.wechat.v3;
  * @since 1.0.0.RELEASE
  */
 public class WechatApiProvider {
+    /**
+     * The Wechat pay client.
+     */
     private final WechatPayClient wechatPayClient;
 
     /**
@@ -24,8 +27,8 @@ public class WechatApiProvider {
      * @param tenantId the tenant id
      * @return the wechat marketing favor api
      */
-    public WechatMarketingFavorApi  favorApi(String tenantId){
-        return new WechatMarketingFavorApi(this.wechatPayClient,tenantId);
+    public WechatMarketingFavorApi favorApi(String tenantId) {
+        return new WechatMarketingFavorApi(this.wechatPayClient, tenantId);
     }
 
     /**
@@ -34,8 +37,18 @@ public class WechatApiProvider {
      * @param tenantId the tenant id
      * @return the wechat pay api
      */
-    public WechatDirectPayApi directPayApi(String tenantId){
-        return new WechatDirectPayApi(wechatPayClient,tenantId);
+    public WechatDirectPayApi directPayApi(String tenantId) {
+        return new WechatDirectPayApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 合单支付.
+     *
+     * @param tenantId the tenant id
+     * @return the wechat combine pay api
+     */
+    public WechatCombinePayApi combinePayApi(String tenantId) {
+        return new WechatCombinePayApi(wechatPayClient, tenantId);
     }
 
     /**
@@ -44,8 +57,8 @@ public class WechatApiProvider {
      * @param tenantId the tenant id
      * @return the wechat pay callback
      */
-    public WechatPayCallback callback(String tenantId){
-        return new WechatPayCallback(wechatPayClient.signatureProvider(),tenantId);
+    public WechatPayCallback callback(String tenantId) {
+        return new WechatPayCallback(wechatPayClient.signatureProvider(), tenantId);
     }
 
 }

@@ -8,13 +8,13 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
- * 合单支付 APP支付、JSAPI支付、小程序支付、Native支付参数.
+ * 合单支付 H5支付参数.
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
 @Data
-public class CombinePayParams {
+public class CombineH5PayParams {
 
     /**
      * 合单商户appid，必填
@@ -41,7 +41,7 @@ public class CombinePayParams {
     /**
      * 合单支付场景信息描述，选填
      */
-    private CombineSceneInfo sceneInfo;
+    private CombineH5SceneInfo sceneInfo;
     /**
      * 子单信息，必填，最多50单
      */
