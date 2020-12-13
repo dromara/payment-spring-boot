@@ -5,8 +5,8 @@ import lombok.Data;
 /**
  * 批次使用规则
  *
- * @author Dax
- * @since 15:08
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class StockUseRule {

@@ -15,12 +15,21 @@ import java.net.URI;
 /**
  * The type Abstract api.
  *
- * @author Dax
- * @since 18 :23
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public abstract class AbstractApi {
+    /**
+     * The Mapper.
+     */
     private final ObjectMapper mapper;
+    /**
+     * The Wechat pay client.
+     */
     private final WechatPayClient wechatPayClient;
+    /**
+     * The Tenant id.
+     */
     private final String tenantId;
 
 
@@ -41,6 +50,11 @@ public abstract class AbstractApi {
         this.tenantId = tenantId;
     }
 
+    /**
+     * Apply object mapper.
+     *
+     * @param mapper the mapper
+     */
     private void applyObjectMapper(ObjectMapper mapper) {
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

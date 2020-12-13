@@ -2,13 +2,15 @@ package cn.felord.payment.wechat;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * The type Wechat pay properties.
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 @ConfigurationProperties("wechat.pay")
@@ -20,6 +22,9 @@ public class WechatPayProperties {
 
     /**
      * wechat pay v3 properties.
+     *
+     * @author felord.cn
+     * @since 1.0.0.RELEASE
      */
     @Data
     public static class V3 {

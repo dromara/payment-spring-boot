@@ -7,8 +7,9 @@ import lombok.Data;
 /**
  * 优惠券样式
  *
- * @author Dax
- * @since 15:09
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class PatternInfo {

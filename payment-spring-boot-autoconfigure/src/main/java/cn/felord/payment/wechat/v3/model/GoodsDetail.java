@@ -5,6 +5,9 @@ import lombok.Data;
 
 /**
  * 商户下单接口传的单品信息
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class GoodsDetail {

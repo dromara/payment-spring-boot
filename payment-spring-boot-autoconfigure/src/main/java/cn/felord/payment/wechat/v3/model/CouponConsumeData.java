@@ -5,6 +5,9 @@ import lombok.Data;
 
 /**
  * 微信代金券核销通知参数
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class CouponConsumeData {

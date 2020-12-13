@@ -16,8 +16,8 @@ import java.net.URI;
 /**
  * 普通支付-直连模式.
  *
- * @author Dax
- * @since 16 :15
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class WechatDirectPayApi extends AbstractApi {
 

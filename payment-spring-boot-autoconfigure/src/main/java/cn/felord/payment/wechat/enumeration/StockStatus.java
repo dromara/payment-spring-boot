@@ -3,8 +3,8 @@ package cn.felord.payment.wechat.enumeration;
 /**
  * The enum Stock status.
  *
- * @author Dax
- * @since 15 :17
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum StockStatus {
     /**

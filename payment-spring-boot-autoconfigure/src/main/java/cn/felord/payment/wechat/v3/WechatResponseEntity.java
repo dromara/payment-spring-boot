@@ -11,13 +11,19 @@ import java.util.Objects;
  * The type Wechat response entity.
  *
  * @param <T> the type parameter
- * @author Dax
- * @since 13 :20
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Slf4j
 @Data
 public class WechatResponseEntity<T> {
+    /**
+     * The Http status.
+     */
     private int httpStatus;
+    /**
+     * The Body.
+     */
     private T body;
 
 

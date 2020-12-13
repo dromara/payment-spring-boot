@@ -5,8 +5,8 @@ package cn.felord.payment.wechat.enumeration;
  * <p>
  * https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/convention/chapter3_1.shtml#menu1
  *
- * @author Dax
- * @since 14:50
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum CouponBgColor {
     COLOR010("#63B359"),

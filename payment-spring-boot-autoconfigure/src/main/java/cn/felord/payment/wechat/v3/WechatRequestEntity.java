@@ -16,12 +16,15 @@ import java.util.function.Consumer;
  * The type Wechat request entity.
  *
  * @param <T> the type parameter
- * @author Dax
- * @since 14 :01
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Getter
 public class WechatRequestEntity<T> extends RequestEntity<T> {
 
+    /**
+     * The Response body consumer.
+     */
     private final Consumer<ResponseEntity<ObjectNode>> responseBodyConsumer;
 
     /**

@@ -21,8 +21,8 @@ import java.util.function.Consumer;
 /**
  * 微信支付回调工具.
  *
- * @author Dax
- * @since 10 :21
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Slf4j
 public class WechatPayCallback {
@@ -108,6 +108,9 @@ public class WechatPayCallback {
 
     /**
      * 事件类型用于处理回调.
+     *
+     * @author felord.cn
+     * @since 1.0.0.RELEASE
      */
     enum EventType {
         /**

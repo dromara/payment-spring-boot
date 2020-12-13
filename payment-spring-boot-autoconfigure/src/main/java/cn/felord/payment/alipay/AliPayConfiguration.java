@@ -20,8 +20,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * @author Dax
- * @since 14:35
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Slf4j
 @Configuration

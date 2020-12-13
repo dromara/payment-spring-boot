@@ -25,8 +25,8 @@ import java.util.function.Consumer;
 /**
  * The type Wechat pay client.
  *
- * @author Dax
- * @since 11 :43
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class WechatPayClient {
     /**
@@ -66,6 +66,8 @@ public class WechatPayClient {
      * The type Executor.
      *
      * @param <M> the type parameter
+     * @author felord.cn
+     * @since 1.0.0.RELEASE
      */
     public static class Executor<M> {
         /**

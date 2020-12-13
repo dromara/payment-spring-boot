@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
  * <p>
  * 其中【微信平台证书】定期会进行更新，不受我方管控，我方需要适当的时候获取最新的证书列表。
  *
- * @author Dax
- * @since 16 :48
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class SignatureProvider {
 

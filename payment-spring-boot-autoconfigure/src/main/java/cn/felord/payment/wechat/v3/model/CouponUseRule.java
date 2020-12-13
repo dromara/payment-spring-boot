@@ -7,6 +7,9 @@ import java.util.List;
 
 /**
  * 核销规则.
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class CouponUseRule {

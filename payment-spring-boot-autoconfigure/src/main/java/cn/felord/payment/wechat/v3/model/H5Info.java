@@ -3,8 +3,9 @@ package cn.felord.payment.wechat.v3.model;
 import lombok.Data;
 
 /**
- * @author Dax
- * @since 17:03
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class H5Info {

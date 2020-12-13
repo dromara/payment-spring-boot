@@ -6,8 +6,9 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import java.io.IOException;
 
 /**
- * @author Dax
- * @since 12:57
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class WechatPayResponseErrorHandler extends DefaultResponseErrorHandler {
 

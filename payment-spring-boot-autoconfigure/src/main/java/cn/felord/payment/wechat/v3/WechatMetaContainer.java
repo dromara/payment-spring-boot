@@ -6,8 +6,8 @@ import java.util.*;
 /**
  * 配置容器
  *
- * @author Dax
- * @since 15 :18
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class WechatMetaContainer {
     private final Map<String, WechatMetaBean> wechatMetaBeanMap = new HashMap<>();

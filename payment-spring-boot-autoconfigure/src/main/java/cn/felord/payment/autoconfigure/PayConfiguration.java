@@ -6,8 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * @author Dax
- * @since 14:47
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Configuration
 @Import({WechatPayConfiguration.class, AliPayConfiguration.class})

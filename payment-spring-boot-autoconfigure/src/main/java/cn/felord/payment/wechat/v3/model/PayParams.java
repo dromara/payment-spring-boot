@@ -4,10 +4,10 @@ package cn.felord.payment.wechat.v3.model;
 import lombok.Data;
 
 /**
- * The type App pay model.
+ * 支付请求参数.
  *
- * @author Dax
- * @since 17 :10
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class PayParams {

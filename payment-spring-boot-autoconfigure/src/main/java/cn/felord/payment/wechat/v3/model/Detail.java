@@ -5,8 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * @author Dax
- * @since 17:01
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class Detail {

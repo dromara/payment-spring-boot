@@ -9,6 +9,8 @@ import lombok.Data;
  *
  * 满transactionMinimum 减少 couponAmount
  *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class FixedNormalCoupon {

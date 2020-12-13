@@ -11,10 +11,16 @@ import java.util.Map;
 
 /**
  * The type Wechat pay configuration.
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Configuration
 @EnableConfigurationProperties(WechatPayProperties.class)
 public class WechatPayConfiguration {
+    /**
+     * The constant CERT_ALIAS.
+     */
     private static final String CERT_ALIAS = "Tenpay Certificate";
 
     /**

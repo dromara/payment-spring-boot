@@ -3,8 +3,10 @@ package cn.felord.payment.wechat.v3.model;
 import lombok.Data;
 
 /**
- * @author Dax
- * @since 19:19
+ * The type User coupons query params.
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class UserCouponsQueryParams {
@@ -46,8 +48,20 @@ public class UserCouponsQueryParams {
     private Integer limit = 20;
 
 
-   public enum Status{
+    /**
+     * The enum Status.
+     *
+     * @author felord.cn
+     * @since 1.0.0.RELEASE
+     */
+    public enum Status{
+        /**
+         * Sended status.
+         */
         SENDED,
+        /**
+         * Used status.
+         */
         USED
     }
 

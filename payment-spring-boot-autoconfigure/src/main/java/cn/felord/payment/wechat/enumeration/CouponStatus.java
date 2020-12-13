@@ -3,8 +3,8 @@ package cn.felord.payment.wechat.enumeration;
 /**
  * The enum Coupon status.
  *
- * @author Dax
- * @since 10 :57
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum  CouponStatus {
     /**

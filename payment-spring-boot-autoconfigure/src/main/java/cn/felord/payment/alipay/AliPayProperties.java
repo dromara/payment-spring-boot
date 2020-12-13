@@ -7,8 +7,8 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * The type Ali pay properties.
  *
- * @author Dax
- * @since 14 :13
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 @ConfigurationProperties("ali.pay")
@@ -22,6 +22,9 @@ public class AliPayProperties {
 
     /**
      * The type V 1.
+     *
+     * @author felord.cn
+     * @since 1.0.0.RELEASE
      */
     @Data
     public static class V1{

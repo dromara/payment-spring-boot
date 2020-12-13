@@ -27,7 +27,9 @@ import java.util.Map;
 /**
  * 用于微信支付处理上传的自定义消息转换器.
  *
+ * @author felord.cn
  * @see AllEncompassingFormHttpMessageConverter
+ * @since 1.0.0.RELEASE
  */
 final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
     /**

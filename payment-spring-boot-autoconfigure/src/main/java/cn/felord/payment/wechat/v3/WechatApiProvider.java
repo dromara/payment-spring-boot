@@ -3,8 +3,8 @@ package cn.felord.payment.wechat.v3;
 /**
  * 微信支付工具.
  *
- * @author Dax
- * @since 17 :32
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class WechatApiProvider {
     private final WechatPayClient wechatPayClient;

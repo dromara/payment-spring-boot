@@ -3,6 +3,9 @@ package cn.felord.payment.wechat.enumeration;
 
 /**
  * The enum We chat server domain.
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum WeChatServer {
     /**

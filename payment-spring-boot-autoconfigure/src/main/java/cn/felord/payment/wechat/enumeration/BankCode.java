@@ -3,6 +3,9 @@ package cn.felord.payment.wechat.enumeration;
 
 /**
  * The enum Bank code.
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum BankCode {
     /**

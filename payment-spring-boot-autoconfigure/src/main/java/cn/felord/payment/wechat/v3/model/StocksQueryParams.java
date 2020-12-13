@@ -11,8 +11,8 @@ import java.time.OffsetDateTime;
  * <p>
  * 条件查询批次列表API、查询代金券可用商户API、查询代金券可用单品API
  *
- * @author Dax
- * @since 15 :16
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class StocksQueryParams {

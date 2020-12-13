@@ -5,8 +5,8 @@ import lombok.Data;
 /**
  * 查询代金券详情API参数
  *
- * @author Dax
- * @since 18 :51
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class CouponDetailsQueryParams {

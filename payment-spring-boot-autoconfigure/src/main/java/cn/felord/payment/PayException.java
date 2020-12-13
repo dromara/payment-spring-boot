@@ -1,8 +1,9 @@
 package cn.felord.payment;
 
 /**
- * @author Dax
- * @since 14:18
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class PayException extends RuntimeException {
 

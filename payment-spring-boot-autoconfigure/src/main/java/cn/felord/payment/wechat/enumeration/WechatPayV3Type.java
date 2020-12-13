@@ -5,8 +5,8 @@ import org.springframework.http.HttpMethod;
 /**
  * The Wechat Pay V3 type.
  *
- * @author Dax
- * @since 14 :25
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum WechatPayV3Type {
     /**

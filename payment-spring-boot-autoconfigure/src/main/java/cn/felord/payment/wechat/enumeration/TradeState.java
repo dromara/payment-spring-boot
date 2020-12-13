@@ -3,8 +3,8 @@ package cn.felord.payment.wechat.enumeration;
 /**
  * 微信侧返回交易状态
  *
- * @author Dax
- * @since 11:37
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum TradeState {
     /**

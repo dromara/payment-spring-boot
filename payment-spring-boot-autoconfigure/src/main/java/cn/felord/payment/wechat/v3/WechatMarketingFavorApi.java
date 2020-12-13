@@ -30,12 +30,18 @@ import java.util.function.Consumer;
 /**
  * 微信支付营销代金券API
  *
- * @author Dax
- * @since 18 :22
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public class WechatMarketingFavorApi extends AbstractApi {
 
 
+    /**
+     * Instantiates a new Wechat marketing favor api.
+     *
+     * @param wechatPayClient the wechat pay client
+     * @param tenantId        the tenant id
+     */
     public WechatMarketingFavorApi(WechatPayClient wechatPayClient, String tenantId) {
         super(wechatPayClient, tenantId);
     }
@@ -43,6 +49,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 创建代金券批次API
+     * <p>
+     * 通过调用此接口可创建代金券批次，包括 <strong>预充值</strong> 和 <strong>免充值</strong> 类型。
      *
      * @param params the params
      * @return the wechat response entity
@@ -56,6 +64,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
         return wechatResponseEntity;
     }
 
+    /**
+     * Create stocks function request entity.
+     *
+     * @param type   the type
+     * @param params the params
+     * @return the request entity
+     */
     private RequestEntity<?> createStocksFunction(WechatPayV3Type type, StocksCreateParams params) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
@@ -69,6 +84,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 激活代金券批次API
+     * <p>
+     * 制券成功后，通过调用此接口激活批次，如果是预充值代金券，激活时会从商户账户余额中锁定本批次的营销资金。
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -85,6 +102,11 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 发放代金券API
+     * <p>
+     * 商户平台/API完成制券后，可使用发放代金券接口发券。通过调用此接口可发放指定批次给指定用户，发券场景可以是小程序、H5、APP等。
+     * <p>
+     * 注意：
+     * • 商户可在H5活动页面、商户小程序、商户APP等自有场景内调用该接口完成发券，商户默认只允许发放本商户号（调用发券接口的商户号）创建的代金券，如需发放其他商户商户创建的代金券，请参考常见问题Q1。
      *
      * @param params the params
      * @return the wechat response entity
@@ -99,6 +121,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
 
+    /**
+     * Send stocks function request entity.
+     *
+     * @param type   the type
+     * @param params the params
+     * @return the request entity
+     */
     private RequestEntity<?> sendStocksFunction(WechatPayV3Type type, StocksSendParams params) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
@@ -114,6 +143,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 暂停代金券批次API
+     * <p>
+     * 通过此接口可暂停指定代金券批次。暂停后，该代金券批次暂停发放，用户无法通过任何渠道再领取该批次的券。
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -129,6 +160,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 重启代金券批次API
+     * <p>
+     * 通过此接口可重启指定代金券批次。重启后，该代金券批次可以再次发放。
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -142,6 +175,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
         return wechatResponseEntity;
     }
 
+    /**
+     * Start and restart and pause stock function request entity.
+     *
+     * @param type    the type
+     * @param stockId the stock id
+     * @return the request entity
+     */
     private RequestEntity<?> startAndRestartAndPauseStockFunction(WechatPayV3Type type, String stockId) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
         String mchId = v3.getMchId();
@@ -157,6 +197,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 条件查询批次列表API
+     * <p>
+     * 通过此接口可查询多个批次的信息，包括批次的配置信息以及批次概况数据。
      *
      * @param params the params
      * @return the wechat response entity
@@ -172,6 +214,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
 
+    /**
+     * Query stocks function request entity.
+     *
+     * @param type   the type
+     * @param params the params
+     * @return the request entity
+     */
     private RequestEntity<?> queryStocksFunction(WechatPayV3Type type, StocksQueryParams params) {
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -213,6 +262,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 查询批次详情API
+     * <p>
+     * 通过此接口可查询批次信息，包括批次的配置信息以及批次概况数据。
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -227,6 +278,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
 
+    /**
+     * Stock detail function request entity.
+     *
+     * @param type    the type
+     * @param stockId the stock id
+     * @return the request entity
+     */
     private RequestEntity<?> stockDetailFunction(WechatPayV3Type type, String stockId) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
@@ -244,6 +302,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 查询代金券详情API
+     * <p>
+     * 通过此接口可查询代金券信息，包括代金券的基础信息、状态。如代金券已核销，会包括代金券核销的订单信息（订单号、单品信息等）。
      *
      * @param params the params
      * @return the wechat response entity
@@ -258,6 +318,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
 
+    /**
+     * Coupon detail function request entity.
+     *
+     * @param type   the type
+     * @param params the params
+     * @return the request entity
+     */
     private RequestEntity<?> couponDetailFunction(WechatPayV3Type type, CouponDetailsQueryParams params) {
 
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
@@ -279,6 +346,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 查询代金券可用商户API
+     * <p>
+     * 通过调用此接口可查询批次的可用商户号，判断券是否在某商户号可用，来决定是否展示。
      *
      * @param params the params
      * @return the wechat response entity
@@ -294,6 +363,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 查询代金券可用单品API
+     * <p>
+     * 通过此接口可查询批次的可用商品编码，判断券是否可用于某些商品，来决定是否展示。
      *
      * @param params the params
      * @return the wechat response entity
@@ -310,6 +381,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 根据商户号查用户的券API
+     * <p>
+     * 可通过该接口查询用户在某商户号可用的全部券，可用于商户的小程序/H5中，用户"我的代金券"或"提交订单页"展示优惠信息。无法查询到微信支付立减金。本接口查不到用户的微信支付立减金（又称“全平台通用券”），即在所有商户都可以使用的券，例如：摇摇乐红包；当按可用商户号查询时，无法查询用户已经核销的券
      *
      * @param params the params
      * @return the wechat response entity
@@ -324,6 +397,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
         return wechatResponseEntity;
     }
 
+    /**
+     * Query user coupons function request entity.
+     *
+     * @param type   the type
+     * @param params the params
+     * @return the request entity
+     */
     private RequestEntity<?> queryUserCouponsFunction(WechatPayV3Type type, UserCouponsQueryParams params) {
 
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
@@ -363,6 +443,10 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 下载批次核销明细API
+     * <p>
+     * 数据结果包含在响应体的 <strong>csv</strong> 字段中
+     * <p>
+     * 可获取到某批次的核销明细数据，包括订单号、单品信息、银行流水号等，用于对账/数据分析。
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -380,6 +464,10 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 下载批次退款明细API
+     * <p>
+     * 数据结果包含在响应体的 <strong>csv</strong> 字段中
+     * <p>
+     * 可获取到某批次的退款明细数据，包括订单号、单品信息、银行流水号等，用于对账/数据分析。
      *
      * @param stockId the stock id
      * @return the wechat response entity
@@ -395,6 +483,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
         return wechatResponseEntity;
     }
 
+    /**
+     * Download flow function request entity.
+     *
+     * @param type    the type
+     * @param stockId the stock id
+     * @return the request entity
+     */
     private RequestEntity<?> downloadFlowFunction(WechatPayV3Type type, String stockId) {
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
@@ -405,6 +500,10 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
     /**
      * 营销图片上传API
+     * <p>
+     * 媒体图片只支持JPG、BMP、PNG格式，文件大小不能超过2M。
+     * <p>
+     * 通过本接口上传图片后可获得图片url地址。图片url可在微信支付营销相关的API使用，包括商家券、代金券、支付有礼等。
      *
      * @param file the file
      * @return the wechat response entity
@@ -419,6 +518,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
 
+    /**
+     * Marketing image upload function request entity.
+     *
+     * @param type the type
+     * @param file the file
+     * @return the request entity
+     */
     @SneakyThrows
     private RequestEntity<?> marketingImageUploadFunction(WechatPayV3Type type, MultipartFile file) {
 
@@ -445,11 +551,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
     /**
-     * 代金券核销回调通知API
+     * 代金券核销回调通知API。
+     * <p>
+     * 设置核销回调通知的{@code notifyUrl},{@code notifyUrl}需要设置应用白名单。开发者应该对代金券的核销结果进行流水记录。
      *
      * @param notifyUrl the notify url
      * @return the wechat response entity
-     * @see WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer)
+     * @see WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer) WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer)WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer)
      */
     public WechatResponseEntity<ObjectNode> setMarketingFavorCallback(String notifyUrl) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -460,6 +568,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
         return wechatResponseEntity;
     }
 
+    /**
+     * Sets marketing favor callback function.
+     *
+     * @param type      the type
+     * @param notifyUrl the notify url
+     * @return the marketing favor callback function
+     */
     private RequestEntity<?> setMarketingFavorCallbackFunction(WechatPayV3Type type, String notifyUrl) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
@@ -473,6 +588,14 @@ public class WechatMarketingFavorApi extends AbstractApi {
         return Post(uri, body);
     }
 
+    /**
+     * csv对账单下载。
+     *
+     * @param link the link
+     * @return the string
+     * @see WechatMarketingFavorApi#downloadStockUseFlow(String) 下载批次核销明细API
+     * @see WechatMarketingFavorApi#downloadStockRefundFlow(String) 下载批次退款明细API
+     */
     public String billDownload(String link) {
         return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
                 .function(this::billDownloadFunction)
@@ -480,6 +603,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
     }
 
 
+    /**
+     * Bill download function request entity.
+     *
+     * @param type the type
+     * @param link the link
+     * @return the request entity
+     */
     private RequestEntity<?> billDownloadFunction(WechatPayV3Type type, String link) {
         URI uri = UriComponentsBuilder.fromHttpUrl(link)
                 .build()

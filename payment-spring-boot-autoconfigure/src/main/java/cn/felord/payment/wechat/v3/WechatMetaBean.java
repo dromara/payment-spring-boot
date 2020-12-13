@@ -9,8 +9,8 @@ import java.security.KeyPair;
 /**
  * 微信支付元数据Bean.
  *
- * @author Dax
- * @since 15 :50
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 @Data
 public class WechatMetaBean {

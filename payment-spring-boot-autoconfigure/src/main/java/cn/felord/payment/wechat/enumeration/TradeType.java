@@ -3,8 +3,8 @@ package cn.felord.payment.wechat.enumeration;
 /**
  * 微信侧返回交易类型
  *
- * @author Dax
- * @since 11:34
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  */
 public enum TradeType {
     /**

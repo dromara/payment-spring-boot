@@ -2,6 +2,12 @@ package cn.felord.payment.wechat.v3.model;
 
 import lombok.Data;
 
+/**
+ * 代金券发放接口请求参数
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
+ */
 @Data
 public class StocksSendParams {
     /**
@@ -25,11 +31,13 @@ public class StocksSendParams {
      */
     private String stockCreatorMchid;
     /**
-     * 指定面额发券，面额
+     * 指定面额发券场景，券面额，其他场景不需要填，单位：分。
+     * 校验规则：仅在发券时指定面额及门槛的场景才生效，常规发券场景请勿传入该信息。
      */
-    private String couponValue;
+    private Long couponValue;
     /**
-     * 指定面额发券，券门槛
+     * 指定面额发券批次门槛，其他场景不需要，单位：分。
+     * 校验规则：仅在发券时指定面额及门槛的场景才生效，常规发券场景请勿传入该信息。
      */
-    private String couponMinimum;
+    private Long couponMinimum;
 }

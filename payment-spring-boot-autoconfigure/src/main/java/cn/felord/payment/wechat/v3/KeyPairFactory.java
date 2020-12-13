@@ -13,8 +13,8 @@ import java.security.cert.X509Certificate;
 /**
  * 证书工具
  *
- * @author dax
- * @since 13:41
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
  **/
 public class KeyPairFactory {
 
