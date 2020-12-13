@@ -103,6 +103,15 @@ public class WechatMarketingFavorApi extends AbstractApi {
     /**
      * 发放代金券API
      * <p>
+     * 商户侧开发时建议增加发放流水记录。
+     * <p>
+     * 微信支付文档所要求的微信公众号服务号不是必须的，只要你有一个绑定了微信支付商户平台和开放平台的appid即可。
+     * <p>
+     * 流程为：
+     * 1. appid 请求授权微信登录。
+     * 2. 登录成功后，开发者在商户侧保存用户 <strong>对应此appid的openid</strong>。
+     * 3. 通过 appid - openid 进行发券。
+     * <p>
      * 商户平台/API完成制券后，可使用发放代金券接口发券。通过调用此接口可发放指定批次给指定用户，发券场景可以是小程序、H5、APP等。
      * <p>
      * 注意：
@@ -557,7 +566,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param notifyUrl the notify url
      * @return the wechat response entity
-     * @see WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer) WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer)WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer)
+     * @see WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer) 核销回调
      */
     public WechatResponseEntity<ObjectNode> setMarketingFavorCallback(String notifyUrl) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
