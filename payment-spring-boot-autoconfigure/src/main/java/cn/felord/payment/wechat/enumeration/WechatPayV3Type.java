@@ -35,6 +35,11 @@ public enum WechatPayV3Type {
     APP(HttpMethod.POST, "%s/v3/pay/transactions/app"),
 
     /**
+     * 合单下单-APP支付API.
+     */
+    COMBINE_APP(HttpMethod.POST, "%s/v3/combine-transactions/app"),
+
+    /**
      * H5支付.
      */
     MWEB(HttpMethod.POST, "%s/v3/pay/transactions/h5"),
@@ -111,11 +116,21 @@ public enum WechatPayV3Type {
     MARKETING_FAVOR_CALLBACKS(HttpMethod.POST, "%s/v3/marketing/favor/callbacks");
 
 
-
-
+    /**
+     * The Pattern.
+     */
     private final String pattern;
+    /**
+     * The Method.
+     */
     private final HttpMethod method;
 
+    /**
+     * Instantiates a new Wechat pay v 3 type.
+     *
+     * @param method  the method
+     * @param pattern the pattern
+     */
     WechatPayV3Type(HttpMethod method, String pattern) {
         this.method = method;
         this.pattern = pattern;
