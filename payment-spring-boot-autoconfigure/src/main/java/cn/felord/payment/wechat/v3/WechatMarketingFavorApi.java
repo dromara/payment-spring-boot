@@ -15,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -215,14 +214,12 @@ public class WechatMarketingFavorApi extends AbstractApi {
     public WechatResponseEntity<ObjectNode> queryStocksByMch(StocksQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS, params)
-                .function(this::queryStocksFunction)
+                .function(this::queryStocksByMchFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
 
         return wechatResponseEntity;
     }
-
-
     /**
      * Query stocks function request entity.
      *
@@ -230,7 +227,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      * @param params the params
      * @return the request entity
      */
-    private RequestEntity<?> queryStocksFunction(WechatPayV3Type type, StocksQueryParams params) {
+    private RequestEntity<?> queryStocksByMchFunction(WechatPayV3Type type, StocksQueryParams params) {
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("offset", String.valueOf(params.getOffset()));
@@ -251,23 +248,16 @@ public class WechatMarketingFavorApi extends AbstractApi {
                     .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
         StockStatus status = params.getStatus();
-        if (Objects.nonNull(status) && Objects.equals(WechatPayV3Type.MARKETING_FAVOR_STOCKS, type)) {
+        if (Objects.nonNull(status)) {
             queryParams.add("status", status.value());
         }
 
-        String stockId = params.getStockId();
-
-        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
-                .build();
-
-        if (StringUtils.hasText(stockId) && !Objects.equals(WechatPayV3Type.MARKETING_FAVOR_STOCKS, type)) {
-            uriComponents = uriComponents.expand(stockId);
-        }
-
-        URI uri = uriComponents.toUri();
+                .build().toUri();
         return Get(uri);
     }
+
 
     /**
      * 查询批次详情API
@@ -361,13 +351,35 @@ public class WechatMarketingFavorApi extends AbstractApi {
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> queryMerchantsByStockId(StocksQueryParams params) {
+    public WechatResponseEntity<ObjectNode> queryMerchantsByStockId(MchQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_MERCHANTS, params)
-                .function(this::queryStocksFunction)
+                .function(this::queryMerchantsByStockIdFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
+    }
+
+    /**
+     * Query stocks function request entity.
+     *
+     * @param type   the type
+     * @param params the params
+     * @return the request entity
+     */
+    private RequestEntity<?> queryMerchantsByStockIdFunction(WechatPayV3Type type, MchQueryParams params) {
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("offset", String.valueOf(params.getOffset()));
+        queryParams.add("limit", String.valueOf(params.getLimit()));
+        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+        queryParams.add("stock_creator_mchid", v3.getMchId());
+        String stockId = params.getStockId();
+        URI uri =  UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParams(queryParams)
+                .build()
+                .expand(stockId)
+                .toUri();
+        return Get(uri);
     }
 
     /**
@@ -378,10 +390,10 @@ public class WechatMarketingFavorApi extends AbstractApi {
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> queryStockItems(StocksQueryParams params) {
+    public WechatResponseEntity<ObjectNode> queryStockItems(MchQueryParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.MARKETING_FAVOR_STOCKS_ITEMS, params)
-                .function(this::queryStocksFunction)
+                .function(this::queryMerchantsByStockIdFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
 
@@ -538,7 +550,10 @@ public class WechatMarketingFavorApi extends AbstractApi {
     private RequestEntity<?> marketingImageUploadFunction(WechatPayV3Type type, MultipartFile file) {
 
         Map<String, Object> meta = new LinkedHashMap<>(2);
-        meta.put("filename", file.getOriginalFilename());
+
+        String originalFilename = file.getOriginalFilename();
+        String filename = StringUtils.hasText(originalFilename)? originalFilename :file.getName();
+        meta.put("filename", filename);
 
         byte[] digest = SHA256.Digest.getInstance("SHA-256").digest(file.getBytes());
         meta.put("sha256", Hex.toHexString(digest));
@@ -549,7 +564,6 @@ public class WechatMarketingFavorApi extends AbstractApi {
         String metaStr = this.getMapper().writeValueAsString(meta);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
-                .queryParam("pay_tenantId", this.tenantId())
                 .build()
                 .toUri();
         return RequestEntity.post(uri)

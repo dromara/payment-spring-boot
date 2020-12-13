@@ -8,7 +8,8 @@
 - 配置简单、只依赖 Spring 框架
 
 
-[Star](https://github.com/NotFound403/payment-spring-boot)
+[GitHub](https://github.com/NotFound403/payment-spring-boot)
+[示例项目](https://github.com/NotFound403/payment-spring-boot-samples)
 [技术博客](https://felord.cn)
 [快速开始](README.md)
 

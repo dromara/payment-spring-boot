@@ -51,7 +51,7 @@ wechat:
 #  微信支付商户号 必填
       mch-id: xxxxxxx
 #  商户服务器域名 用于回调  需要放开回调接口的安全策略 必填
-      domain: https://xxxx.xxx.com
+      domain: https://felord.cn
 #  商户 api 证书路径 必填  填写classpath路径 位于 maven项目的resources文件下
       cert-path: apiclient_cert.p12
  

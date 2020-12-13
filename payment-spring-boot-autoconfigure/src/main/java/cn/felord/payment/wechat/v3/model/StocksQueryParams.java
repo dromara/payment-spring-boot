@@ -1,7 +1,6 @@
 package cn.felord.payment.wechat.v3.model;
 
 import cn.felord.payment.wechat.enumeration.StockStatus;
-import cn.felord.payment.wechat.v3.WechatMarketingFavorApi;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
@@ -9,7 +8,7 @@ import java.time.OffsetDateTime;
 /**
  * 查询参数，适用以下接口：
  * <p>
- * 条件查询批次列表API、查询代金券可用商户API、查询代金券可用单品API
+ * 条件查询批次列表API
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -36,12 +35,12 @@ public class StocksQueryParams {
      * 查询代金券可用单品API 最大100。
      */
     private Integer limit = 10;
-    /**
+/*    *//**
      * 根据API而定
      * <p>
-     * 批次ID，对条件查询批次列表API{@link WechatMarketingFavorApi#queryStocksByMch(StocksQueryParams)}无效。
-     */
-    private String stockId;
+     * 批次ID
+     *//*
+    private String stockId;*/
     /**
      * 选填
      * <p>
@@ -57,7 +56,7 @@ public class StocksQueryParams {
     /**
      * 根据API而定
      * <p>
-     * 批次状态，只对条件查询批次列表API{@link WechatMarketingFavorApi#queryStocksByMch(StocksQueryParams)}有效。
+     * 批次状态
      */
     private StockStatus status;
 }
