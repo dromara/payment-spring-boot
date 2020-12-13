@@ -97,7 +97,7 @@
 
 #### 关单API
 
-`WechatResponseEntity<ObjectNode> closeByOutTradeNo(String outTradeNo)`
+`WechatResponseEntity<ObjectNode> close(String outTradeNo)`
 
 ### 回调API
 

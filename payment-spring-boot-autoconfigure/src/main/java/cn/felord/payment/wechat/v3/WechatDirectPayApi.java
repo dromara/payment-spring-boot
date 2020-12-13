@@ -153,7 +153,7 @@ public class WechatDirectPayApi extends AbstractApi {
      * @param outTradeNo the out trade no
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> closeByOutTradeNo(String outTradeNo) {
+    public WechatResponseEntity<ObjectNode> close(String outTradeNo) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.CLOSE, outTradeNo)
                 .function(this::closeByOutTradeNoFunction)
