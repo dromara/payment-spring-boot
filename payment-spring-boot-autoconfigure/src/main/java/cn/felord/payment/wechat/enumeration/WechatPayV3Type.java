@@ -66,7 +66,7 @@ public enum WechatPayV3Type {
      */
     COMBINE_MWEB(HttpMethod.POST, "%s/v3/pay/combine-transactions/h5"),
     /**
-     * 合单下单-Native支付API. /v3/combine-transactions/out-trade-no/{combine_out_trade_no}
+     * 合单下单-Native支付API.
      */
     COMBINE_NATIVE(HttpMethod.POST, "%s/v3/pay/combine-transactions/native"),
     /**
