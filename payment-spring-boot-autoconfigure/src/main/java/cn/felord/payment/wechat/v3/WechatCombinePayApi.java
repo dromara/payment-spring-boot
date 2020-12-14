@@ -183,7 +183,7 @@ public class WechatCombinePayApi extends AbstractApi{
      */
     public WechatResponseEntity<ObjectNode> close(CombineCloseParams combineCloseParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.COMBINE_NATIVE, combineCloseParams)
+        this.client().withType(WechatPayV3Type.COMBINE_CLOSE, combineCloseParams)
                 .function((wechatPayV3Type, params) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build().toUri();
