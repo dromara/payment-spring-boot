@@ -23,6 +23,14 @@
 - 微信支付 支付功能-普通支付直连模式 `WechatDirectPayApi` 100%
 - 微信合单支付 `WechatCombinePayApi` 100% 
 
+## Maven 中央仓库坐标
+```xml
+<dependency>
+    <groupId>cn.felord</groupId>
+    <artifactId>payment-spring-boot-starter</artifactId>
+    <version>1.0.0.RELEASE</version>
+</dependency>
+```
 ## 采用技术
 只依赖了 **Spring**已有的东西，做到了低依赖。
 

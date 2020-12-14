@@ -1,18 +1,24 @@
-## Maven中央仓库
+## Maven 中央仓库坐标
 
->  ❗注意：<span style= 'color:red;'>目前并没有上传到Maven中央仓库，等稳定后会进行支持。</span>
-
+```xml
+<dependency>
+    <groupId>cn.felord</groupId>
+    <artifactId>payment-spring-boot-starter</artifactId>
+    <version>1.0.0.RELEASE</version>
+</dependency>
+```
+> 基于 **Spring Boot 2.4.1** 
 
 ## Spring Boot 版本适配
 
-克隆项目后修改根目录下的`pom.xml`以下配置项：
+需要自行克隆项目，修改根目录下的`pom.xml`以下配置项：
 ```xml
     <properties>
         <!--  修改为你对应的Spring Boot版本号 -->
         <spring-boot.version>2.4.0</spring-boot.version>
     </properties>
 ```
-
+然后安装使用
 
 ## 自行安装
 
