@@ -27,6 +27,6 @@
 - [Gitee](https://gitee.com/felord/payment-spring-boot)
 
 ## 文档地址
-[payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
-[payment-spring-boot Gitee文档](https://felord.gitee.io/payment-spring-boot)
+- [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
+- [payment-spring-boot Gitee文档](https://felord.gitee.io/payment-spring-boot)
  
