@@ -86,7 +86,7 @@ public class SignatureProvider {
 
 
     /**
-     * 我方请求时加签，使用API证书.
+     * 我方请求前用 SHA256withRSA 加签，使用API证书.
      *
      * @param tenantId     the properties key
      * @param method       the method
@@ -95,7 +95,7 @@ public class SignatureProvider {
      * @return the string
      */
     @SneakyThrows
-    public String requestSign(String tenantId,String method, String canonicalUrl, String body) {
+    public String requestSign(String tenantId, String method, String canonicalUrl, String body) {
         Signature signer = Signature.getInstance("SHA256withRSA");
         WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
         signer.initSign(wechatMetaBean.getKeyPair().getPrivate());
@@ -160,7 +160,7 @@ public class SignatureProvider {
         }
         // 签名
         HttpMethod httpMethod = WechatPayV3Type.CERT.method();
-        String authorization = requestSign(tenantId,httpMethod.name(), canonicalUrl, "");
+        String authorization = requestSign(tenantId, httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -177,29 +177,26 @@ public class SignatureProvider {
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
             CERTIFICATE_MAP.clear();
-            final CertificateFactory cf = CertificateFactory.getInstance("X509");
+            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
                 String associatedData = encryptCertificate.get("associated_data").asText();
                 String nonce = encryptCertificate.get("nonce").asText();
                 String ciphertext = encryptCertificate.get("ciphertext").asText();
-                String publicKey = decryptResponseBody(tenantId,associatedData, nonce, ciphertext);
+                String publicKey = decryptResponseBody(tenantId, associatedData, nonce, ciphertext);
 
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(publicKey.getBytes(StandardCharsets.UTF_8));
-                Certificate certificate = null;
+
                 try {
-                    certificate = cf.generateCertificate(inputStream);
+                    Certificate certificate = certificateFactory.generateCertificate(inputStream);
+                    String responseSerialNo = objectNode.get("serial_no").asText();
+                    CERTIFICATE_MAP.put(responseSerialNo, certificate);
                 } catch (CertificateException e) {
-                    e.printStackTrace();
+                    throw new PayException("An error occurred while generating the wechat v3 certificate, reason : " + e.getMessage());
                 }
-                String responseSerialNo = objectNode.get("serial_no").asText();
-                CERTIFICATE_MAP.put(responseSerialNo, certificate);
             });
-
         }
-
     }
-
 
     /**
      * 解密响应体.
@@ -210,7 +207,7 @@ public class SignatureProvider {
      * @param ciphertext     the ciphertext
      * @return the string
      */
-    public String decryptResponseBody(String tenantId,String associatedData, String nonce, String ciphertext) {
+    public String decryptResponseBody(String tenantId, String associatedData, String nonce, String ciphertext) {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             String apiV3Key = wechatMetaContainer.getWechatMeta(tenantId).getV3().getAppV3Secret();
@@ -233,7 +230,6 @@ public class SignatureProvider {
         }
     }
 
-
     /**
      * Wechat meta container.
      *
@@ -249,10 +245,9 @@ public class SignatureProvider {
      * @param components the components
      * @return string string
      */
-    private String createSign(String... components) {
+    private static String createSign(String... components) {
         return Arrays.stream(components)
                 .collect(Collectors.joining("\n", "", "\n"));
     }
-
 
 }

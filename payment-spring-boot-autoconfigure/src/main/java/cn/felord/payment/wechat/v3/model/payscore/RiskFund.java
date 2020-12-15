@@ -22,7 +22,7 @@ public class RiskFund {
      * 1、数字，必须>0（单位分）。
      * 2、风险金额≤每个服务ID的风险金额上限。
      * 3、当商户优惠字段为空时，付费项目总金额≤服务ID的风险金额上限 （未填写金额的付费项目，视为该付费项目金额为0）。
-     * 4、完结金额可大于、小于或等于风险金额。详细可见QA <a src = "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/payscore/chapter11_2.shtml#menu1">关于订单风险金额问题</a>
+     * 4、完结金额可大于、小于或等于风险金额。详细可见QA <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/payscore/chapter11_2.shtml#menu1">关于订单风险金额问题</a>
      */
     private Long amount;
     /**

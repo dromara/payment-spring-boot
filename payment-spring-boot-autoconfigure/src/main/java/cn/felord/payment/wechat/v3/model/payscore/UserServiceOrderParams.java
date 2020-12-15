@@ -13,7 +13,7 @@ import java.util.List;
  * @since 1.0.2.RELEASE
  */
 @Data
-public class UserPayScoreOrderParams {
+public class UserServiceOrderParams {
 
     /**
      * 商户服务订单号，必填

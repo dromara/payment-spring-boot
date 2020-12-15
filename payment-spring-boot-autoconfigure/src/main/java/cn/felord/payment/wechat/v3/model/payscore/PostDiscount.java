@@ -27,6 +27,11 @@ public class PostDiscount {
      */
     private String description;
     /**
+     * 总金额，单位分，必填
+     * todo 新增没有此字段，修改必填，感觉不太符合常理
+     */
+    private Long amount;
+    /**
      * 优惠数量，选填。
      * <p>
      * 优惠的数量。

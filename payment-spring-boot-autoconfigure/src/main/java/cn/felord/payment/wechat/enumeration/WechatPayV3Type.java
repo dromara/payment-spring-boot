@@ -110,11 +110,43 @@ public enum WechatPayV3Type {
     COMBINE_CLOSE(HttpMethod.POST, "%s/v3/combine-transactions/out-trade-no/{combine_out_trade_no}/close"),
 
     /**
+     * 商户预授权API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_PERMISSIONS(HttpMethod.POST, "%s/v3/payscore/permissions"),
+    /**
+     * 查询与用户授权记录（授权协议号）API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_QUEERY_PERMISSIONS_AUTHORIZATION_CODE(HttpMethod.GET, "%s/v3/payscore/permissions/authorization-code/{authorization_code}"),
+    /**
+     * 解除用户授权关系（授权协议号）API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_TERMINATE_PERMISSIONS_AUTHORIZATION_CODE(HttpMethod.POST, "%s/v3/payscore/permissions/authorization-code/{authorization_code}/terminate"),
+    /**
+     * 查询与用户授权记录（openid）API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_PERMISSIONS_OPENID(HttpMethod.GET, "%s/v3/payscore/permissions/openid/{openid}"),
+    /**
+     * 解除用户授权关系（openid）API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_TERMINATE_PERMISSIONS_OPENID(HttpMethod.POST, "%s/v3/payscore/permissions/openid/{openid}/terminate"),
+    /**
      * 查询用户授权状态API.
      *
      * @since 1.0.2.RELEASE
      */
     PAY_SCORE_USER_SERVICE_STATE(HttpMethod.GET, "%s/v3/payscore/user-service-state?service_id={service_id}&appid={appid}&openid={openid}"),
+
+
     /**
      * 创建支付分订单API
      *
@@ -133,6 +165,30 @@ public enum WechatPayV3Type {
      * @since 1.0.2.RELEASE
      */
     PAY_SCORE_CANCEL_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/cancel"),
+    /**
+     * 修改订单金额API
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_MODIFY_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/modify"),
+    /**
+     * 完结支付分订单API
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_COMPLETE_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/complete"),
+    /**
+     * 商户发起催收扣款API
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_PAY_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/pay"),
+    /**
+     * 同步服务订单信息API
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_SYNC_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/sync"),
 
 
     /**
