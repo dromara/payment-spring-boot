@@ -7,6 +7,19 @@
 - 代金券制券后不能修改，所以一定要注意
 - 代金券激活券和制券要有一定的间隔时间，官方说是1分钟
 - 发券不需要靠微信服务号，官方的描述是错误的，有一个支持微信登录的appid就行了
+- 制券 返回`403`，报文`{"code":"REQUEST_BLOCKED","message":"活动未开始或已结束\n"}`检查规则是否符合：
+ ```
+   1.stock_name：最多可填写9个字
+   2.max_coupons_per_user：单天发放个数上限不能为0
+   3. coupon_amount：10<=coupon_amount<=100000
+   4.available_time_after_receive：可用时间：相对时间，按分钟设置，是否1min<=分钟范围<=1440min
+   5.transaction_minimum校验规则：
+     a、使用门槛-券面额>=0.01（门槛要大于面额）
+     b、0.1元<=门槛<=100000
+   6.stock_type：目前只支持NORMAL
+   7.out_request_no：校验规则：不可以重复
+   8.活动时间不可以大于90天 
+ ```  
 - 不要过分相信微信文档，微信文档不一定是真的，要问就问他们客服
 
 ## 支付宝
