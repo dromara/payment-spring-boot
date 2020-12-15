@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 
 /**
  * 微信支付回调工具.
+ * <p>
+ * 支付通知http应答码为200或204才会当作正常接收，当回调处理异常时，应答的HTTP状态码应为500，或者4xx。
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
