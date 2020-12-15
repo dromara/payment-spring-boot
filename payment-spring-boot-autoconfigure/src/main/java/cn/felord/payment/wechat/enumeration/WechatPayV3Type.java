@@ -114,7 +114,27 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.2.RELEASE
      */
-    PAY_SCORE_USER_SERVICE_STATE(HttpMethod.GET,"%s/v3/payscore/user-service-state?service_id={service_id}&appid={appid}&openid={openid}"),
+    PAY_SCORE_USER_SERVICE_STATE(HttpMethod.GET, "%s/v3/payscore/user-service-state?service_id={service_id}&appid={appid}&openid={openid}"),
+    /**
+     * 创建支付分订单API
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_CREATE_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder"),
+    /**
+     * 查询支付分订单API
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_QUERY_USER_SERVICE_ORDER(HttpMethod.GET, "%s/v3/payscore/serviceorder"),
+    /**
+     * 取消支付分订单API
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_CANCEL_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/cancel"),
+
+
     /**
      * 创建代金券批次API.
      *

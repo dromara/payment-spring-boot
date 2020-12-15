@@ -71,12 +71,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
      * @return the request entity
      */
     private RequestEntity<?> createStocksFunction(WechatPayV3Type type, StocksCreateParams params) {
-        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
-        String mchId = v3.getMchId();
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
                 .toUri();
+
+        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+        String mchId = v3.getMchId();
         params.setBelongMerchant(mchId);
         return Post(uri, params);
     }
@@ -220,6 +221,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
         return wechatResponseEntity;
     }
+
     /**
      * Query stocks function request entity.
      *
@@ -374,7 +376,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
         queryParams.add("stock_creator_mchid", v3.getMchId());
         String stockId = params.getStockId();
-        URI uri =  UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
                 .build()
                 .expand(stockId)
@@ -552,7 +554,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
         Map<String, Object> meta = new LinkedHashMap<>(2);
 
         String originalFilename = file.getOriginalFilename();
-        String filename = StringUtils.hasText(originalFilename)? originalFilename :file.getName();
+        String filename = StringUtils.hasText(originalFilename) ? originalFilename : file.getName();
         meta.put("filename", filename);
 
         byte[] digest = SHA256.Digest.getInstance("SHA-256").digest(file.getBytes());
