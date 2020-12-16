@@ -168,7 +168,7 @@ public class WechatPayScoreApi extends AbstractApi {
      * 注意：
      * • 若此笔订单已收款成功，商户直接使用退款能力，将差价退回用户即可。
      * <p>
-     * • 修改次数>=1，第n次修改后金额 <第n-1次修改后金额
+     * • 修改次数&gt;=1，第n次修改后金额 &lt;第n-1次修改后金额
      *
      * @param params the params
      * @return the wechat response entity

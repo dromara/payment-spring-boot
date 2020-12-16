@@ -11,11 +11,11 @@ import lombok.Data;
 @Data
 public class QueryServiceOrderParams {
     /**
-     * 商户服务订单号，同{@link QueryServiceOrderParams#queryId} 二选一，而且不能同时为{@link null}
+     * 商户服务订单号，同{@link QueryServiceOrderParams#queryId} 二选一，而且不能同时为null
      */
     private String outOrderNo;
     /**
-     * 回跳查询ID，同{@link QueryServiceOrderParams#outOrderNo} 二选一，而且不能同时为{@link null}
+     * 回跳查询ID，同{@link QueryServiceOrderParams#outOrderNo} 二选一，而且不能同时为null
      */
     private String queryId;
     /**
