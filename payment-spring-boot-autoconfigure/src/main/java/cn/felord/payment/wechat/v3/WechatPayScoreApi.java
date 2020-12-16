@@ -284,4 +284,168 @@ public class WechatPayScoreApi extends AbstractApi {
                 .request();
         return wechatResponseEntity;
     }
+
+    /**
+     * 创单结单合并API
+     * <p>
+     * 相对需确认模式，免确认模式减少了用户确认授权这步操作，因此在免确认模式下商户无法获取用户的授权状态，为了解决商户的困扰，我们为免确认模式特别提供了查询授权状态和调起授权页面的api接口，这些接口仅在免确认模式下需要调用，且必须调用。
+     * <p>
+     * <p>
+     * 该接口适用于无需微信支付分做订单风控判断的业务场景，在服务完成后，通过该接口对用户进行免密代扣。
+     * <p>
+     * 注意：
+     * • 限制条件：【免确认订单模式】，用户已授权状态下，可调用该接口。
+     * <p>
+     * <p>
+     * 特别提醒：创单结单合并接口暂未对外开放，如有需要请咨询对接的微信支付运营人员，申请开通调用权限。
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> directCompleteServiceOrder(DirectCompleteServiceOrderParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PAY_SCORE_DIRECT_COMPLETE, params)
+                .function((wechatPayV3Type, orderParams) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .build()
+                            .toUri();
+
+                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                    orderParams.setAppid(v3.getAppId());
+                    String notifyUrl = orderParams.getNotifyUrl();
+                    if (StringUtils.hasText(notifyUrl)) {
+                        orderParams.setNotifyUrl(v3.getDomain().concat(notifyUrl));
+                    }
+                    return Post(uri, orderParams);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 商户预授权API
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> permissions(ServiceOrderPermissionParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PAY_SCORE_PERMISSIONS, params)
+                .function((wechatPayV3Type, orderParams) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .build()
+                            .toUri();
+
+                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                    String notifyUrl = orderParams.getNotifyUrl();
+                    orderParams.setAppid(v3.getAppId());
+                    if (StringUtils.hasText(notifyUrl)) {
+                        orderParams.setNotifyUrl(v3.getDomain().concat(notifyUrl));
+                    }
+                    return Post(uri, orderParams);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+
+    /**
+     * 查询与用户授权记录（授权协议号）API
+     * <p>
+     * 通过authorization_code，商户查询与用户授权关系
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> queryPermissionsByAuthCode(PermissionsAuthCodeParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PAY_SCORE_PERMISSIONS_AUTH_CODE, params)
+                .function((wechatPayV3Type, orderParams) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParam("service_id", orderParams.getServiceId())
+                            .build()
+                            .expand(orderParams.getAuthorizationCode())
+                            .toUri();
+
+                    return Get(uri);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 解除用户授权关系（授权协议号）API
+     * <p>
+     * 通过authorization_code，商户解除用户授权关系
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> terminatePermissionsByAuthCode(PermissionsAuthCodeParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PAY_SCORE_TERMINATE_PERMISSIONS_AUTH_CODE, params)
+                .function((wechatPayV3Type, orderParams) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(orderParams.getAuthorizationCode())
+                            .toUri();
+                    orderParams.setAuthorizationCode(null);
+                    return Post(uri, orderParams);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 查询与用户授权记录（openid）API
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> queryPermissionsByOpenId(PermissionsOpenIdParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PAY_SCORE_PERMISSIONS_OPENID, params)
+                .function((wechatPayV3Type, orderParams) -> {
+                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParam("appid", v3.getAppId())
+                            .queryParam("service_id", orderParams.getServiceId())
+                            .build()
+                            .expand(orderParams.getOpenid())
+                            .toUri();
+                    return Get(uri);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 解除用户授权关系（openid）API
+     *
+     * @param params the params
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> terminatePermissionsByOpenId(PermissionsOpenIdParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PAY_SCORE_PERMISSIONS_OPENID, params)
+                .function((wechatPayV3Type, orderParams) -> {
+
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(orderParams.getOpenid())
+                            .toUri();
+                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                    orderParams.setAppid(v3.getAppId());
+                    orderParams.setOpenid(null);
+                    return Post(uri, orderParams);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
 }

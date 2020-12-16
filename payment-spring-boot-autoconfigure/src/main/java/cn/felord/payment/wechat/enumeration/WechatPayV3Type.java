@@ -10,6 +10,9 @@ import org.springframework.http.HttpMethod;
  * @since 1.0.0.RELEASE
  */
 public enum WechatPayV3Type {
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     /**
      * 获取证书.
      *
@@ -23,6 +26,8 @@ public enum WechatPayV3Type {
      * @since 1.0.0.RELEASE
      */
     FILE_DOWNLOAD(HttpMethod.GET, "%s/v3/billdownload/file"),
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
      * 微信公众号支付或者小程序支付.
@@ -70,6 +75,8 @@ public enum WechatPayV3Type {
      */
     TRANSACTION_OUT_TRADE_NO(HttpMethod.GET, "%s/v3/pay/transactions/out-trade-no/{out_trade_no}"),
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     /**
      * 合单下单-APP支付API.
      *
@@ -109,6 +116,8 @@ public enum WechatPayV3Type {
      */
     COMBINE_CLOSE(HttpMethod.POST, "%s/v3/combine-transactions/out-trade-no/{combine_out_trade_no}/close"),
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     /**
      * 商户预授权API.
      *
@@ -116,17 +125,23 @@ public enum WechatPayV3Type {
      */
     PAY_SCORE_PERMISSIONS(HttpMethod.POST, "%s/v3/payscore/permissions"),
     /**
+     * 创单结单合并API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    PAY_SCORE_DIRECT_COMPLETE(HttpMethod.POST, "%s/payscore/serviceorder/direct-complete"),
+    /**
      * 查询与用户授权记录（授权协议号）API.
      *
      * @since 1.0.2.RELEASE
      */
-    PAY_SCORE_QUEERY_PERMISSIONS_AUTHORIZATION_CODE(HttpMethod.GET, "%s/v3/payscore/permissions/authorization-code/{authorization_code}"),
+    PAY_SCORE_PERMISSIONS_AUTH_CODE(HttpMethod.GET, "%s/v3/payscore/permissions/authorization-code/{authorization_code}"),
     /**
      * 解除用户授权关系（授权协议号）API.
      *
      * @since 1.0.2.RELEASE
      */
-    PAY_SCORE_TERMINATE_PERMISSIONS_AUTHORIZATION_CODE(HttpMethod.POST, "%s/v3/payscore/permissions/authorization-code/{authorization_code}/terminate"),
+    PAY_SCORE_TERMINATE_PERMISSIONS_AUTH_CODE(HttpMethod.POST, "%s/v3/payscore/permissions/authorization-code/{authorization_code}/terminate"),
     /**
      * 查询与用户授权记录（openid）API.
      *
@@ -145,8 +160,6 @@ public enum WechatPayV3Type {
      * @since 1.0.2.RELEASE
      */
     PAY_SCORE_USER_SERVICE_STATE(HttpMethod.GET, "%s/v3/payscore/user-service-state?service_id={service_id}&appid={appid}&openid={openid}"),
-
-
     /**
      * 创建支付分订单API
      *
@@ -190,6 +203,7 @@ public enum WechatPayV3Type {
      */
     PAY_SCORE_SYNC_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/sync"),
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
      * 创建代金券批次API.
