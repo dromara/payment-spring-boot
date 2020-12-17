@@ -12,23 +12,84 @@ import lombok.Data;
 @Data
 public class CouponConsumeData {
 
-
+    /**
+     * The Available begin time.
+     */
     private String availableBeginTime;
+    /**
+     * The Available end time.
+     */
     private String availableEndTime;
+    /**
+     * The Consume information.
+     */
     private ConsumeInformation consumeInformation;
+    /**
+     * The Coupon id.
+     */
     private String couponId;
+    /**
+     * The Coupon name.
+     */
     private String couponName;
-    private String couponType;
+    /**
+     * The Coupon type.
+     */
+    private CouponType couponType;
+    /**
+     * The Create time.
+     */
     private String createTime;
+    /**
+     * The Description.
+     */
     private String description;
+    /**
+     * The Discount to.
+     */
     private DiscountTo discountTo;
-    private boolean noCash;
+    /**
+     * The No cash.
+     */
+    private Boolean noCash;
+    /**
+     * The Normal coupon information.
+     */
     private NormalCouponInformation normalCouponInformation;
-    private boolean singleitem;
+    /**
+     * The Singleitem.
+     */
+    private Boolean singleitem;
+    /**
+     * The Singleitem discount off.
+     */
     private SingleitemDiscountOff singleitemDiscountOff;
+    /**
+     * The Status.
+     */
     private String status;
+    /**
+     * The Stock creator mchid.
+     */
     private String stockCreatorMchid;
+    /**
+     * The Stock id.
+     */
     private String stockId;
 
-
+    /**
+     * 券类型
+     *
+     * @since 1.0.2.RELEASE
+     */
+    public enum CouponType{
+        /**
+         * 满减券
+         */
+        NORMAL,
+        /**
+         * 减至券
+         */
+        CUT_TO
+    }
 }

@@ -66,8 +66,19 @@ public class WechatApiProvider {
     }
 
     /**
-     * 回调.
+     * 微信支付先享卡.
      *
+     * @param tenantId the tenant id
+     * @return the wechat discount card api
+     * @since 1.0.2.RELEASE
+     */
+    public WechatDiscountCardApi discountCardApi(String tenantId) {
+        return new WechatDiscountCardApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 回调.
+     * <p>
      * 需要处理白名单、幂等性问题。
      *
      * @param tenantId the tenant id

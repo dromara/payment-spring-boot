@@ -1,7 +1,12 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.v3.model.*;
+import cn.felord.payment.wechat.v3.model.CallbackParams;
+import cn.felord.payment.wechat.v3.model.CouponConsumeData;
+import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
+import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
+import cn.felord.payment.wechat.v3.model.combine.CombineTransactionConsumeData;
+import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardAcceptedConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
@@ -71,8 +76,8 @@ public class WechatPayCallback {
     @SneakyThrows
     public Map<String, ?> couponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.COUPON);
-        CouponConsumeData couponConsumeData = MAPPER.readValue(data, CouponConsumeData.class);
-        consumeDataConsumer.accept(couponConsumeData);
+        CouponConsumeData consumeData = MAPPER.readValue(data, CouponConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("code", 200);
         responseBody.put("message", "SUCCESS");
@@ -93,8 +98,8 @@ public class WechatPayCallback {
     @SneakyThrows
     public Map<String, ?> transactionCallback(ResponseSignVerifyParams params, Consumer<TransactionConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.TRANSACTION);
-        TransactionConsumeData transactionConsumeData = MAPPER.readValue(data, TransactionConsumeData.class);
-        consumeDataConsumer.accept(transactionConsumeData);
+        TransactionConsumeData consumeData = MAPPER.readValue(data, TransactionConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
         return Collections.singletonMap("code", "SUCCESS");
 
     }
@@ -112,8 +117,8 @@ public class WechatPayCallback {
     @SneakyThrows
     public Map<String, ?> combineTransactionCallback(ResponseSignVerifyParams params, Consumer<CombineTransactionConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.TRANSACTION);
-        CombineTransactionConsumeData combineTransactionConsumeData = MAPPER.readValue(data, CombineTransactionConsumeData.class);
-        consumeDataConsumer.accept(combineTransactionConsumeData);
+        CombineTransactionConsumeData consumeData = MAPPER.readValue(data, CombineTransactionConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
         return Collections.singletonMap("code", "SUCCESS");
 
     }
@@ -132,8 +137,8 @@ public class WechatPayCallback {
     @SneakyThrows
     public Map<String, ?> payscoreUserConfirmCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserConfirmConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.PAYSCORE_USER_CONFIRM);
-        PayScoreUserConfirmConsumeData payScoreUserConfirmConsumeData = MAPPER.readValue(data, PayScoreUserConfirmConsumeData.class);
-        consumeDataConsumer.accept(payScoreUserConfirmConsumeData);
+        PayScoreUserConfirmConsumeData consumeData = MAPPER.readValue(data, PayScoreUserConfirmConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
         return Collections.singletonMap("code", "SUCCESS");
     }
 
@@ -150,8 +155,8 @@ public class WechatPayCallback {
     @SneakyThrows
     public Map<String, ?> payscoreUserPaidCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserPaidConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.PAYSCORE_USER_PAID);
-        PayScoreUserPaidConsumeData payScoreUserPaidConsumeData = MAPPER.readValue(data, PayScoreUserPaidConsumeData.class);
-        consumeDataConsumer.accept(payScoreUserPaidConsumeData);
+        PayScoreUserPaidConsumeData consumeData = MAPPER.readValue(data, PayScoreUserPaidConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
         return Collections.singletonMap("code", "SUCCESS");
     }
 
@@ -180,13 +185,26 @@ public class WechatPayCallback {
             throw new PayException(" wechat pay event type is not matched");
         }
         String data = this.decrypt(callbackParams);
-        PayScoreUserPermissionConsumeData payScoreUserPermissionConsumeData = MAPPER.readValue(data, PayScoreUserPermissionConsumeData.class);
-        payScoreUserPermissionConsumeData.setClosed(closed);
-
-        consumeDataConsumer.accept(payScoreUserPermissionConsumeData);
+        PayScoreUserPermissionConsumeData consumeData = MAPPER.readValue(data, PayScoreUserPermissionConsumeData.class);
+        consumeData.setClosed(closed);
+        consumeDataConsumer.accept(consumeData);
         return Collections.singletonMap("code", "SUCCESS");
     }
 
+    /**
+     * Discount card user accepted callback map.
+     *
+     * @param params              the params
+     * @param consumeDataConsumer the consume data consumer
+     * @return the map
+     */
+    @SneakyThrows
+    public Map<String, ?> discountCardUserAcceptedCallback(ResponseSignVerifyParams params, Consumer<DiscountCardAcceptedConsumeData> consumeDataConsumer) {
+        String data = this.callback(params, EventType.DISCOUNT_CARD_USER_ACCEPTED);
+        DiscountCardAcceptedConsumeData consumeData = MAPPER.readValue(data, DiscountCardAcceptedConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
+        return Collections.singletonMap("code", "SUCCESS");
+    }
 
     /**
      * Callback.
@@ -253,24 +271,49 @@ public class WechatPayCallback {
          * @since 1.0.2.RELEASE
          */
         PAYSCORE_USER_CONFIRM("PAYSCORE.USER_CONFIRM"),
+
         /**
          * 微信支付分用户支付成功订单事件.
          *
          * @since 1.0.2.RELEASE
          */
         PAYSCORE_USER_PAID("PAYSCORE.USER_PAID"),
+
         /**
          * 微信支付分授权事件.
          *
          * @since 1.0.2.RELEASE
          */
         PAYSCORE_USER_OPEN("PAYSCORE.USER_OPEN_SERVICE"),
+
         /**
          * 微信支付分解除授权事件.
          *
          * @since 1.0.2.RELEASE
          */
         PAYSCORE_USER_CLOSE("PAYSCORE.USER_CLOSE_SERVICE"),
+
+        /**
+         * 用户领取微信先享卡事件.
+         *
+         * @since 1.0.2.RELEASE
+         */
+        DISCOUNT_CARD_USER_ACCEPTED("DISCOUNT_CARD.USER_ACCEPTED"),
+
+        /**
+         * TODO 微信先享卡守约状态变化事件.
+         *
+         * @since 1.0.2.RELEASE
+         */
+        DISCOUNT_CARD_AGREEMENT_ENDED("DISCOUNT_CARD.AGREEMENT_ENDED"),
+
+        /**
+         * TODO 微信先享卡扣费状态变化事件.
+         *
+         * @since 1.0.2.RELEASE
+         */
+        DISCOUNT_CARD_USER_PAID("DISCOUNT_CARD.USER_PAID"),
+
         /**
          * 优惠券核销事件.
          *
@@ -298,6 +341,5 @@ public class WechatPayCallback {
             this.event = event;
         }
     }
-
 
 }

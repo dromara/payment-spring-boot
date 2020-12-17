@@ -203,6 +203,27 @@ public enum WechatPayV3Type {
      */
     PAY_SCORE_SYNC_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/sync"),
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 微信先享卡预受理领卡请求API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    DISCOUNT_CARD_PRE_REQUEST(HttpMethod.POST, "%s/v3/discount-card/cards"),
+    /**
+     * 微信先享卡增加用户记录API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    DISCOUNT_CARD_ADD_USER_RECORDS(HttpMethod.POST, "%s/v3/discount-card/cards/{out_card_code}/add-user-records"),
+    /**
+     * 微信先享卡查询先享卡订单API.
+     *
+     * @since 1.0.2.RELEASE
+     */
+    DISCOUNT_CARD_INFO(HttpMethod.POST, "%s/v3/discount-card/cards/{out_card_code}"),
+
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**

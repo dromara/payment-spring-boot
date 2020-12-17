@@ -1,7 +1,9 @@
 
-package cn.felord.payment.wechat.v3.model;
+package cn.felord.payment.wechat.v3.model.combine;
 
-import cn.felord.payment.wechat.v3.model.combine.CombinePayerInfo;
+import cn.felord.payment.wechat.enumeration.TradeState;
+import cn.felord.payment.wechat.enumeration.TradeType;
+import cn.felord.payment.wechat.v3.model.SceneInfo;
 import lombok.Data;
 
 import java.util.List;
@@ -94,12 +96,12 @@ public class CombineTransactionConsumeData {
         /**
          * The Trade state.
          */
-        private String tradeState;
+        private TradeState tradeState;
 
         /**
          * The Trade type.
          */
-        private String tradeType;
+        private TradeType tradeType;
 
         /**
          * The Transaction id.
