@@ -432,7 +432,7 @@ public class WechatPayScoreApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> terminatePermissionsByOpenId(PermissionsOpenIdParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.PAY_SCORE_PERMISSIONS_OPENID, params)
+        this.client().withType(WechatPayV3Type.PAY_SCORE_TERMINATE_PERMISSIONS_OPENID, params)
                 .function((wechatPayV3Type, orderParams) -> {
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))

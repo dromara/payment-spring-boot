@@ -4,6 +4,7 @@ import cn.felord.payment.PayException;
 import cn.felord.payment.wechat.v3.model.*;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
+import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -155,16 +156,34 @@ public class WechatPayCallback {
     }
 
     /**
-     * Permission callback map.
+     * 授权/解除授权服务回调通知API.
+     * <p>
+     * 微信支付分通过授权/解除授权服务通知接口将用户过授权/解除授权服务消息通知给商户
+     * <p>
+     * 普通授权模式是通过[商户入驻配置申请表]提交service_notify_url设置，预授权模式是通过[商户预授权]提交的notify_url设置，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
      *
      * @param params              the params
      * @param consumeDataConsumer the consume data consumer
      * @return the map
      */
     @SneakyThrows
-    public Map<String, ?> permissionCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserPaidConsumeData> consumeDataConsumer) {
+    public Map<String, ?> permissionCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserPermissionConsumeData> consumeDataConsumer) {
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
+        boolean closed;
+        if (Objects.equals(eventType, EventType.PAYSCORE_USER_OPEN.event)) {
+            closed = false;
+        } else if (Objects.equals(eventType, EventType.PAYSCORE_USER_CLOSE.event)) {
+            closed = true;
+        } else {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
+        String data = this.decrypt(callbackParams);
+        PayScoreUserPermissionConsumeData payScoreUserPermissionConsumeData = MAPPER.readValue(data, PayScoreUserPermissionConsumeData.class);
+        payScoreUserPermissionConsumeData.setClosed(closed);
 
-
+        consumeDataConsumer.accept(payScoreUserPermissionConsumeData);
         return Collections.singletonMap("code", "SUCCESS");
     }
 
@@ -178,13 +197,13 @@ public class WechatPayCallback {
      */
     @SneakyThrows
     private String callback(ResponseSignVerifyParams params, EventType eventType) {
-        CallbackParams callbackParams = resolve(params);
+        CallbackParams callbackParams = this.resolve(params);
 
         if (!Objects.equals(callbackParams.getEventType(), eventType.event)) {
             log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
             throw new PayException(" wechat pay event type is not matched");
         }
-        return decrypt(callbackParams);
+        return this.decrypt(callbackParams);
     }
 
     /**
@@ -245,7 +264,7 @@ public class WechatPayCallback {
          *
          * @since 1.0.2.RELEASE
          */
-        PAYSCORE_USER_OPEN("PAYSCORE.USER_CLOSE_SERVICE"),
+        PAYSCORE_USER_OPEN("PAYSCORE.USER_OPEN_SERVICE"),
         /**
          * 微信支付分解除授权事件.
          *
