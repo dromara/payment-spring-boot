@@ -1,3 +1,21 @@
+/*
+ *
+ *  Copyright 2019-2020 felord.cn
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *  Website:
+ *       https://felord.cn
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.WechatPayProperties;
@@ -220,6 +238,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
 
         return wechatResponseEntity;
     }
+
     /**
      * Query stocks function request entity.
      *
@@ -374,7 +393,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
         queryParams.add("stock_creator_mchid", v3.getMchId());
         String stockId = params.getStockId();
-        URI uri =  UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
                 .build()
                 .expand(stockId)
@@ -552,7 +571,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
         Map<String, Object> meta = new LinkedHashMap<>(2);
 
         String originalFilename = file.getOriginalFilename();
-        String filename = StringUtils.hasText(originalFilename)? originalFilename :file.getName();
+        String filename = StringUtils.hasText(originalFilename) ? originalFilename : file.getName();
         meta.put("filename", filename);
 
         byte[] digest = SHA256.Digest.getInstance("SHA-256").digest(file.getBytes());

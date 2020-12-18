@@ -1,3 +1,21 @@
+/*
+ *
+ *  Copyright 2019-2020 felord.cn
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *  Website:
+ *       https://felord.cn
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
 package cn.felord.payment.wechat.v3;
 
 
@@ -95,7 +113,7 @@ public class SignatureProvider {
      * @return the string
      */
     @SneakyThrows
-    public String requestSign(String tenantId,String method, String canonicalUrl, String body) {
+    public String requestSign(String tenantId, String method, String canonicalUrl, String body) {
         Signature signer = Signature.getInstance("SHA256withRSA");
         WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
         signer.initSign(wechatMetaBean.getKeyPair().getPrivate());
@@ -160,7 +178,7 @@ public class SignatureProvider {
         }
         // 签名
         HttpMethod httpMethod = WechatPayV3Type.CERT.method();
-        String authorization = requestSign(tenantId,httpMethod.name(), canonicalUrl, "");
+        String authorization = requestSign(tenantId, httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -183,7 +201,7 @@ public class SignatureProvider {
                 String associatedData = encryptCertificate.get("associated_data").asText();
                 String nonce = encryptCertificate.get("nonce").asText();
                 String ciphertext = encryptCertificate.get("ciphertext").asText();
-                String publicKey = decryptResponseBody(tenantId,associatedData, nonce, ciphertext);
+                String publicKey = decryptResponseBody(tenantId, associatedData, nonce, ciphertext);
 
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(publicKey.getBytes(StandardCharsets.UTF_8));
                 Certificate certificate = null;
@@ -210,7 +228,7 @@ public class SignatureProvider {
      * @param ciphertext     the ciphertext
      * @return the string
      */
-    public String decryptResponseBody(String tenantId,String associatedData, String nonce, String ciphertext) {
+    public String decryptResponseBody(String tenantId, String associatedData, String nonce, String ciphertext) {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             String apiV3Key = wechatMetaContainer.getWechatMeta(tenantId).getV3().getAppV3Secret();
