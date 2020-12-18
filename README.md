@@ -30,3 +30,7 @@
 - [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
 - [payment-spring-boot Gitee文档](https://felord.gitee.io/payment-spring-boot)
  
+## QQ交流群
+为了交流解惑，新建QQ群，可通过扫码进入。
+
+![QQ交流群](./docs/img/qqun.png)
