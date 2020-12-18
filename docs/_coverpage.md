@@ -7,6 +7,7 @@
 - Spring Boot Starter 风格  
 - 配置简单、只依赖 Spring 框架
 
+![QQ交流群](./img/qqun.png)
 
 [GitHub](https://github.com/NotFound403/payment-spring-boot)
 [示例项目](https://github.com/NotFound403/payment-spring-boot-samples)
