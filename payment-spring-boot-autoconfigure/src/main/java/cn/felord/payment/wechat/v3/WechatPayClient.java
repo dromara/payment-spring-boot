@@ -181,8 +181,7 @@ public class WechatPayClient {
             Assert.notNull(httpMethod, "httpMethod is required");
             HttpHeaders headers = requestEntity.getHeaders();
 
-            T entityBody = requestEntity.getBody();
-            String body = requestEntity.hasBody() ? Objects.requireNonNull(entityBody).toString() : "";
+            String body = requestEntity.hasBody() ? Objects.requireNonNull(requestEntity.getBody()).toString() : "";
             if (WechatPayV3Type.MARKETING_IMAGE_UPLOAD.pattern().contains(canonicalUrl)) {
                 body = Objects.requireNonNull(headers.get("Meta-Info")).get(0);
             }
@@ -193,7 +192,7 @@ public class WechatPayClient {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.addAll(headers);
             httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            // 兼容图片上传，自定义优先级最高
+            // for upload
             if (Objects.isNull(httpHeaders.getContentType())) {
                 httpHeaders.setContentType(MediaType.APPLICATION_JSON);
             }
@@ -218,13 +217,13 @@ public class WechatPayClient {
             HttpHeaders headers = responseEntity.getHeaders();
             ObjectNode body = responseEntity.getBody();
             HttpStatus statusCode = responseEntity.getStatusCode();
+            // 微信请求id
+            String requestId = headers.getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error,statusCode " + statusCode + ",result : " + body);
+                throw new PayException("wechat pay server error, Request-ID "+requestId+" , statusCode " + statusCode + ",result : " + body);
             }
 
             ResponseSignVerifyParams params = new ResponseSignVerifyParams();
-            // 微信请求回调id
-            // String RequestId = response.header("Request-ID");
             // 微信平台证书序列号 用来取微信平台证书
             params.setWechatpaySerial(headers.getFirst("Wechatpay-Serial"));
             //获取应答签名
@@ -244,7 +243,7 @@ public class WechatPayClient {
                     responseConsumer.accept(responseEntity);
                 }
             } else {
-                throw new PayException("wechat pay signature failed");
+                throw new PayException("wechat pay signature failed, Request-ID "+requestId );
             }
         }
 
@@ -261,11 +260,13 @@ public class WechatPayClient {
 
             String body = responseEntity.getBody();
             HttpStatus statusCode = responseEntity.getStatusCode();
+            // 微信请求id
+            String requestId = requestEntity.getHeaders().getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error,statusCode " + statusCode + ",result : " + body);
+                throw new PayException("wechat pay server error, Request-ID  "+requestId+" , statusCode " + statusCode + ",result : " + body);
             }
             if (Objects.isNull(body)) {
-                throw new PayException("cant obtain wechat response body");
+                throw new PayException("cant obtain wechat response body, Request-ID  "+requestId);
             }
             return body;
         }

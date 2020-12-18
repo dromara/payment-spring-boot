@@ -6,7 +6,7 @@ import cn.felord.payment.wechat.v3.model.CouponConsumeData;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
 import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.combine.CombineTransactionConsumeData;
-import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardAcceptedConsumeData;
+import cn.felord.payment.wechat.v3.model.discountcard.*;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
@@ -26,6 +26,8 @@ import java.util.function.Consumer;
 
 /**
  * 微信支付回调工具.
+ * <p>
+ * 注意：<strong>开发者应该保证回调调用的幂等性</strong>
  * <p>
  * 支付通知http应答码为200或204才会当作正常接收，当回调处理异常时，应答的HTTP状态码应为500，或者4xx。
  *
@@ -123,40 +125,34 @@ public class WechatPayCallback {
 
     }
 
-
     /**
-     * 微信支付分确认订单回调通知.
+     * 微信支付分确认订单、支付成功回调通知.
      * <p>
-     * 该链接是通过商户[创建支付分订单]提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
+     * 该链接是通过商户 <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/payscore/chapter3_1.shtml">创建支付分订单</a> 提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
      *
-     * @param params              the params
-     * @param consumeDataConsumer the consume data consumer
+     * @param params           the params
+     * @param payScoreConsumer the pay score consumer
      * @return the map
      * @since 1.0.2.RELEASE
      */
     @SneakyThrows
-    public Map<String, ?> payscoreUserConfirmCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserConfirmConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.PAYSCORE_USER_CONFIRM);
-        PayScoreUserConfirmConsumeData consumeData = MAPPER.readValue(data, PayScoreUserConfirmConsumeData.class);
-        consumeDataConsumer.accept(consumeData);
-        return Collections.singletonMap("code", "SUCCESS");
-    }
+    public Map<String, ?> payscoreUserOrderCallback(ResponseSignVerifyParams params, PayScoreConsumer payScoreConsumer) {
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
 
-    /**
-     * 微信支付分支付成功回调通知API.
-     * <p>
-     * 请求URL：该链接是通过商户[创建支付分订单]提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
-     *
-     * @param params              the params
-     * @param consumeDataConsumer the consume data consumer
-     * @return the map
-     * @since 1.0.2.RELEASE
-     */
-    @SneakyThrows
-    public Map<String, ?> payscoreUserPaidCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserPaidConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.PAYSCORE_USER_PAID);
-        PayScoreUserPaidConsumeData consumeData = MAPPER.readValue(data, PayScoreUserPaidConsumeData.class);
-        consumeDataConsumer.accept(consumeData);
+        if (Objects.equals(eventType, EventType.PAYSCORE_USER_CONFIRM.event)) {
+            String data = this.decrypt(callbackParams);
+            PayScoreUserConfirmConsumeData confirmConsumeData = MAPPER.readValue(data, PayScoreUserConfirmConsumeData.class);
+            payScoreConsumer.getConfirmConsumeDataConsumer().accept(confirmConsumeData);
+        } else if (Objects.equals(eventType, EventType.PAYSCORE_USER_PAID.event)) {
+            String data = this.decrypt(callbackParams);
+            PayScoreUserPaidConsumeData paidConsumeData = MAPPER.readValue(data, PayScoreUserPaidConsumeData.class);
+            payScoreConsumer.getPaidConsumeDataConsumer().accept(paidConsumeData);
+        } else {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
+
         return Collections.singletonMap("code", "SUCCESS");
     }
 
@@ -192,19 +188,41 @@ public class WechatPayCallback {
     }
 
     /**
-     * Discount card user accepted callback map.
+     * 用户领卡、守约状态变化、扣费状态变化通知API
+     * <p>
+     * 用户领取优惠卡后或者用户守约状态发生变更后或扣费状态变化后，微信会把对应信息发送给商户。
+     * <p>
+     * 该链接是通过商户<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/discount-card/chapter3_1.shtml">预受理领卡请求</a>中提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
      *
-     * @param params              the params
-     * @param consumeDataConsumer the consume data consumer
+     * @param params               the params
+     * @param discountCardConsumer the discount card consumer
      * @return the map
      */
     @SneakyThrows
-    public Map<String, ?> discountCardUserAcceptedCallback(ResponseSignVerifyParams params, Consumer<DiscountCardAcceptedConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.DISCOUNT_CARD_USER_ACCEPTED);
-        DiscountCardAcceptedConsumeData consumeData = MAPPER.readValue(data, DiscountCardAcceptedConsumeData.class);
-        consumeDataConsumer.accept(consumeData);
+    public Map<String, ?> discountCardCallback(ResponseSignVerifyParams params, DiscountCardConsumer discountCardConsumer) {
+
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
+
+        if (Objects.equals(eventType, EventType.DISCOUNT_CARD_AGREEMENT_ENDED.event)) {
+            String data = this.decrypt(callbackParams);
+            DiscountCardAgreementEndConsumeData agreementEndConsumeData = MAPPER.readValue(data, DiscountCardAgreementEndConsumeData.class);
+            discountCardConsumer.getAgreementEndConsumeDataConsumer().accept(agreementEndConsumeData);
+        } else if (Objects.equals(eventType, EventType.DISCOUNT_CARD_USER_ACCEPTED.event)) {
+            String data = this.decrypt(callbackParams);
+            DiscountCardAcceptedConsumeData acceptedConsumeData = MAPPER.readValue(data, DiscountCardAcceptedConsumeData.class);
+            discountCardConsumer.getAcceptedConsumeDataConsumer().accept(acceptedConsumeData);
+        }  else if (Objects.equals(eventType, EventType.DISCOUNT_CARD_USER_PAID.event)) {
+            String data = this.decrypt(callbackParams);
+            DiscountCardUserPaidConsumeData paidConsumeData = MAPPER.readValue(data, DiscountCardUserPaidConsumeData.class);
+            discountCardConsumer.getCardUserPaidConsumeDataConsumer().accept(paidConsumeData);
+        } else {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
         return Collections.singletonMap("code", "SUCCESS");
     }
+
 
     /**
      * Callback.
@@ -301,14 +319,14 @@ public class WechatPayCallback {
         DISCOUNT_CARD_USER_ACCEPTED("DISCOUNT_CARD.USER_ACCEPTED"),
 
         /**
-         * TODO 微信先享卡守约状态变化事件.
+         * 微信先享卡守约状态变化事件.
          *
          * @since 1.0.2.RELEASE
          */
         DISCOUNT_CARD_AGREEMENT_ENDED("DISCOUNT_CARD.AGREEMENT_ENDED"),
 
         /**
-         * TODO 微信先享卡扣费状态变化事件.
+         * 微信先享卡扣费状态变化事件.
          *
          * @since 1.0.2.RELEASE
          */
