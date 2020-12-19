@@ -1,13 +1,10 @@
 <!-- _coverpage.md -->
-# payment spring boot 
+# <span style = "font-size:3rem;font-weight: 600;font-family: fantasy;">Payment Spring Boot</span>
 
-> Spring Boot 风格支付开发包。
+> Spring Boot 风格支付开发包
 
-- 快速接入微信支付V3、支付宝支付
-- Spring Boot Starter 风格  
-- 配置简单、只依赖 Spring 框架
+- 简单、快捷、融合Spring Boot生态
 
-![QQ交流群](./img/qqun.png)
 
 [GitHub](https://github.com/NotFound403/payment-spring-boot)
 [示例项目](https://github.com/NotFound403/payment-spring-boot-samples)
