@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model;
 
@@ -37,28 +36,14 @@ public class StocksQueryParams {
      * 必填
      * <p>
      * 条件查询批次列表API 页码从0开始，默认第0页，传递1可能出错。
-     * <p>
-     * 查询代金券可用商户API 分页页码，最大1000。
-     * <p>
-     * 查询代金券可用单品API 最大500。
      */
     private Integer offset = 0;
     /**
      * 必填
      * <p>
      * 条件查询批次列表API 分页大小，最大10。
-     * <p>
-     * 查询代金券可用商户API 最大50。
-     * <p>
-     * 查询代金券可用单品API 最大100。
      */
     private Integer limit = 10;
-    /*    *//**
-     * 根据API而定
-     * <p>
-     * 批次ID
-     *//*
-    private String stockId;*/
     /**
      * 选填
      * <p>

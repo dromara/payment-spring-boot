@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.payscore;
 
@@ -85,7 +84,7 @@ public class CompleteServiceOrderParams {
      * <p>
      * 代金券或立减金优惠的参数，说明详见代金券或立减金优惠
      */
-    private String goods_tag;
+    private String goodsTag;
 
 
     /**

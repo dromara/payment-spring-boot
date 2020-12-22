@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3;
 
@@ -98,7 +97,7 @@ public class WechatPayCallback {
         String data = this.callback(params, EventType.COUPON);
         CouponConsumeData consumeData = MAPPER.readValue(data, CouponConsumeData.class);
         consumeDataConsumer.accept(consumeData);
-        Map<String, Object> responseBody = new HashMap<>();
+        Map<String, Object> responseBody = new HashMap<>(2);
         responseBody.put("code", 200);
         responseBody.put("message", "SUCCESS");
         return responseBody;
