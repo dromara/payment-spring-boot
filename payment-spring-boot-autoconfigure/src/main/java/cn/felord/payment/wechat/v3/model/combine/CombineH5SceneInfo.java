@@ -20,6 +20,7 @@ package cn.felord.payment.wechat.v3.model.combine;
 import cn.felord.payment.wechat.v3.model.H5Info;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 /**
  * 合单支付 H5场景信息.
  *
@@ -29,5 +30,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CombineH5SceneInfo extends CombineSceneInfo {
+    /**
+     * H5 支付信息.
+     */
     private H5Info h5Info;
 }

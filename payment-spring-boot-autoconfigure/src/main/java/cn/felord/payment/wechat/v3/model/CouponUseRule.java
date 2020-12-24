@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model;
 
@@ -33,37 +32,78 @@ public class CouponUseRule {
 
 
     /**
-     * The Available items.
+     * 可核销商品编码
      */
     private List<String> availableItems;
 
     /**
-     * The Available merchants.
+     * 可用商户
      */
     private List<String> availableMerchants;
 
     /**
-     * The Combine use.
+     * 是否可以叠加使用
      */
     private Boolean combineUse;
 
     /**
-     * The Coupon available time.
+     * 券生效时间
      */
     private CouponAvailableTime couponAvailableTime;
 
     /**
-     * The Fixed normal coupon.
+     * 固定面额满减券使用规则
      */
     private FixedNormalCoupon fixedNormalCoupon;
 
     /**
-     * The Goods tag.
+     * 订单优惠标记
      */
     private List<String> goodsTag;
+    /**
+     * 指定支付方式
+     */
+    private List<String> limitPay;
+    /**
+     * 指定银行卡BIN
+     */
+    private LimitCard limitCard;
 
     /**
-     * The Trade type.
+     * 支付方式，枚举值：
+     *
+     * <ul>
+     *   <li>MICROAPP：小程序支付</li>
+     *   <li>APPPAY：APP支付</li>
+     *   <li>PPAY：免密支付</li>
+     *   <li>CARD：刷卡支付</li>
+     *   <li>FACE：人脸支付</li>
+     *   <li>OTHER：其他支付</li>
+     * </ul>
      */
     private String tradeType;
+
+
+    /**
+     * 指定银行卡BIN
+     * <p>
+     * 限定该批次核销的指定银行卡BIN，当批次限定了指定银行卡时方可生效
+     */
+    @Data
+    public static class LimitCard {
+        /**
+         * 银行卡名称
+         * <p>
+         * 将在微信支付收银台向用户展示，最多4个中文字
+         */
+        private String name;
+        /**
+         * 指定卡BIN
+         * <p>
+         * 使用指定卡BIN的银行卡支付方可享受优惠，按json格式
+         * 特殊规则：单个卡BIN的字符长度为【6,9】,条目个数限制为【1,10】。
+         * 示例值：['62123456','62123457']
+         */
+        private List<String> bin;
+    }
 }
