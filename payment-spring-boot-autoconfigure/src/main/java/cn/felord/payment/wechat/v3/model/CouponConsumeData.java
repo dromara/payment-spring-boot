@@ -1,4 +1,3 @@
-
 /*
  *
  *  Copyright 2019-2020 felord.cn
@@ -30,7 +29,6 @@ import lombok.Data;
 @Data
 public class CouponConsumeData {
 
-
     /**
      * The Available begin time.
      */
@@ -54,7 +52,7 @@ public class CouponConsumeData {
     /**
      * The Coupon type.
      */
-    private String couponType;
+    private CouponType couponType;
     /**
      * The Create time.
      */
@@ -70,7 +68,7 @@ public class CouponConsumeData {
     /**
      * The No cash.
      */
-    private boolean noCash;
+    private Boolean noCash;
     /**
      * The Normal coupon information.
      */
@@ -78,7 +76,7 @@ public class CouponConsumeData {
     /**
      * The Singleitem.
      */
-    private boolean singleitem;
+    private Boolean singleitem;
     /**
      * The Singleitem discount off.
      */
@@ -96,5 +94,19 @@ public class CouponConsumeData {
      */
     private String stockId;
 
-
+    /**
+     * 券类型
+     *
+     * @since 1.0.2.RELEASE
+     */
+    public enum CouponType{
+        /**
+         * 满减券
+         */
+        NORMAL,
+        /**
+         * 减至券
+         */
+        CUT_TO
+    }
 }

@@ -104,7 +104,7 @@ public class SignatureProvider {
 
 
     /**
-     * 我方请求时加签，使用API证书.
+     * 我方请求前用 SHA256withRSA 加签，使用API证书.
      *
      * @param tenantId     the properties key
      * @param method       the method
@@ -195,7 +195,7 @@ public class SignatureProvider {
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
             CERTIFICATE_MAP.clear();
-            final CertificateFactory cf = CertificateFactory.getInstance("X509");
+            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
                 String associatedData = encryptCertificate.get("associated_data").asText();
@@ -204,20 +204,17 @@ public class SignatureProvider {
                 String publicKey = decryptResponseBody(tenantId, associatedData, nonce, ciphertext);
 
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(publicKey.getBytes(StandardCharsets.UTF_8));
-                Certificate certificate = null;
+
                 try {
-                    certificate = cf.generateCertificate(inputStream);
+                    Certificate certificate = certificateFactory.generateCertificate(inputStream);
+                    String responseSerialNo = objectNode.get("serial_no").asText();
+                    CERTIFICATE_MAP.put(responseSerialNo, certificate);
                 } catch (CertificateException e) {
-                    e.printStackTrace();
+                    throw new PayException("An error occurred while generating the wechat v3 certificate, reason : " + e.getMessage());
                 }
-                String responseSerialNo = objectNode.get("serial_no").asText();
-                CERTIFICATE_MAP.put(responseSerialNo, certificate);
             });
-
         }
-
     }
-
 
     /**
      * 解密响应体.
@@ -251,7 +248,6 @@ public class SignatureProvider {
         }
     }
 
-
     /**
      * Wechat meta container.
      *
@@ -267,10 +263,9 @@ public class SignatureProvider {
      * @param components the components
      * @return string string
      */
-    private String createSign(String... components) {
+    private static String createSign(String... components) {
         return Arrays.stream(components)
                 .collect(Collectors.joining("\n", "", "\n"));
     }
-
 
 }

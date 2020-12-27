@@ -19,7 +19,7 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * The enum Stock status.
+ * 代金券批次状态.
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -27,22 +27,32 @@ package cn.felord.payment.wechat.enumeration;
 public enum StockStatus {
     /**
      * Unactivated stock status.
+     *
+     * @since 1.0.0.RELEASE
      */
     UNACTIVATED("unactivated", "未激活"),
     /**
      * Audit stock status.
+     *
+     * @since 1.0.0.RELEASE
      */
     AUDIT("audit", "审核中"),
     /**
      * Running stock status.
+     *
+     * @since 1.0.0.RELEASE
      */
     RUNNING("running", "运行中"),
     /**
      * Stoped stock status.
+     *
+     * @since 1.0.0.RELEASE
      */
     STOPED("stoped", "已停止"),
     /**
      * Paused stock status.
+     *
+     * @since 1.0.0.RELEASE
      */
     PAUSED("paused", "暂停发放");
 
@@ -58,6 +68,7 @@ public enum StockStatus {
      * Value string.
      *
      * @return the string
+     * @since 1.0.0.RELEASE
      */
     public String value() {
         return this.value;
@@ -67,6 +78,7 @@ public enum StockStatus {
      * Description string.
      *
      * @return the string
+     * @since 1.0.0.RELEASE
      */
     public String description() {
         return this.description;

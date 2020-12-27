@@ -29,9 +29,9 @@ public class SettleInfo {
     /**
      * 是否指定分账
      */
-    private boolean profitSharing;
+    private Boolean profitSharing;
     /**
      * 补差金额
      */
-    private int subsidyAmount;
+    private Integer subsidyAmount;
 }

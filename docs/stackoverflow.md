@@ -4,6 +4,7 @@
 - [Java中的微信支付（2）：API V3 微信平台证书的获取与刷新](https://mp.weixin.qq.com/s/O_YcnIRcl2MltElBupm3Hg)
 - [Java中的微信支付（3）：API V3对微信服务器响应进行签名验证](https://mp.weixin.qq.com/s/cb2eTTRjHifNYUGpQETMCQ)
 ### 微信支付V3中的坑
+#### 代金券
 - 代金券制券后不能修改，所以一定要注意
 - 已激活的代金券批次被停用后不影响该批次已发放代金券的核销 
 - 代金券激活券和制券要有一定的间隔时间，官方说是1分钟
@@ -21,6 +22,7 @@
    7.out_request_no：校验规则：不可以重复
    8.活动时间不可以大于90天 
  ```
+#### 微信支付分
 - 微信支付分`service_id`相关
 ```
  1. 在微信支付分功能申请成功后，联系运营那边配置 service_id。

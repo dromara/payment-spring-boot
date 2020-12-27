@@ -1,4 +1,3 @@
-
 /*
  *
  *  Copyright 2019-2020 felord.cn
@@ -19,6 +18,8 @@
  */
 package cn.felord.payment.wechat.v3.model;
 
+import cn.felord.payment.wechat.enumeration.TradeState;
+import cn.felord.payment.wechat.enumeration.TradeType;
 import lombok.Data;
 
 import java.util.List;
@@ -71,17 +72,19 @@ public class TransactionConsumeData {
      */
     private String successTime;
     /**
-     * The Trade state.
+     * 在 1.0.0.RELEASE 直接返回了枚举字符串，1.0.2.RELEASE 中变更为枚举
+     * @since 1.0.0.RELEASE
      */
-    private String tradeState;
+    private TradeState tradeState;
     /**
      * The Trade state desc.
      */
     private String tradeStateDesc;
     /**
-     * The Trade type.
+     * 在 1.0.0.RELEASE 直接返回了枚举字符串，1.0.2.RELEASE 中变更为枚举
+     * @since 1.0.0.RELEASE
      */
-    private String tradeType;
+    private TradeType tradeType;
     /**
      * The Transaction id.
      */
@@ -127,11 +130,11 @@ public class TransactionConsumeData {
         /**
          * The Total.
          */
-        private int total;
+        private Integer total;
         /**
          * The Payer total.
          */
-        private int payerTotal;
+        private Integer payerTotal;
         /**
          * The Currency.
          */

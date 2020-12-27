@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model;
 
@@ -72,7 +71,7 @@ public class StocksCreateParams {
     /**
      * 扩展属性
      */
-    private String ext_info;
+    private String extInfo;
     /**
      * 批次使用规则
      */

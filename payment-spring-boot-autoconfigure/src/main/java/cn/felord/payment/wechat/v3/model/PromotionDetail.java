@@ -1,4 +1,3 @@
-
 /*
  *
  *  Copyright 2019-2020 felord.cn
@@ -17,6 +16,7 @@
  *  limitations under the License.
  *
  */
+
 package cn.felord.payment.wechat.v3.model;
 
 import lombok.Data;

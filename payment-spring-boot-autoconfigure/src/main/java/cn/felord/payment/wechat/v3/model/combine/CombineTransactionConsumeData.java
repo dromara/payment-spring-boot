@@ -1,4 +1,3 @@
-
 /*
  *
  *  Copyright 2019-2020 felord.cn
@@ -15,11 +14,12 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model;
+package cn.felord.payment.wechat.v3.model.combine;
 
-import cn.felord.payment.wechat.v3.model.combine.CombinePayerInfo;
+import cn.felord.payment.wechat.enumeration.TradeState;
+import cn.felord.payment.wechat.enumeration.TradeType;
+import cn.felord.payment.wechat.v3.model.SceneInfo;
 import lombok.Data;
 
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.List;
 public class CombineTransactionConsumeData {
 
     /**
-     * 合单商户appid.
+     * 合单商户appid，即合单发起方的appid
      */
     private String combineAppid;
 
@@ -75,52 +75,53 @@ public class CombineTransactionConsumeData {
 
 
         /**
-         * The Amount.
+         * 订单金额信息
          */
         private CombineAmount amount;
 
         /**
-         * The Attach.
+         * 附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用。
          */
         private String attach;
 
         /**
-         * The Bank type.
+         * 付款银行类型，参见<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/terms_definition/chapter1_1_3.shtml#part-4">开户银行对照表</a>
          */
         private String bankType;
 
         /**
-         * The Mchid.
+         * 子单发起方商户号，必须与发起方Appid有绑定关系。（即电商平台mchid）
          */
         private String mchid;
 
         /**
-         * The Out trade no.
+         * 子单商户侧订单号
          */
         private String outTradeNo;
 
         /**
-         * The Sub mchid.
+         * 二级商户商户号，由微信支付生成并下发。
+         * 服务商子商户的商户号，被合单方。直连商户不用传二级商户号。
          */
         private String subMchid;
 
         /**
-         * The Success time.
+         * 支付完成时间
          */
         private String successTime;
 
         /**
-         * The Trade state.
+         * 交易状态
          */
-        private String tradeState;
+        private TradeState tradeState;
 
         /**
-         * The Trade type.
+         * 交易类型
          */
-        private String tradeType;
+        private TradeType tradeType;
 
         /**
-         * The Transaction id.
+         * 微信支付侧订单号
          */
         private String transactionId;
 

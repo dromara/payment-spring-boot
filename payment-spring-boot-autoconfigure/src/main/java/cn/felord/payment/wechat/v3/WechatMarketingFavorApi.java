@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3;
 
@@ -89,12 +88,13 @@ public class WechatMarketingFavorApi extends AbstractApi {
      * @return the request entity
      */
     private RequestEntity<?> createStocksFunction(WechatPayV3Type type, StocksCreateParams params) {
-        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
-        String mchId = v3.getMchId();
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
                 .toUri();
+
+        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+        String mchId = v3.getMchId();
         params.setBelongMerchant(mchId);
         return Post(uri, params);
     }
@@ -211,7 +211,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
     private RequestEntity<?> startAndRestartAndPauseStockFunction(WechatPayV3Type type, String stockId) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
         String mchId = v3.getMchId();
-        Map<String, String> body = new HashMap<>();
+        Map<String, String> body = new HashMap<>(1);
         body.put("stock_creator_mchid", mchId);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))

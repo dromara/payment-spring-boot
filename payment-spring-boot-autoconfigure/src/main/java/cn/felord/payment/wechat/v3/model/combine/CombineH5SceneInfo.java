@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.combine;
 
@@ -22,8 +21,17 @@ import cn.felord.payment.wechat.v3.model.H5Info;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 合单支付 H5场景信息.
+ *
+ * @author felord.cn
+ * @since 1.0.0.RELEASE
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CombineH5SceneInfo extends CombineSceneInfo {
+    /**
+     * H5 支付信息.
+     */
     private H5Info h5Info;
 }
