@@ -14,12 +14,9 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model.discountcard;
+package cn.felord.payment.wechat.v3.model.payscore;
 
-import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
-import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import lombok.Data;
 
 import java.util.function.Consumer;
@@ -33,11 +30,11 @@ import java.util.function.Consumer;
 @Data
 public class PayScoreConsumer {
     /**
-     * The Confirm consume data consumer.
+     * 用户确认回调消费接口
      */
     private Consumer<PayScoreUserConfirmConsumeData> confirmConsumeDataConsumer;
     /**
-     * The Paid consume data consumer.
+     * 用户支付回调消费接口
      */
     private Consumer<PayScoreUserPaidConsumeData> paidConsumeDataConsumer;
 }

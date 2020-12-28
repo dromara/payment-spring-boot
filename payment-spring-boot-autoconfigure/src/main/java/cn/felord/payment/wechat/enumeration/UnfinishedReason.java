@@ -18,18 +18,19 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 优惠数量的类型标识
+ * 未完成约定原因
+ * <p>
+ * 当订单守约状态为{@link ContractStatus#UNFINISHED}，返回此字段
  *
- * @author felord.cn
  * @since 1.0.3.RELEASE
  */
-public enum CountType {
+public enum UnfinishedReason {
     /**
-     * 不限数量
+     * 到期未完成约
      */
-    COUNT_UNLIMITED,
+    DUE_TO_QUIT,
     /**
-     * 有限数量
+     * 提前退出约定
      */
-    COUNT_LIMIT
+    EARLY_QUIT
 }

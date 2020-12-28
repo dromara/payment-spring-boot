@@ -107,19 +107,19 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.0.RELEASE
      */
-    COMBINE_JSAPI(HttpMethod.POST, "%s/v3/pay/combine-transactions/jsapi"),
+    COMBINE_JSAPI(HttpMethod.POST, "%s/v3/combine-transactions/jsapi"),
     /**
      * 合单下单-H5支付API.
      *
      * @since 1.0.0.RELEASE
      */
-    COMBINE_MWEB(HttpMethod.POST, "%s/v3/pay/combine-transactions/h5"),
+    COMBINE_MWEB(HttpMethod.POST, "%s/v3/combine-transactions/h5"),
     /**
      * 合单下单-Native支付API.
      *
      * @since 1.0.0.RELEASE
      */
-    COMBINE_NATIVE(HttpMethod.POST, "%s/v3/pay/combine-transactions/native"),
+    COMBINE_NATIVE(HttpMethod.POST, "%s/v3/combine-transactions/native"),
     /**
      * 合单查询订单API.
      *

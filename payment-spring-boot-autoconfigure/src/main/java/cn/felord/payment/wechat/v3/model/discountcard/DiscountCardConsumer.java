@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.discountcard;
 
@@ -31,15 +30,15 @@ import java.util.function.Consumer;
 @Data
 public class DiscountCardConsumer {
    /**
-    * The Accepted consume data consumer.
+    * 用户领取微信先享卡通知解密
     */
    private Consumer<DiscountCardAcceptedConsumeData> acceptedConsumeDataConsumer;
    /**
-    * The Agreement end consume data consumer.
+    * 微信支付先享卡用户守约状态变化通知解密
     */
    private Consumer<DiscountCardAgreementEndConsumeData> agreementEndConsumeDataConsumer;
    /**
-    * The Card user paid consume data consumer.
+    * 先享卡扣费状态变化通知解密
     */
    private Consumer<DiscountCardUserPaidConsumeData> cardUserPaidConsumeDataConsumer;
 }

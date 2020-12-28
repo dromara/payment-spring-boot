@@ -19,6 +19,7 @@ package cn.felord.payment.wechat.v3.model.discountcard;
 
 import cn.felord.payment.wechat.enumeration.ContractStatus;
 import cn.felord.payment.wechat.enumeration.CountType;
+import cn.felord.payment.wechat.enumeration.UnfinishedReason;
 import lombok.Data;
 
 import java.util.List;
@@ -108,7 +109,7 @@ public class DiscountCardAgreementEndConsumeData {
          */
         private String name;
         /**
-         * The Objective completion records.
+         * 用户先享卡目标完成纪录
          */
         private List<ObjectiveCompletionRecord> objectiveCompletionRecords;
         /**
@@ -188,24 +189,6 @@ public class DiscountCardAgreementEndConsumeData {
          */
         private List<RewardUsageRecord> rewardUsageRecords;
 
-    }
-
-    /**
-     * 未完成约定原因
-     * <p>
-     * 当订单守约状态为{@link ContractStatus#UNFINISHED}，返回此字段
-     *
-     * @since 1.0.3.RELEASE
-     */
-    enum UnfinishedReason {
-        /**
-         * 到期未完成约
-         */
-        DUE_TO_QUIT,
-        /**
-         * 提前退出约定
-         */
-        EARLY_QUIT
     }
 
 }

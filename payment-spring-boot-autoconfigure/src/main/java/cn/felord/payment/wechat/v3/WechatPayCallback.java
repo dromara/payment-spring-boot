@@ -24,6 +24,7 @@ import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
 import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.combine.CombineTransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.discountcard.*;
+import cn.felord.payment.wechat.v3.model.payscore.PayScoreConsumer;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
