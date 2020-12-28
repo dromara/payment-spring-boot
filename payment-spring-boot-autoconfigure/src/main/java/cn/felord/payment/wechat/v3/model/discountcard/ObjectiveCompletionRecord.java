@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.discountcard;
 
@@ -22,7 +21,7 @@ import cn.felord.payment.wechat.enumeration.StrategyType;
 import lombok.Data;
 
 /**
- * The type Objective completion record.
+ * 微信先享卡目标完成纪录
  *
  * @author felord.cn
  * @since 1.0.2.RELEASE
@@ -31,31 +30,31 @@ import lombok.Data;
 public class ObjectiveCompletionRecord {
 
     /**
-     * The Completion count.
+     * 目标完成数量
      */
     private Long completionCount;
     /**
-     * The Completion time.
+     * 目标完成时间
      */
     private String completionTime;
     /**
-     * The Completion type.
+     * 目标完成类型
      */
     private StrategyType completionType;
     /**
-     * The Description.
+     * 目标完成描述
      */
     private String description;
     /**
-     * The Objective completion serial no.
+     * 目标完成流水号
      */
     private String objectiveCompletionSerialNo;
     /**
-     * The Objective id.
+     * 目标id
      */
     private String objectiveId;
     /**
-     * The Remark.
+     * 备注说明
      */
     private String remark;
 

@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.discountcard;
 
@@ -22,7 +21,7 @@ import cn.felord.payment.wechat.enumeration.StrategyType;
 import lombok.Data;
 
 /**
- * The type Reward usage record.
+ * 优惠使用纪录列表对象
  *
  * @author felord.cn
  * @since 1.0.2.RELEASE
@@ -31,35 +30,40 @@ import lombok.Data;
 public class RewardUsageRecord {
 
     /**
-     * The Amount.
+     * 优惠金额
+     *
+     * <ol>
+     *  <li>优惠金额，用户此项本次享受的优惠对应的优惠总金额，单位：分，必须大于0。</li>
+     *  <li>子优惠已享金额累计≤创建模板时配置的此子优惠的价值金额 例如：优惠为【满10元减3元优惠券4张】时，用户一次消费使用了2张优惠券，优惠金额为本次优惠总金额6元，优惠数量为本次使用优惠的优惠券数量2张</li>
+     * </ol>
      */
     private Long amount;
     /**
-     * The Description.
+     * 优惠使用描述
      */
     private String description;
     /**
-     * The Remark.
+     * 备注说明
      */
     private String remark;
     /**
-     * The Reward id.
+     * 优惠Id
      */
     private String rewardId;
     /**
-     * The Reward usage serial no.
+     * 优惠使用纪录流水号
      */
     private String rewardUsageSerialNo;
     /**
-     * The Usage count.
+     * 优惠使用数量
      */
     private Long usageCount;
     /**
-     * The Usage time.
+     * 优惠使用时间
      */
     private String usageTime;
     /**
-     * The Usage type.
+     * 优惠使用类型
      */
     private StrategyType usageType;
 
