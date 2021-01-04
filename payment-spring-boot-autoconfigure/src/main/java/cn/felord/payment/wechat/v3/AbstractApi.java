@@ -19,6 +19,7 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
+import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.RequestEntity;
 import org.springframework.util.Assert;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
@@ -127,7 +129,7 @@ public abstract class AbstractApi {
     }
 
     /**
-     * Post request entity.
+     * 构建Post请求对象.
      *
      * @param uri    the uri
      * @param params the params
@@ -143,7 +145,7 @@ public abstract class AbstractApi {
     }
 
     /**
-     * Get request entity.
+     * 构建Get请求对象.
      *
      * @param uri the uri
      * @return the request entity
@@ -151,5 +153,23 @@ public abstract class AbstractApi {
     protected RequestEntity<?> Get(URI uri) {
         return RequestEntity.get(uri).header("Pay-TenantId", tenantId)
                 .build();
+    }
+
+
+    /**
+     * 对账单下载。
+     *
+     * @param link the link
+     * @return 对账单内容，有可能为空字符 “”
+     */
+    protected String billDownload(String link) {
+        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
+                .function((type, downloadUrl) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(downloadUrl)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })
+                .download();
     }
 }

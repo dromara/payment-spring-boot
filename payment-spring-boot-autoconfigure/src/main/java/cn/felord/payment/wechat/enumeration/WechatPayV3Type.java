@@ -133,6 +133,18 @@ public enum WechatPayV3Type {
      * @since 1.0.0.RELEASE
      */
     COMBINE_CLOSE(HttpMethod.POST, "%s/v3/combine-transactions/out-trade-no/{combine_out_trade_no}/close"),
+    /**
+     * 申请交易账单API.
+     *
+     * @since 1.0.3.RELEASE
+     */
+    COMBINE_TRADEBILL(HttpMethod.POST, "%s/v3/bill/tradebill"),
+    /**
+     * 申请资金账单API.
+     *
+     * @since 1.0.3.RELEASE
+     */
+    COMBINE_FUNDFLOWBILL(HttpMethod.POST, "%s/v3/bill/fundflowbill"),
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -222,7 +234,8 @@ public enum WechatPayV3Type {
     PAY_SCORE_SYNC_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/sync"),
 
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     /**
      * 微信先享卡预受理领卡请求API.
      *
