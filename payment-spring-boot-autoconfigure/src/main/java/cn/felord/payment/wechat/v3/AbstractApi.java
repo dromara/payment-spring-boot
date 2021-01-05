@@ -19,7 +19,9 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
+import cn.felord.payment.wechat.enumeration.*;
+import cn.felord.payment.wechat.v3.model.FundFlowBillParams;
+import cn.felord.payment.wechat.v3.model.TradeBillParams;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,9 +30,16 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.RequestEntity;
 import org.springframework.util.Assert;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The type Abstract api.
@@ -171,5 +180,87 @@ public abstract class AbstractApi {
                     return Get(uri);
                 })
                 .download();
+    }
+
+
+    /**
+     * 申请交易账单API
+     * <p>
+     * 微信支付按天提供交易账单文件，商户可以通过该接口获取账单文件的下载地址。文件内包含交易相关的金额、时间、营销等信息，供商户核对订单、退款、银行到账等情况。
+     * <p>
+     * 注意：
+     * <ul>
+     *     <li>微信侧未成功下单的交易不会出现在对账单中。支付成功后撤销的交易会出现在对账单中，跟原支付单订单号一致；</li>
+     *     <li>对账单中涉及金额的字段单位为“元”；</li>
+     *     <li>对账单接口只能下载三个月以内的账单。</li>
+     *     <li>小微商户不单独提供对账单下载，如有需要，可在调取“下载对账单”API接口时不传sub_mch_id，获取服务商下全量电商二级商户（包括小微商户和非小微商户）的对账单。</li>
+     * </ul>
+     *
+     * @param tradeBillParams tradeBillParams
+     * @since 1.0.3.RELEASE
+     */
+    public final void downloadTradeBill(TradeBillParams tradeBillParams) {
+        this.client().withType(WechatPayV3Type.TRADEBILL, tradeBillParams)
+                .function((wechatPayV3Type, params) -> {
+                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    LocalDate billDate = params.getBillDate();
+                    queryParams.add("bill_date", billDate.format(DateTimeFormatter.ISO_DATE));
+                    String subMchid = params.getSubMchid();
+
+                    if (StringUtils.hasText(subMchid)) {
+                        queryParams.add("sub_mchid", subMchid);
+                    }
+
+                    TradeBillType tradeBillType = Optional.ofNullable(params.getBillType())
+                            .orElse(TradeBillType.ALL);
+                    queryParams.add("bill_type", tradeBillType.name());
+                    TarType tarType = params.getTarType();
+                    if (Objects.nonNull(tarType)) {
+                        queryParams.add("tar_type", tarType.name());
+                    }
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParams(queryParams)
+                            .build().toUri();
+                    return Get(uri);
+                })
+                .consumer(response -> this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText()))
+                .request();
+    }
+
+    /**
+     * 申请资金账单API
+     * <p>
+     * 微信支付按天提供微信支付账户的资金流水账单文件，商户可以通过该接口获取账单文件的下载地址。文件内包含该账户资金操作相关的业务单号、收支金额、记账时间等信息，供商户进行核对。
+     * <p>
+     * 注意：
+     * <ul>
+     *     <li>资金账单中的数据反映的是商户微信支付账户资金变动情况；</li>
+     *     <li>对账单中涉及金额的字段单位为“元”。</li>
+     * </ul>
+     *
+     * @param fundFlowBillParams fundFlowBillParams
+     * @since 1.0.3.RELEASE
+     */
+    public final void downloadFundFlowBill(FundFlowBillParams fundFlowBillParams) {
+        this.client().withType(WechatPayV3Type.FUNDFLOWBILL, fundFlowBillParams)
+                .function((wechatPayV3Type, params) -> {
+                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    LocalDate billDate = params.getBillDate();
+                    queryParams.add("bill_date", billDate.format(DateTimeFormatter.ISO_DATE));
+
+                    FundFlowAccountType accountType = Optional.ofNullable(params.getAccountType())
+                            .orElse(FundFlowAccountType.BASIC);
+                    queryParams.add("account_type", accountType.name());
+                    TarType tarType = params.getTarType();
+                    if (Objects.nonNull(tarType)) {
+                        queryParams.add("tar_type", tarType.name());
+                    }
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParams(queryParams)
+                            .build().toUri();
+                    return Get(uri);
+                })
+                .consumer(response -> this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText()))
+                .request();
     }
 }

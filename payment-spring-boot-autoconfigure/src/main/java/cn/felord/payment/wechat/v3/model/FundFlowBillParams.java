@@ -15,7 +15,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.v3.model.combine;
+package cn.felord.payment.wechat.v3.model;
 
 import cn.felord.payment.wechat.enumeration.FundFlowAccountType;
 import cn.felord.payment.wechat.enumeration.TarType;
@@ -24,7 +24,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 /**
- * 合单支付申请资金账单请求参数
+ * 申请资金账单请求参数
  *
  * @author felord.cn
  * @since 1.0.3.RELEASE
