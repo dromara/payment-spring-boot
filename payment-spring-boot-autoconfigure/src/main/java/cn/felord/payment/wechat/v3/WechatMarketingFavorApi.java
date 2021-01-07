@@ -490,6 +490,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param stockId the stock id
      * @return the wechat response entity
+     * @see AbstractApi#billDownload(String) 对账单下载api
      */
     public WechatResponseEntity<ObjectNode> downloadStockUseFlow(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -497,7 +498,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .function(this::downloadFlowFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
-        String csv = billDownload(wechatResponseEntity.getBody().get("url").asText());
+        String csv = this.billDownload(wechatResponseEntity.getBody().get("url").asText());
         wechatResponseEntity.getBody().put("csv", csv);
         return wechatResponseEntity;
     }
@@ -511,6 +512,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param stockId the stock id
      * @return the wechat response entity
+     * @see AbstractApi#billDownload(String) 对账单下载api
      */
     public WechatResponseEntity<ObjectNode> downloadStockRefundFlow(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -518,7 +520,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .function(this::downloadFlowFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
-        String csv = billDownload(wechatResponseEntity.getBody().get("url").asText());
+        String csv = this.billDownload(wechatResponseEntity.getBody().get("url").asText());
         wechatResponseEntity.getBody().put("csv", csv);
         return wechatResponseEntity;
     }
@@ -628,35 +630,6 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .toUri();
         return Post(uri, body);
-    }
-
-    /**
-     * csv对账单下载。
-     *
-     * @param link the link
-     * @return the string
-     * @see WechatMarketingFavorApi#downloadStockUseFlow(String) 下载批次核销明细API
-     * @see WechatMarketingFavorApi#downloadStockRefundFlow(String) 下载批次退款明细API
-     */
-    public String billDownload(String link) {
-        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
-                .function(this::billDownloadFunction)
-                .download();
-    }
-
-
-    /**
-     * Bill download function request entity.
-     *
-     * @param type the type
-     * @param link the link
-     * @return the request entity
-     */
-    private RequestEntity<?> billDownloadFunction(WechatPayV3Type type, String link) {
-        URI uri = UriComponentsBuilder.fromHttpUrl(link)
-                .build()
-                .toUri();
-        return Get(uri);
     }
 }
 

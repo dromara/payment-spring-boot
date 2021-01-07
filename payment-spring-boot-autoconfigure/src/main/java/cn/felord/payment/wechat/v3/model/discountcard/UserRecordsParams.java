@@ -14,7 +14,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.discountcard;
 
@@ -30,21 +29,20 @@ import java.util.List;
  */
 @Data
 public class UserRecordsParams {
-
     /**
-     * The Out card code.
+     * 商户领卡号，商户在请求领卡预受理接口时传入的领卡请求号，同一个商户号下必须唯一，要求32个字符内，只能是数字、大小写字母_-|*
      */
     private String outCardCode;
     /**
-     * The Card template id.
+     * 先享卡模板ID，唯一定义此资源的标识。创建模板后可获得
      */
     private String cardTemplateId;
     /**
-     * The Objective completion records.
+     * 微信先享卡目标完成纪录
      */
     private List<ObjectiveCompletionRecord> objectiveCompletionRecords;
     /**
-     * The Reward usage records.
+     * 优惠使用纪录
      */
     private List<RewardUsageRecord> rewardUsageRecords;
 

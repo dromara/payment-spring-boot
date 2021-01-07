@@ -15,47 +15,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.v3.model.discountcard;
+package cn.felord.payment.wechat.v3.model.payscore;
 
-import cn.felord.payment.wechat.enumeration.StrategyType;
 import lombok.Data;
 
+import java.util.function.Consumer;
+
 /**
- * 微信先享卡目标完成纪录
+ * 支付分回调复合消费器
  *
  * @author felord.cn
  * @since 1.0.2.RELEASE
  */
 @Data
-public class ObjectiveCompletionRecord {
-
+public class PayScoreConsumer {
     /**
-     * 目标完成数量
+     * 用户确认回调消费接口
      */
-    private Long completionCount;
+    private Consumer<PayScoreUserConfirmConsumeData> confirmConsumeDataConsumer;
     /**
-     * 目标完成时间
+     * 用户支付回调消费接口
      */
-    private String completionTime;
-    /**
-     * 目标完成类型
-     */
-    private StrategyType completionType;
-    /**
-     * 目标完成描述
-     */
-    private String description;
-    /**
-     * 目标完成流水号
-     */
-    private String objectiveCompletionSerialNo;
-    /**
-     * 目标id
-     */
-    private String objectiveId;
-    /**
-     * 备注说明
-     */
-    private String remark;
-
+    private Consumer<PayScoreUserPaidConsumeData> paidConsumeDataConsumer;
 }

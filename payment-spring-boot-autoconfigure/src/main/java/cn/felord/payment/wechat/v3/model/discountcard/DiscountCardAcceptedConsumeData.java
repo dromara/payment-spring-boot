@@ -14,11 +14,11 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.discountcard;
 
 import cn.felord.payment.wechat.enumeration.ContractStatus;
+import cn.felord.payment.wechat.enumeration.CountType;
 import lombok.Data;
 
 import java.util.List;
@@ -33,51 +33,54 @@ import java.util.List;
 public class DiscountCardAcceptedConsumeData {
 
     /**
-     * The Appid.
+     * 应用appid需要绑定微信商户平台
      */
     private String appid;
     /**
-     * The Card id.
+     * 先享卡ID，唯一标识一个先享卡
      */
     private String cardId;
     /**
-     * The Card template id.
+     * 先享卡模板ID，唯一定义此资源的标识。创建模板后可获得
      */
     private String cardTemplateId;
     /**
-     * The Create time.
+     * 创建先享卡的时间
      */
     private String createTime;
     /**
-     * The Mchid.
+     * 商户号
      */
     private String mchid;
     /**
-     * The Objectives.
+     * 用户先享卡目标列表
      */
     private List<Objective> objectives;
     /**
-     * The Openid.
+     * 用户标识，用户在{@code appid}下的唯一标识
      */
     private String openid;
     /**
-     * The Out card code.
+     * 商户领卡号，商户在请求领卡预受理接口时传入的领卡请求号，同一个商户号下必须唯一，要求32个字符内，只能是数字、大小写字母_-|*
      */
     private String outCardCode;
     /**
-     * The Rewards.
+     * 用户先享卡优惠列表
      */
     private List<Reward> rewards;
     /**
-     * The Sharer openid.
+     * 邀请者用户标识
+     * <p>
+     * 微信用户在商户对应appid下的唯一标识。
+     * 仅当此卡是通过“邀请有礼”渠道领卡时，会返回此字段；指此先享卡是通过此[邀请者]邀请领卡成功的。当此先享卡完成约定时，商户可给此[邀请者]下发应邀请有礼的奖励
      */
     private String sharerOpenid;
     /**
-     * The State.
+     * 先享卡的守约状态
      */
     private ContractStatus state;
     /**
-     * The Time range.
+     * 约定时间期限
      */
     private TimeRange timeRange;
 
@@ -91,23 +94,27 @@ public class DiscountCardAcceptedConsumeData {
     public static class Objective {
 
         /**
-         * The Count.
+         * 目标数量
+         * <p>
+         * 履约目标需要完成的数量，必须大于0。
          */
         private Long count;
         /**
-         * The Description.
+         * 目标描述
          */
         private String description;
         /**
-         * The Name.
+         * 目标名称
          */
         private String name;
         /**
-         * The Objective id.
+         * 目标id
          */
         private String objectiveId;
         /**
-         * The Unit.
+         * 目标单位
+         * <p>
+         * 示例值：次
          */
         private String unit;
 
@@ -123,38 +130,42 @@ public class DiscountCardAcceptedConsumeData {
     public static class Reward {
 
         /**
-         * The Amount.
+         * 优惠金额
+         * <p>
+         * 1、优惠金额，此项优惠对应的优惠总金额，单位：分，必须大于0。
+         * 2、此项优惠已享累计金额≤创建模板时配置的此项奖励的奖励金额，
+         * 例如：优惠为【满10元减3元优惠券4张】时，用户一次消费使用了2张优惠券，优惠金额为本次优惠总金额6元，优惠数量为本次使用优惠的优惠券数量2张
          */
         private Long amount;
         /**
-         * The Count.
+         * 优惠数量
          */
         private Long count;
         /**
-         * The Count type.
+         * 优惠数量类型
          */
         private CountType countType;
         /**
-         * The Description.
+         * 优惠描述
          */
         private String description;
         /**
-         * The Name.
+         * 优惠名称
          */
         private String name;
         /**
-         * The Reward id.
+         * 优惠ID
          */
         private String rewardId;
         /**
-         * The Unit.
+         * 优惠单位，例如 “个”
          */
         private String unit;
 
     }
 
     /**
-     * The type Time range.
+     * 先享卡约定时间期限
      *
      * @author felord.cn
      * @since 1.0.2.RELEASE
@@ -162,29 +173,13 @@ public class DiscountCardAcceptedConsumeData {
     @Data
     public static class TimeRange {
         /**
-         * The Betin time.
+         * 开始时间
          */
         private String betinTime;
         /**
-         * The End time.
+         * 结束时间
          */
         private String endTime;
     }
 
-    /**
-     * 优惠数量的类型标识
-     *
-     * @author felord.cn
-     * @since 1.0.2.RELEASE
-     */
-    public enum CountType{
-        /**
-         * 不限数量
-         */
-        COUNT_UNLIMITED,
-        /**
-         * 有限数量
-         */
-        COUNT_LIMIT
-    }
 }

@@ -24,11 +24,12 @@
 - 微信合单支付 `WechatCombinePayApi` 100% 
 
 ## Maven 中央仓库坐标
+> 推荐使用最新版本
 ```xml
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.2.RELEASE</version>
+    <version>1.0.3.RELEASE</version>
 </dependency>
 ```
 ## 采用技术

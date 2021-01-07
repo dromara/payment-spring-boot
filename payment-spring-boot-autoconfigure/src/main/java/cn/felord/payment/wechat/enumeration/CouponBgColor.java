@@ -20,7 +20,7 @@ package cn.felord.payment.wechat.enumeration;
 /**
  * 优惠券背景色
  * <p>
- * https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/convention/chapter3_1.shtml#menu1
+ * 详见<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/convention/chapter3_1.shtml#menu1">优惠券背景色参考</a>
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE

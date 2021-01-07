@@ -14,30 +14,22 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model.discountcard;
-
-import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
-import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
-import lombok.Data;
-
-import java.util.function.Consumer;
+package cn.felord.payment.wechat.enumeration;
 
 /**
- * 支付分回调复合消费器
+ * 优惠数量的类型标识
  *
  * @author felord.cn
- * @since 1.0.2.RELEASE
+ * @since 1.0.3.RELEASE
  */
-@Data
-public class PayScoreConsumer {
+public enum CountType {
     /**
-     * The Confirm consume data consumer.
+     * 不限数量
      */
-    private Consumer<PayScoreUserConfirmConsumeData> confirmConsumeDataConsumer;
+    COUNT_UNLIMITED,
     /**
-     * The Paid consume data consumer.
+     * 有限数量
      */
-    private Consumer<PayScoreUserPaidConsumeData> paidConsumeDataConsumer;
+    COUNT_LIMIT
 }

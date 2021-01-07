@@ -37,6 +37,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -238,7 +239,7 @@ public class WechatPayClient {
             // 微信请求id
             String requestId = headers.getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error, Request-ID "+requestId+" , statusCode " + statusCode + ",result : " + body);
+                throw new PayException("wechat pay server error, Request-ID " + requestId + " , statusCode " + statusCode + ",result : " + body);
             }
 
             ResponseSignVerifyParams params = new ResponseSignVerifyParams();
@@ -261,7 +262,7 @@ public class WechatPayClient {
                     responseConsumer.accept(responseEntity);
                 }
             } else {
-                throw new PayException("wechat pay signature failed, Request-ID "+requestId );
+                throw new PayException("wechat pay signature failed, Request-ID " + requestId);
             }
         }
 
@@ -276,17 +277,13 @@ public class WechatPayClient {
 
             ResponseEntity<String> responseEntity = restOperations.exchange(requestEntity, String.class);
 
-            String body = responseEntity.getBody();
             HttpStatus statusCode = responseEntity.getStatusCode();
             // 微信请求id
             String requestId = requestEntity.getHeaders().getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error, Request-ID  "+requestId+" , statusCode " + statusCode + ",result : " + body);
+                throw new PayException("wechat pay server error, Request-ID  " + requestId + " , statusCode " + statusCode + ",result : " + responseEntity);
             }
-            if (Objects.isNull(body)) {
-                throw new PayException("cant obtain wechat response body, Request-ID  "+requestId);
-            }
-            return body;
+            return Optional.ofNullable(responseEntity.getBody()).orElse("");
         }
 
     }

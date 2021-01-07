@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,18 +18,23 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 目标完成类型、优惠使用类型
+ * 交易账单类型
  *
  * @author felord.cn
- * @since 1.0.2.RELEASE
+ * @since 1.0.3.RELEASE
  */
-public enum StrategyType {
+public enum TradeBillType {
     /**
-     * 增加数量，表示用户发生了履约行为
+     * 返回当日所有订单信息（不含充值退款订单）
      */
-    INCREASE,
+    ALL,
     /**
-     * 减少数量，表示取消用户的履约行为（例如用户取消购买、退货退款等）
+     * 返回当日成功支付的订单（不含充值退款订单）
      */
-    DECREASE
+    SUCCESS,
+    /**
+     * 返回当日退款订单（不含充值退款订单）
+     */
+    REFUND
+
 }

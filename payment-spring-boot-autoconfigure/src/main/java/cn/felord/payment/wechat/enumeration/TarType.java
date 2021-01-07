@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,18 +18,14 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 目标完成类型、优惠使用类型
+ * 账单压缩类型
  *
  * @author felord.cn
- * @since 1.0.2.RELEASE
+ * @since 1.0.3.RELEASE
  */
-public enum StrategyType {
+public enum TarType {
     /**
-     * 增加数量，表示用户发生了履约行为
+     * 格式为{@code .gzip}的压缩包账单
      */
-    INCREASE,
-    /**
-     * 减少数量，表示取消用户的履约行为（例如用户取消购买、退货退款等）
-     */
-    DECREASE
+    GZIP
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,18 +18,21 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 目标完成类型、优惠使用类型
+ * 申请资金账单账户类型.
  *
- * @author felord.cn
- * @since 1.0.2.RELEASE
+ * @since 1.0.3.RELEASE
  */
-public enum StrategyType {
+public enum FundFlowAccountType {
     /**
-     * 增加数量，表示用户发生了履约行为
+     * 基本账户
      */
-    INCREASE,
+    BASIC,
     /**
-     * 减少数量，表示取消用户的履约行为（例如用户取消购买、退货退款等）
+     * 运营账户
      */
-    DECREASE
+    OPERATION,
+    /**
+     * 手续费账户
+     */
+    FEES
 }
