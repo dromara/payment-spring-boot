@@ -2,6 +2,9 @@
 
 为了满足业务中出现app支付、公众号支付、小程序支付等多appid并存的场景，对原有的进行了增强开发出了多租户版本。
 
+请给[Payment Spring Boot](https://github.com/NotFound403/payment-spring-boot) **Star**以鼓励，谢谢。
+
+
 ## Maven 最新中央仓库坐标
 
 ```xml
