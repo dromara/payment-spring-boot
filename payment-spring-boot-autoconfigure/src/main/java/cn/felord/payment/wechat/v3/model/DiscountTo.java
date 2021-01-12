@@ -21,7 +21,7 @@ package cn.felord.payment.wechat.v3.model;
 import lombok.Data;
 
 /**
- * 减至优惠限定字段，仅减至优惠场景有返回
+ *  微信代金券核销通知参数-减至优惠限定字段，仅减至优惠场景有返回
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -30,11 +30,11 @@ import lombok.Data;
 public class DiscountTo {
 
     /**
-     * The Cut to price.
+     * 减至后优惠单价，单位：分。
      */
     private Long cutToPrice;
     /**
-     * The Max price.
+     * 可享受优惠的最高价格，单位：分。
      */
     private Long maxPrice;
 

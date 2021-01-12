@@ -23,7 +23,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * The type Detail.
+ * 支付优惠功能.
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE

@@ -18,14 +18,26 @@
  */
 package cn.felord.payment.wechat.v3.model;
 
+import cn.felord.payment.wechat.v3.WechatDirectPayApi;
 import lombok.Data;
 
 /**
+ * 微信支付订单号查询API请求参数.
+ *
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
 @Data
 public class TransactionQueryParams {
+    /**
+     * 商户id
+     */
     private String mchId;
+    /**
+     * <ul>
+     *     <li>调用 {@link WechatDirectPayApi#queryTransactionByOutTradeNo(TransactionQueryParams)} 传递【商户侧订单号】</li>
+     *     <li>调用 {@link WechatDirectPayApi#queryTransactionById(TransactionQueryParams)} (TransactionQueryParams)} 传递【微信支付订单号】</li>
+     * </ul>
+     */
     private String transactionIdOrOutTradeNo;
 }

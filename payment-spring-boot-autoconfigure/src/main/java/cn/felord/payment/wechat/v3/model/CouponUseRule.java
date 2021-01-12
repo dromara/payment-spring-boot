@@ -30,32 +30,26 @@ import java.util.List;
 @Data
 public class CouponUseRule {
 
-
     /**
      * 可核销商品编码
      */
     private List<String> availableItems;
-
     /**
      * 可用商户
      */
     private List<String> availableMerchants;
-
     /**
      * 是否可以叠加使用
      */
     private Boolean combineUse;
-
     /**
-     * 券生效时间
+     * 券生效时间（暂时未开放，日期2021-1-12，请以微信官方通知为准）
      */
     private CouponAvailableTime couponAvailableTime;
-
     /**
      * 固定面额满减券使用规则
      */
     private FixedNormalCoupon fixedNormalCoupon;
-
     /**
      * 订单优惠标记
      */

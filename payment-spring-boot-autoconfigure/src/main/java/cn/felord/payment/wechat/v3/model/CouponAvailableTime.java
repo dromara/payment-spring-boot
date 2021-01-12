@@ -21,7 +21,7 @@ package cn.felord.payment.wechat.v3.model;
 import lombok.Data;
 
 /**
- * The type Coupon available time.
+ * 代金券生效时间
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -29,15 +29,26 @@ import lombok.Data;
 @Data
 public class CouponAvailableTime {
     /**
-     * The Available time after receive.
+     * 领取后有效时间，【单位：分钟】
+     * <p>
+     * 领取后，券的结束时间为领取N天后，如设置领取后7天有效，那么7月1日领券，在7月7日23:59:59失效（在可用时间内计算失效时间，若券还未到领取后N天，但是已经到了可用结束时间，那么也会过期）
      */
     private Long availableTimeAfterReceive;
     /**
-     * The Fix available time.
+     * 固定时间段可用
      */
     private FixAvailableTime fixAvailableTime;
     /**
-     * The Second day available.
+     * 领取后N天有效
+     * <p>
+     * 领取后，券的开始时间为领券后第二天，如7月1日领券，那么在7月2日00:00:00开始。
+     * 当设置领取后N天有效时，不可设置固定时间段可用。枚举值：
+     *
+     * <ul>
+     *     <li>true：是</li>
+     *     <li>false：否</li>
+     * </ul>
+     *
      */
     private Boolean secondDayAvailable;
 }
