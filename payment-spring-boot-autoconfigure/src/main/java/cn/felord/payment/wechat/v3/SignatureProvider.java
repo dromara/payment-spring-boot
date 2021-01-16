@@ -19,10 +19,10 @@
 package cn.felord.payment.wechat.v3;
 
 
+import cn.felord.payment.PayException;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
-import cn.felord.payment.PayException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -46,6 +46,8 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -115,7 +117,7 @@ public class SignatureProvider {
     @SneakyThrows
     public String requestSign(String tenantId, String method, String canonicalUrl, String body) {
 
-        long timestamp = System.currentTimeMillis() / 1000;
+        long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         String nonceStr = nonceStrGenerator.generateId()
                 .toString()
                 .replaceAll("-", "");

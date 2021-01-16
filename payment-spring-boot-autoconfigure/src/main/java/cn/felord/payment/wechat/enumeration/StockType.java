@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,19 +17,28 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 未完成约定原因
- * <p>
- * 当订单守约状态为{@link ContractStatus#UNFINISHED}，返回此字段
+ * 代金券、商家券批次类型
+ *
  * @author felord.cn
- * @since 1.0.3.RELEASE
+ * @since 1.0.4.RELEASE
  */
-public enum UnfinishedReason {
+public enum StockType {
     /**
-     * 到期未完成约
+     * 固定面额满减券批次
+     *
+     * @since 1.0.4.RELEASE
      */
-    DUE_TO_QUIT,
+    NORMAL,
     /**
-     * 提前退出约定
+     * 折扣券批次
+     *
+     * @since 1.0.4.RELEASE
      */
-    EARLY_QUIT
+    DISCOUNT,
+    /**
+     * 换购券批次
+     *
+     * @since 1.0.4.RELEASE
+     */
+    EXCHANGE;
 }

@@ -17,6 +17,7 @@
  */
 package cn.felord.payment.wechat.v3.model;
 
+import cn.felord.payment.wechat.enumeration.StockType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -62,8 +63,10 @@ public class StocksCreateParams {
     private Boolean noCash;
     /**
      * 批次类型
+     *
+     * @since 1.0.4.RELEASE
      */
-    private String stockType = "NORMAL";
+    private StockType stockType = StockType.NORMAL;
     /**
      * 商户单据号
      */
