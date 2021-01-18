@@ -40,8 +40,7 @@ public class BusiFavorAssociateInfo {
      */
     private String outTradeNo;
     /**
-     * 商户请求单号
-     * @see BusiFavorCreateParams#getOutRequestNo()
+     * 商户请求单号，参考 {@code BusiFavorCreateParams#getOutRequestNo()}
      */
     private String outRequestNo;
 }
