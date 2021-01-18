@@ -14,31 +14,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import lombok.Data;
 
 /**
- * 代金券、商家券批次类型
+ * 使券失效API请求参数
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class BusiFavorDeactivateParams {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 券code
      */
-    NORMAL,
+    private String couponCode;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 批次号
      */
-    DISCOUNT,
+    private String stockId;
     /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 失效请求单据号
      */
-    EXCHANGE
+    private String deactivateRequestNo;
+    /**
+     * 失效原因
+     */
+    private String deactivateReason;
 }

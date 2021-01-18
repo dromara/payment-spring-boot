@@ -14,31 +14,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import lombok.Data;
+
+import java.util.Set;
 
 /**
- * 代金券、商家券批次类型
+ * 商家券上传预存code API请求参数
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class BusiCouponCodeUploadParams {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 批次号
      */
-    NORMAL,
+    private String stockId;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 券code列表
+     * <p>
+     * 特殊规则：单个券code长度为【1，32】，条目个数限制为【1，200】。
      */
-    DISCOUNT,
+    private Set<String> couponCodeList;
     /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 请求业务单据号
      */
-    EXCHANGE
+    private String uploadRequestNo;
 }

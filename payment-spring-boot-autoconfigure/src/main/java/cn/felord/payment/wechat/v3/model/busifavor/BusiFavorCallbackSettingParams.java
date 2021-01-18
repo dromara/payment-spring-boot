@@ -14,31 +14,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import lombok.Data;
 
 /**
- * 代金券、商家券批次类型
+ * 设置商家券事件通知地址API请求参数
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class BusiFavorCallbackSettingParams {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 微信支付商户的商户号，由微信支付生成并下发，不填默认查询调用方商户的通知URL。
      */
-    NORMAL,
+    private String mchid;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 商户提供的用于接收商家券事件通知的url地址，必须支持https。
      */
-    DISCOUNT,
-    /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
-     */
-    EXCHANGE
+    private String notifyUrl;
 }

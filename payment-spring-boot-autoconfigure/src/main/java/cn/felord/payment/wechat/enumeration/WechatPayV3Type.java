@@ -341,8 +341,93 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.0.RELEASE
      */
-    MARKETING_FAVOR_CALLBACKS(HttpMethod.POST, "%s/v3/marketing/favor/callbacks");
+    MARKETING_FAVOR_CALLBACKS(HttpMethod.POST, "%s/v3/marketing/favor/callbacks"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    /**
+     * 创建商家券API.
+     *
+     * @since 1.0.4.RELEASE
+     */
+    MARKETING_BUSI_FAVOR_CREATE_STOCKS(HttpMethod.POST, "%s/v3/marketing/busifavor/stocks"),
+    /**
+     * 查询商家券详情API.
+     *
+     * @since 1.0.4.RELEASE
+     */
+    MARKETING_BUSI_FAVOR_STOCKS_DETAIL(HttpMethod.GET, "%s/v3/marketing/busifavor/stocks/{stock_id}"),
+    /**
+     * 核销用户券API.
+     *
+     * @since 1.0.4.RELEASE
+     */
+    MARKETING_BUSI_FAVOR_COUPON_USE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/use"),
+    /**
+     * 根据过滤条件查询用户券API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_USER_COUPONS(HttpMethod.GET, "%s/v3/marketing/busifavor/users/{openid}/coupons"),
+    /**
+     * 查询用户单张券详情API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_USER_COUPON(HttpMethod.GET, "%s/v3/marketing/busifavor/users/{openid}/coupons/{coupon_code}/appids/{appid}"),
+    /**
+     * 商家券上传预存Code API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_UPLOAD_COUPON_CODES(HttpMethod.POST, "%s/v3/marketing/busifavor/stocks/{stock_id}/couponcodes"),
+    /**
+     * 设置商家券事件通知地址API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_SETTING_CALLBACKS(HttpMethod.POST, "%s/v3/marketing/busifavor/callbacks"),
+    /**
+     * 查询商家券事件通知地址API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_GET_CALLBACKS(HttpMethod.GET, "%s/v3/marketing/busifavor/callbacks"),
+    /**
+     * 关联订单信息API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_ASSOCIATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/associate"),
+    /**
+     * 取消关联订单信息API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_DISASSOCIATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/disassociate"),
+    /**
+     * 取消关联订单信息API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_BUDGET(HttpMethod.POST, "%s/v3/marketing/busifavor/stocks/{stock_id}/budget"),
+    /**
+     * 修改商家券基本信息API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_UPDATE(HttpMethod.POST, "%s/v3/marketing/busifavor/stocks/{stock_id}"),
+    /**
+     * 申请退券API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_RETURN(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/return"),
+    /**
+     * 使券失效API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_DEACTIVATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/deactivate");
 
     /**
      * The Pattern.

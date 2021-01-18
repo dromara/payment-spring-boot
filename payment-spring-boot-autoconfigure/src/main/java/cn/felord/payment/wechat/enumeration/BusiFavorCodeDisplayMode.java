@@ -17,28 +17,22 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 代金券、商家券批次类型
+ * code展示模式
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+public enum BusiFavorCodeDisplayMode {
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 不展示code
      */
-    NORMAL,
+    NOT_SHOW,
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 一维码（条形码）
      */
-    DISCOUNT,
+    BARCODE,
     /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 二维码
      */
-    EXCHANGE
+    QRCODE
 }

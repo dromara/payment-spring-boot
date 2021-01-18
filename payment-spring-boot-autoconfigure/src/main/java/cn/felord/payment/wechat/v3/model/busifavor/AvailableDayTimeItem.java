@@ -14,31 +14,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import lombok.Data;
 
 /**
- * 代金券、商家券批次类型
+ * 商家券当天可用时间段
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class AvailableDayTimeItem {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 当天可用开始时间，单位：秒，1代表当天0点0分1秒。
      */
-    NORMAL,
+    private Integer endTime;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 当天可用结束时间，单位：秒，86399代表当天23点59分59秒。
      */
-    DISCOUNT,
-    /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
-     */
-    EXCHANGE
+    private Integer beginTime;
 }

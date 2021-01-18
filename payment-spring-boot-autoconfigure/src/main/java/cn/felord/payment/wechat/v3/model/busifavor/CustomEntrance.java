@@ -14,31 +14,45 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import cn.felord.payment.wechat.enumeration.BusiFavorCodeDisplayMode;
+import lombok.Data;
 
 /**
- * 代金券、商家券批次类型
+ * 商家券核销规则-自定义入口
+ * <p>
+ * 卡详情页面，可选择多种入口引导用户。
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class CustomEntrance {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 可用门店id
+     * <p>
+     *  不可修改项
      */
-    NORMAL,
+    private String storeId;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 营销馆id
      */
-    DISCOUNT,
+    private String hallId;
     /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 小程序入口
      */
-    EXCHANGE
+    private MiniProgramsInfo miniProgramsInfo;
+    /**
+     * 商户公众号appid
+     * <p>
+     * 从券详情可跳转至公众号
+     */
+    private String appid;
+    /**
+     * code展示模式
+     */
+    private BusiFavorCodeDisplayMode codeDisplayMode;
+
 }

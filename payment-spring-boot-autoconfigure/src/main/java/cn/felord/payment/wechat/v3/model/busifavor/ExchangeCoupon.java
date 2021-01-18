@@ -14,31 +14,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import lombok.Data;
 
 /**
- * 代金券、商家券批次类型
+ * 商家券核销规则-换购券使用规则
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class ExchangeCoupon {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 单品换购价，单位：分。
+     * <p>
+     * 特殊规则：取值范围 1 ≤ exchangePrice ≤ 10000000
      */
-    NORMAL,
+    private Integer exchangePrice;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 消费门槛，单位：分。
+     * <p>
+     * 特殊规则：取值范围 1 ≤ transactionMinimum ≤ 10000000
      */
-    DISCOUNT,
-    /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
-     */
-    EXCHANGE
+    private Integer transactionMinimum;
 }

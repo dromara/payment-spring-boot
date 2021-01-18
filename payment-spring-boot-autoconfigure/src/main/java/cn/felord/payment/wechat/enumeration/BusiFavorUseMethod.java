@@ -17,28 +17,35 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 代金券、商家券批次类型
+ * 商家券核销方式
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+public enum BusiFavorUseMethod {
+
     /**
-     * 固定面额满减券批次
+     * 线下滴码核销，点击券“立即使用”跳转展示券二维码详情。
      *
      * @since 1.0.4.RELEASE
      */
-    NORMAL,
+    OFF_LINE,
     /**
-     * 折扣券批次
+     * 线上小程序核销，点击券“立即使用”跳转至配置的商家小程序（需要添加小程序appid和path）。
      *
      * @since 1.0.4.RELEASE
      */
-    DISCOUNT,
+    MINI_PROGRAMS,
     /**
-     * 换购券批次
+     * 微信支付付款码核销，点击券“立即使用”跳转至微信支付钱包付款码。
      *
      * @since 1.0.4.RELEASE
      */
-    EXCHANGE
+    PAYMENT_CODE,
+    /**
+     * 用户自助核销，点击券“立即使用”跳转至用户自助操作核销界面（当前暂不支持用户自助核销）。
+     *
+     * @since 1.0.4.RELEASE
+     */
+    SELF_CONSUME;
 }

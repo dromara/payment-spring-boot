@@ -20,6 +20,7 @@ package cn.felord.payment.wechat.enumeration;
 /**
  * 申请资金账单账户类型.
  *
+ * @author felord.cn
  * @since 1.0.3.RELEASE
  */
 public enum FundFlowAccountType {

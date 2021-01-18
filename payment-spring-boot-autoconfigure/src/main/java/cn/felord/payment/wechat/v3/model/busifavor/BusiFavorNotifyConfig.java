@@ -14,31 +14,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import lombok.Data;
 
 /**
- * 代金券、商家券批次类型
+ * 事件通知配置
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class BusiFavorNotifyConfig {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 事件通知appid
+     * <p>
+     * 用于回调通知时，计算返回操作用户的openid（诸如领券用户），支持小程序or公众号的APPID；
+     * 如该字段不填写，则回调通知中涉及到用户身份信息的openid与unionid都将为空。
      */
-    NORMAL,
-    /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
-     */
-    DISCOUNT,
-    /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
-     */
-    EXCHANGE
+    private String notifyAppid;
 }

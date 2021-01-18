@@ -14,31 +14,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import lombok.Data;
+
+import java.util.List;
 
 /**
- * 代金券、商家券批次类型
+ * 固定周期有效时间段
+ * <p>
+ * 可以设置多个星期下的多个可用时间段，比如每周二10点到18点，用户自定义字段。
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class AvailableWeek {
+
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 当天可用时间段
+     * <p>
+     * 可以填写多个时间段，最多不超过2个。
      */
-    NORMAL,
+    private List<AvailableDayTimeItem> availableDayTime;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 可用星期数
+     * <p>
+     * 0代表周日，1代表周一，以此类推
+     * <p>
+     * 当填写{@link #availableDayTime}时，{@code weekDay}必填
      */
-    DISCOUNT,
-    /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
-     */
-    EXCHANGE
+    private List<Integer> weekDay;
 }

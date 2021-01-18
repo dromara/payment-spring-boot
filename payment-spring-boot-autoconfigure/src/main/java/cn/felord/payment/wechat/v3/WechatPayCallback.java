@@ -22,8 +22,12 @@ import cn.felord.payment.wechat.v3.model.CallbackParams;
 import cn.felord.payment.wechat.v3.model.CouponConsumeData;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
 import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
+import cn.felord.payment.wechat.v3.model.busifavor.BusiFavorReceiveConsumeData;
 import cn.felord.payment.wechat.v3.model.combine.CombineTransactionConsumeData;
-import cn.felord.payment.wechat.v3.model.discountcard.*;
+import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardAcceptedConsumeData;
+import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardAgreementEndConsumeData;
+import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardConsumer;
+import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreConsumer;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
@@ -95,7 +99,7 @@ public class WechatPayCallback {
      */
     @SneakyThrows
     public Map<String, ?> couponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.COUPON);
+        String data = this.callback(params, EventType.COUPON_USE);
         CouponConsumeData consumeData = MAPPER.readValue(data, CouponConsumeData.class);
         consumeDataConsumer.accept(consumeData);
         Map<String, Object> responseBody = new HashMap<>(2);
@@ -230,7 +234,7 @@ public class WechatPayCallback {
             String data = this.decrypt(callbackParams);
             DiscountCardAcceptedConsumeData acceptedConsumeData = MAPPER.readValue(data, DiscountCardAcceptedConsumeData.class);
             discountCardConsumer.getAcceptedConsumeDataConsumer().accept(acceptedConsumeData);
-        }  else if (Objects.equals(eventType, EventType.DISCOUNT_CARD_USER_PAID.event)) {
+        } else if (Objects.equals(eventType, EventType.DISCOUNT_CARD_USER_PAID.event)) {
             String data = this.decrypt(callbackParams);
             DiscountCardUserPaidConsumeData paidConsumeData = MAPPER.readValue(data, DiscountCardUserPaidConsumeData.class);
             discountCardConsumer.getCardUserPaidConsumeDataConsumer().accept(paidConsumeData);
@@ -241,6 +245,32 @@ public class WechatPayCallback {
         return Collections.singletonMap("code", "SUCCESS");
     }
 
+    /**
+     * 商家券领券事件回调通知API
+     * <p>
+     * 领券完成后，微信会把相关支付结果和用户信息发送给商户，商户需要接收处理，并按照文档规范返回应答。出于安全的考虑，我们对支付结果数据进行了加密，商户需要先对通知数据进行解密，才能得到支付结果数据。
+     * <p>
+     * 该链接是通过商户<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/busifavor/chapter3_7.shtml">设置商家券事件通知地址API</a>中提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
+     *
+     * @param params              the params
+     * @param consumeDataConsumer the consume data consumer
+     * @return the map
+     */
+    @SneakyThrows
+    public Map<String, ?> busiFavorReceiveCallback(ResponseSignVerifyParams params, Consumer<BusiFavorReceiveConsumeData> consumeDataConsumer) {
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
+
+        if (!Objects.equals(eventType, EventType.COUPON_SEND.event)) {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
+        String data = this.decrypt(callbackParams);
+        BusiFavorReceiveConsumeData consumeData = MAPPER.readValue(data, BusiFavorReceiveConsumeData.class);
+
+        consumeDataConsumer.accept(consumeData);
+        return Collections.singletonMap("code", "SUCCESS");
+    }
 
     /**
      * Callback.
@@ -352,10 +382,22 @@ public class WechatPayCallback {
 
         /**
          * 优惠券核销事件.
+         * <p>
+         * 代金券
          *
          * @since 1.0.0.RELEASE
          */
-        COUPON("COUPON.USE"),
+        COUPON_USE("COUPON.USE"),
+
+        /**
+         * 优惠券领券事件.
+         * <p>
+         * 商家券
+         *
+         * @since 1.0.0.RELEASE
+         */
+        COUPON_SEND("COUPON.SEND"),
+
         /**
          * 支付成功事件.
          *

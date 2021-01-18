@@ -14,31 +14,45 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.enumeration;
+package cn.felord.payment.wechat.v3.model.busifavor;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.time.OffsetDateTime;
 
 /**
- * 代金券、商家券批次类型
+ * 核销用户券请求参数
  *
  * @author felord.cn
  * @since 1.0.4.RELEASE
  */
-public enum StockType {
+@Data
+public class BusiFavorUseParams {
     /**
-     * 固定面额满减券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 券code
      */
-    NORMAL,
+    private String couponCode;
     /**
-     * 折扣券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 批次号
      */
-    DISCOUNT,
+    private String stockId;
     /**
-     * 换购券批次
-     *
-     * @since 1.0.4.RELEASE
+     * 公众账号ID
      */
-    EXCHANGE
+    private String appid;
+    /**
+     * 请求核销时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
+    private OffsetDateTime useTime;
+    /**
+     * 核销请求单据号,商户侧保证唯一
+     */
+    private String useRequestNo;
+    /**
+     * 用户标识，用户的唯一标识，做安全校验使用
+     */
+    private String openid;
+
 }
