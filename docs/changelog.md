@@ -1,11 +1,11 @@
-## 1.0.3.RELEASE
+## 1.0.4.RELEASE
 - 微信支付
- - feat: 支持微信支付商家券
- - feat: 代金券功能增加发放消费卡接口`WechatMarketingBusiFavorApi`
- - refactor: 一些代码优化
- - refactor: 现在app支付、小程序支付返回所有客户端拉起支付的参数，不再需要用户再进行签名操作了
- - build: SDK开发环境 Spring Boot 版本升级到2.4.2  
- - fix: 支付分RiskFund下枚举无法使用的问题(#2)
+  - feat: 支持微信支付商家券
+  - feat: 代金券功能增加发放消费卡接口`WechatMarketingBusiFavorApi`
+  - refactor: 一些代码优化
+  - refactor: 现在app支付、小程序支付返回所有客户端拉起支付的参数，不再需要用户再进行签名操作了
+  - build: SDK开发环境 Spring Boot 版本升级到2.4.2  
+  - fix: 支付分RiskFund下枚举无法使用的问题(#2)
 ## 1.0.3.RELEASE
 - 微信支付
   - feat: 完善合单支付账单
