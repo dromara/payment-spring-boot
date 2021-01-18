@@ -27,7 +27,7 @@
 
 
 ## 核心API结构
-![](https://asset.felord.cn/blog/20210112211759.png)
+![](https://asset.felord.cn/blog/20210112211759.png?v=1)
 
 > 随着版本迭代会增加
 
