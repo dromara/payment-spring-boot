@@ -342,6 +342,12 @@ public enum WechatPayV3Type {
      * @since 1.0.0.RELEASE
      */
     MARKETING_FAVOR_CALLBACKS(HttpMethod.POST, "%s/v3/marketing/favor/callbacks"),
+    /**
+     * 发放代金券消费卡API.
+     *
+     * @since 1.0.4.RELEASES
+     */
+    MARKETING_FAVOR_COUPONS_SEND(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/{card_id}/send"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
