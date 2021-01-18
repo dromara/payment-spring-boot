@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,22 +17,35 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 申请资金账单账户类型.
+ * 商家券核销方式
  *
  * @author felord.cn
- * @since 1.0.3.RELEASE
+ * @since 1.0.4.RELEASE
  */
-public enum FundFlowAccountType {
+public enum BusiFavorUseMethod {
+
     /**
-     * 基本账户
+     * 线下滴码核销，点击券“立即使用”跳转展示券二维码详情。
+     *
+     * @since 1.0.4.RELEASE
      */
-    BASIC,
+    OFF_LINE,
     /**
-     * 运营账户
+     * 线上小程序核销，点击券“立即使用”跳转至配置的商家小程序（需要添加小程序appid和path）。
+     *
+     * @since 1.0.4.RELEASE
      */
-    OPERATION,
+    MINI_PROGRAMS,
     /**
-     * 手续费账户
+     * 微信支付付款码核销，点击券“立即使用”跳转至微信支付钱包付款码。
+     *
+     * @since 1.0.4.RELEASE
      */
-    FEES
+    PAYMENT_CODE,
+    /**
+     * 用户自助核销，点击券“立即使用”跳转至用户自助操作核销界面（当前暂不支持用户自助核销）。
+     *
+     * @since 1.0.4.RELEASE
+     */
+    SELF_CONSUME;
 }

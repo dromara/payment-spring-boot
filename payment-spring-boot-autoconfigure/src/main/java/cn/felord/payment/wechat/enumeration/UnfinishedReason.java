@@ -21,7 +21,7 @@ package cn.felord.payment.wechat.enumeration;
  * 未完成约定原因
  * <p>
  * 当订单守约状态为{@link ContractStatus#UNFINISHED}，返回此字段
- *
+ * @author felord.cn
  * @since 1.0.3.RELEASE
  */
 public enum UnfinishedReason {

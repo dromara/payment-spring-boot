@@ -17,6 +17,7 @@
  */
 package cn.felord.payment.wechat.v3.model;
 
+import cn.felord.payment.wechat.enumeration.StockType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -43,12 +44,12 @@ public class StocksCreateParams {
      */
     private String belongMerchant;
     /**
-     * 批次开始时间 rfc 3339   yyyy-mm-ddthh:mm:ss.sss+timezone
+     * 批次开始时间 rfc 3339   yyyy-MM-ddTHH:mm:ss+TIMEZONE
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
     private OffsetDateTime availableBeginTime;
     /**
-     * 批次结束时间 rfc 3339   YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
+     * 批次结束时间 rfc 3339   yyyy-MM-ddTHH:mm:ss+TIMEZONE
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
     private OffsetDateTime availableEndTime;
@@ -62,8 +63,10 @@ public class StocksCreateParams {
     private Boolean noCash;
     /**
      * 批次类型
+     *
+     * @since 1.0.4.RELEASE
      */
-    private String stockType = "NORMAL";
+    private StockType stockType = StockType.NORMAL;
     /**
      * 商户单据号
      */

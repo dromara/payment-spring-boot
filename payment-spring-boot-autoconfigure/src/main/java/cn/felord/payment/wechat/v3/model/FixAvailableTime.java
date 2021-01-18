@@ -23,7 +23,9 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * The type Fix available time.
+ * 固定时间段可用
+ * <p>
+ * 允许指定券在特殊时间段生效。当设置固定时间段可用时不可设置领取后N天有效
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -32,15 +34,21 @@ import java.util.List;
 public class FixAvailableTime {
 
     /**
-     * The Available week day.
+     * 可用星期数
+     *
+     * 允许指定每周固定星期数生效，0代表周日生效，1代表周一生效，以此类推；不填则代表在可用时间内周一至周日都生效。
      */
     private List<Long> availableWeekDay;
     /**
-     * The Begin time.
+     * 允许指定特殊生效星期数中的具体生效的时间段。
+     *
+     * 当天开始时间，单位：秒。
      */
     private Long beginTime;
     /**
-     * The End time.
+     * 允许指定特殊生效星期数中的具体生效的时间段。
+     *
+     * 当天结束时间，单位：秒，默认为23点59分59秒。
      */
     private Long endTime;
 

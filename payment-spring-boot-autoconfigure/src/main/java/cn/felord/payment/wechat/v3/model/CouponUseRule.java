@@ -22,7 +22,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 核销规则.
+ * 代金券核销规则.
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -30,32 +30,26 @@ import java.util.List;
 @Data
 public class CouponUseRule {
 
-
     /**
      * 可核销商品编码
      */
     private List<String> availableItems;
-
     /**
      * 可用商户
      */
     private List<String> availableMerchants;
-
     /**
      * 是否可以叠加使用
      */
     private Boolean combineUse;
-
     /**
-     * 券生效时间
+     * 券生效时间（暂时未开放，日期2021-1-12，请以微信官方通知为准）
      */
     private CouponAvailableTime couponAvailableTime;
-
     /**
      * 固定面额满减券使用规则
      */
     private FixedNormalCoupon fixedNormalCoupon;
-
     /**
      * 订单优惠标记
      */
@@ -80,8 +74,9 @@ public class CouponUseRule {
      *   <li>FACE：人脸支付</li>
      *   <li>OTHER：其他支付</li>
      * </ul>
+     * 不填则默认“不限”
      */
-    private String tradeType;
+    private CouponTradeType tradeType;
 
 
     /**
@@ -106,4 +101,50 @@ public class CouponUseRule {
          */
         private List<String> bin;
     }
+
+    /**
+     * 代金券核销规则-支付方式.
+     *
+     * @author felord.cn
+     * @since 1.0.4.RELEASE
+     */
+    public enum CouponTradeType {
+        /**
+         * 小程序支付
+         *
+         * @since 1.0.4.RELEASE
+         */
+        MICROAPP,
+        /**
+         * APP支付
+         *
+         * @since 1.0.4.RELEASE
+         */
+        APPPAY,
+        /**
+         * 免密支付
+         *
+         * @since 1.0.4.RELEASE
+         */
+        PPAY,
+        /**
+         * 刷卡支付
+         *
+         * @since 1.0.4.RELEASE
+         */
+        CARD,
+        /**
+         * 人脸支付
+         *
+         * @since 1.0.4.RELEASE
+         */
+        FACE,
+        /**
+         * 其他支付
+         *
+         * @since 1.0.4.RELEASE
+         */
+        OTHER,
+    }
+
 }

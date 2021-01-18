@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,30 +13,30 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model;
+package cn.felord.payment.wechat.v3.model.busifavor;
 
-import cn.felord.payment.wechat.v3.WechatDirectPayApi;
 import lombok.Data;
 
 /**
- * 微信支付订单号查询API请求参数.
+ * 商家券核销规则-换购券使用规则
  *
  * @author felord.cn
- * @since 1.0.0.RELEASE
+ * @since 1.0.4.RELEASE
  */
 @Data
-public class TransactionQueryParams {
+public class ExchangeCoupon {
+
     /**
-     * 商户id
+     * 单品换购价，单位：分。
+     * <p>
+     * 特殊规则：取值范围 1 ≤ exchangePrice ≤ 10000000
      */
-    private String mchId;
+    private Integer exchangePrice;
     /**
-     * <ul>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionByOutTradeNo(TransactionQueryParams)} 传递【商户侧订单号】</li>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionById(TransactionQueryParams)} (TransactionQueryParams)} 传递【微信支付订单号】</li>
-     * </ul>
+     * 消费门槛，单位：分。
+     * <p>
+     * 特殊规则：取值范围 1 ≤ transactionMinimum ≤ 10000000
      */
-    private String transactionIdOrOutTradeNo;
+    private Integer transactionMinimum;
 }

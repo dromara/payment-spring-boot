@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,30 +13,34 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model;
+package cn.felord.payment.wechat.v3.model.busifavor;
 
-import cn.felord.payment.wechat.v3.WechatDirectPayApi;
 import lombok.Data;
 
+import java.util.Set;
+
 /**
- * 微信支付订单号查询API请求参数.
+ * 商家券上传预存code API请求参数
  *
  * @author felord.cn
- * @since 1.0.0.RELEASE
+ * @since 1.0.4.RELEASE
  */
 @Data
-public class TransactionQueryParams {
+public class BusiCouponCodeUploadParams {
+
     /**
-     * 商户id
+     * 批次号
      */
-    private String mchId;
+    private String stockId;
     /**
-     * <ul>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionByOutTradeNo(TransactionQueryParams)} 传递【商户侧订单号】</li>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionById(TransactionQueryParams)} (TransactionQueryParams)} 传递【微信支付订单号】</li>
-     * </ul>
+     * 券code列表
+     * <p>
+     * 特殊规则：单个券code长度为【1，32】，条目个数限制为【1，200】。
      */
-    private String transactionIdOrOutTradeNo;
+    private Set<String> couponCodeList;
+    /**
+     * 请求业务单据号
+     */
+    private String uploadRequestNo;
 }

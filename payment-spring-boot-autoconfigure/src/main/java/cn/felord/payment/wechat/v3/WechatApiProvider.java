@@ -95,6 +95,17 @@ public class WechatApiProvider {
     }
 
     /**
+     * 微信支付商家券.
+     *
+     * @param tenantId the tenant id
+     * @return the wechat discount card api
+     * @since 1.0.4.RELEASE
+     */
+    public WechatMarketingBusiFavorApi busiFavorApi(String tenantId) {
+        return new WechatMarketingBusiFavorApi(wechatPayClient, tenantId);
+    }
+
+    /**
      * 回调.
      * <p>
      * 需要处理白名单、幂等性问题。

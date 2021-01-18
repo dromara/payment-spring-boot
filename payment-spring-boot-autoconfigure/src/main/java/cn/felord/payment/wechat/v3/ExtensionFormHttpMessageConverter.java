@@ -55,36 +55,35 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
      */
     private static final String BOUNDARY = "boundary";
 
-
     /**
      * The constant jaxb2Present.
      */
-    private static final boolean jaxb2Present;
+    private static final boolean JAXB_2_PRESENT;
 
     /**
      * The constant jackson2Present.
      */
-    private static final boolean jackson2Present;
+    private static final boolean JACKSON_2_PRESENT;
 
     /**
      * The constant jackson2XmlPresent.
      */
-    private static final boolean jackson2XmlPresent;
+    private static final boolean JACKSON_2_XML_PRESENT;
 
     /**
      * The constant jackson2SmilePresent.
      */
-    private static final boolean jackson2SmilePresent;
+    private static final boolean JACKSON_2_SMILE_PRESENT;
 
     /**
      * The constant gsonPresent.
      */
-    private static final boolean gsonPresent;
+    private static final boolean GSON_PRESENT;
 
     /**
      * The constant jsonbPresent.
      */
-    private static final boolean jsonbPresent;
+    private static final boolean JSONB_PRESENT;
 
     /**
      * The Part converters.
@@ -93,13 +92,13 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
 
     static {
         ClassLoader classLoader = AllEncompassingFormHttpMessageConverter.class.getClassLoader();
-        jaxb2Present = ClassUtils.isPresent("javax.xml.bind.Binder", classLoader);
-        jackson2Present = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", classLoader) &&
+        JAXB_2_PRESENT = ClassUtils.isPresent("javax.xml.bind.Binder", classLoader);
+        JACKSON_2_PRESENT = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", classLoader) &&
                 ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", classLoader);
-        jackson2XmlPresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.xml.XmlMapper", classLoader);
-        jackson2SmilePresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.smile.SmileFactory", classLoader);
-        gsonPresent = ClassUtils.isPresent("com.google.gson.Gson", classLoader);
-        jsonbPresent = ClassUtils.isPresent("javax.json.bind.Jsonb", classLoader);
+        JACKSON_2_XML_PRESENT = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.xml.XmlMapper", classLoader);
+        JACKSON_2_SMILE_PRESENT = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.smile.SmileFactory", classLoader);
+        GSON_PRESENT = ClassUtils.isPresent("com.google.gson.Gson", classLoader);
+        JSONB_PRESENT = ClassUtils.isPresent("javax.json.bind.Jsonb", classLoader);
     }
 
     /**
@@ -107,7 +106,8 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
      */
     public ExtensionFormHttpMessageConverter() {
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
-        stringHttpMessageConverter.setWriteAcceptCharset(false);  // see SPR-7316
+        // see SPR-7316
+        stringHttpMessageConverter.setWriteAcceptCharset(false);
 
         this.partConverters.add(new ByteArrayHttpMessageConverter());
         this.partConverters.add(stringHttpMessageConverter);
@@ -118,23 +118,23 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
             // Ignore when no TransformerFactory implementation is available
         }
 
-        if (jaxb2Present && !jackson2XmlPresent) {
+        if (JAXB_2_PRESENT && !JACKSON_2_XML_PRESENT) {
             this.partConverters.add(new Jaxb2RootElementHttpMessageConverter());
         }
 
-        if (jackson2Present) {
+        if (JACKSON_2_PRESENT) {
             this.partConverters.add(new MappingJackson2HttpMessageConverter());
-        } else if (gsonPresent) {
+        } else if (GSON_PRESENT) {
             this.partConverters.add(new GsonHttpMessageConverter());
-        } else if (jsonbPresent) {
+        } else if (JSONB_PRESENT) {
             this.partConverters.add(new JsonbHttpMessageConverter());
         }
 
-        if (jackson2XmlPresent) {
+        if (JACKSON_2_XML_PRESENT) {
             this.partConverters.add(new MappingJackson2XmlHttpMessageConverter());
         }
 
-        if (jackson2SmilePresent) {
+        if (JACKSON_2_SMILE_PRESENT) {
             this.partConverters.add(new MappingJackson2SmileHttpMessageConverter());
         }
         this.setPartConverters(this.partConverters);
@@ -205,7 +205,8 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
         outputMessage.getHeaders().setContentType(contentType);
 
         Charset charset = contentType.getCharset();
-        Assert.notNull(charset, "No charset"); // should never occur
+        // should never occur
+        Assert.notNull(charset, "No charset");
 
         final byte[] bytes = serializeForm(formData, charset).getBytes(charset);
         outputMessage.getHeaders().setContentLength(bytes.length);

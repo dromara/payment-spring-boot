@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,30 +13,35 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model;
+package cn.felord.payment.wechat.v3.model.busifavor;
 
-import cn.felord.payment.wechat.v3.WechatDirectPayApi;
 import lombok.Data;
 
 /**
- * 微信支付订单号查询API请求参数.
+ * 商家券关联订单信息API请求参数
  *
  * @author felord.cn
- * @since 1.0.0.RELEASE
+ * @since 1.0.4.RELEASE
  */
 @Data
-public class TransactionQueryParams {
+public class BusiFavorAssociateInfo {
+
     /**
-     * 商户id
+     * 批次号
      */
-    private String mchId;
+    private String stockId;
     /**
-     * <ul>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionByOutTradeNo(TransactionQueryParams)} 传递【商户侧订单号】</li>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionById(TransactionQueryParams)} (TransactionQueryParams)} 传递【微信支付订单号】</li>
-     * </ul>
+     * 券code
      */
-    private String transactionIdOrOutTradeNo;
+    private String couponCode;
+    /**
+     * 关联的商户订单号
+     */
+    private String outTradeNo;
+    /**
+     * 商户请求单号
+     * @see BusiFavorCreateParams#getOutRequestNo()
+     */
+    private String outRequestNo;
 }

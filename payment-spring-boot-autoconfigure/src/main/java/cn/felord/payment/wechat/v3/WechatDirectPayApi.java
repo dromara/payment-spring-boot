@@ -18,8 +18,9 @@
  */
 package cn.felord.payment.wechat.v3;
 
-import cn.felord.payment.wechat.enumeration.WeChatServer;
+import cn.felord.payment.PayException;
 import cn.felord.payment.wechat.WechatPayProperties;
+import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.PayParams;
 import cn.felord.payment.wechat.v3.model.TransactionQueryParams;
@@ -30,6 +31,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.security.PrivateKey;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Objects;
 
 /**
  * 普通支付-直连模式.
@@ -59,7 +64,41 @@ public class WechatDirectPayApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.APP, payParams)
                 .function(this::payFunction)
-                .consumer(wechatResponseEntity::convert)
+                .consumer(responseEntity -> {
+                    ObjectNode body = responseEntity.getBody();
+                    if (Objects.isNull(body)) {
+                        throw new PayException("response body cannot be resolved");
+                    }
+
+                    SignatureProvider signatureProvider = this.client().signatureProvider();
+                    WechatMetaContainer wechatMetaContainer = signatureProvider.wechatMetaContainer();
+                    WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId());
+                    PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
+
+                    String appId = wechatMetaBean.getV3().getAppId();
+                    long epochSecond = LocalDateTime.now()
+                            .toEpochSecond(ZoneOffset.of("+8"));
+                    String timestamp = String.valueOf(epochSecond);
+                    String nonceStr = signatureProvider.nonceStrGenerator()
+                            .generateId()
+                            .toString()
+                            .replaceAll("-", "");
+                    String prepayId = body.get("prepay_id").asText();
+                    String paySign = signatureProvider.doRequestSign(privateKey, appId, timestamp, nonceStr, prepayId);
+                    String mchId = wechatMetaBean.getV3().getMchId();
+
+                    body.put("appid", appId);
+                    body.put("partnerid", mchId);
+                    body.put("prepayid", prepayId);
+                    body.put("package", "Sign=WXPay");
+                    body.put("nonceStr", nonceStr);
+                    body.put("timeStamp", timestamp);
+                    body.put("signType", "RSA");
+                    body.put("paySign", paySign);
+
+                    wechatResponseEntity.setHttpStatus(responseEntity.getStatusCodeValue());
+                    wechatResponseEntity.setBody(body);
+                })
                 .request();
         return wechatResponseEntity;
     }
@@ -74,7 +113,38 @@ public class WechatDirectPayApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.JSAPI, payParams)
                 .function(this::payFunction)
-                .consumer(wechatResponseEntity::convert)
+                .consumer(responseEntity -> {
+                    ObjectNode body = responseEntity.getBody();
+                    if (Objects.isNull(body)) {
+                        throw new PayException("response body cannot be resolved");
+                    }
+
+                    SignatureProvider signatureProvider = this.client().signatureProvider();
+                    WechatMetaContainer wechatMetaContainer = signatureProvider.wechatMetaContainer();
+                    WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId());
+                    PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
+
+                    String appId = wechatMetaBean.getV3().getAppId();
+                    long epochSecond = LocalDateTime.now()
+                            .toEpochSecond(ZoneOffset.of("+8"));
+                    String timestamp = String.valueOf(epochSecond);
+                    String nonceStr = signatureProvider.nonceStrGenerator()
+                            .generateId()
+                            .toString()
+                            .replaceAll("-", "");
+                    String packageStr = "prepay_id=" + body.get("prepay_id").asText();
+                    String paySign = signatureProvider.doRequestSign(privateKey, appId, timestamp, nonceStr, packageStr);
+
+                    body.put("appId", appId);
+                    body.put("timeStamp", timestamp);
+                    body.put("nonceStr", nonceStr);
+                    body.put("package", packageStr);
+                    body.put("signType", "RSA");
+                    body.put("paySign", paySign);
+
+                    wechatResponseEntity.setHttpStatus(responseEntity.getStatusCodeValue());
+                    wechatResponseEntity.setBody(body);
+                })
                 .request();
         return wechatResponseEntity;
     }

@@ -1,4 +1,4 @@
-# 微信支付 Spring Boot 组件 
+# 最好用的微信支付V3 Spring Boot 组件 
 
 为了满足业务中出现app支付、公众号支付、小程序支付等多appid并存的场景，对原有的进行了增强开发出了多租户版本。
 
@@ -11,7 +11,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.3.RELEASE</version>
+    <version>1.0.4.RELEASE</version>
 </dependency>
 ```
 
@@ -23,6 +23,11 @@
 - 实现微信支付V3 代金券
 - 实现微信支付V3 微信支付分
 - 实现微信支付V3 先享卡
+
+## 核心API结构
+![](https://asset.felord.cn/blog/20210112211759.png)
+
+> 随着版本迭代会增加
 
 ## 开源协议
 **Apache 2.0**

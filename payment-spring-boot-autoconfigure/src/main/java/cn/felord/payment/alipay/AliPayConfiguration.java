@@ -32,10 +32,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author felord.cn
@@ -78,9 +75,12 @@ public class AliPayConfiguration {
 
 
     private String appRSAPrivateKey(String classPath) {
+        ClassPathResource resource = new ClassPathResource(classPath);
         try {
-            File file = new ClassPathResource(classPath).getFile();
-            return new BufferedReader(new FileReader(file)).readLine();
+            FileReader in = new FileReader(resource.getFile());
+            try(BufferedReader bufferedReader = new BufferedReader(in)){
+                return bufferedReader.readLine();
+            }
         } catch (IOException e) {
             log.error("ali pay app private key is required ,{}", e.getMessage());
             throw new PayException("ali pay app private key is required");

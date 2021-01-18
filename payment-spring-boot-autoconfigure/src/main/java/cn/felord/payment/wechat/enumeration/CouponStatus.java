@@ -19,7 +19,7 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
- * 代金券状态.
+ * 代金券、商家券状态.
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE

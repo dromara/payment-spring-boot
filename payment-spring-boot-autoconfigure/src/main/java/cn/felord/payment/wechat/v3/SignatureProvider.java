@@ -19,10 +19,10 @@
 package cn.felord.payment.wechat.v3;
 
 
+import cn.felord.payment.PayException;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
-import cn.felord.payment.PayException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -46,6 +46,8 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -70,7 +72,7 @@ public class SignatureProvider {
     /**
      * The constant ID_GENERATOR.
      */
-    private static final IdGenerator ID_GENERATOR = new AlternativeJdkIdGenerator();
+    private final IdGenerator nonceStrGenerator = new AlternativeJdkIdGenerator();
     /**
      * The constant SCHEMA.
      */
@@ -114,18 +116,14 @@ public class SignatureProvider {
      */
     @SneakyThrows
     public String requestSign(String tenantId, String method, String canonicalUrl, String body) {
-        Signature signer = Signature.getInstance("SHA256withRSA");
-        WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
-        signer.initSign(wechatMetaBean.getKeyPair().getPrivate());
 
-        long timestamp = System.currentTimeMillis() / 1000;
-        String nonceStr = ID_GENERATOR.generateId()
+        long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        String nonceStr = nonceStrGenerator.generateId()
                 .toString()
                 .replaceAll("-", "");
-        final String signatureStr = createSign(method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
-        signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
-        String encode = Base64Utils.encodeToString(signer.sign());
-
+        WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
+        PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
+        String encode = this.doRequestSign(privateKey, method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
         // 序列号
         String serialNo = wechatMetaBean.getSerialNumber();
         // 生成token
@@ -133,6 +131,24 @@ public class SignatureProvider {
                 wechatMetaBean.getV3().getMchId(),
                 nonceStr, timestamp, serialNo, encode);
         return SCHEMA.concat(token);
+    }
+
+
+    /**
+     * Do request sign.
+     *
+     * @param privateKey        the private key
+     * @param orderedComponents the orderedComponents
+     * @return the string
+     * @since 1.0.4.RELEASE
+     */
+    @SneakyThrows
+    public String doRequestSign(PrivateKey privateKey, String... orderedComponents) {
+        Signature signer = Signature.getInstance("SHA256withRSA");
+        signer.initSign(privateKey);
+        final String signatureStr = createSign(orderedComponents);
+        signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
+        return Base64Utils.encodeToString(signer.sign());
     }
 
     /**
@@ -255,6 +271,16 @@ public class SignatureProvider {
      */
     public WechatMetaContainer wechatMetaContainer() {
         return wechatMetaContainer;
+    }
+
+    /**
+     * Nonce generator.
+     *
+     * @return the id generator
+     * @since 1.0.4.RELEASE
+     */
+    public IdGenerator nonceStrGenerator() {
+        return nonceStrGenerator;
     }
 
     /**

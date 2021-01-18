@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,30 +13,36 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model;
+package cn.felord.payment.wechat.v3.model.busifavor;
 
-import cn.felord.payment.wechat.v3.WechatDirectPayApi;
 import lombok.Data;
 
+import java.util.List;
+
 /**
- * 微信支付订单号查询API请求参数.
+ * 固定周期有效时间段
+ * <p>
+ * 可以设置多个星期下的多个可用时间段，比如每周二10点到18点，用户自定义字段。
  *
  * @author felord.cn
- * @since 1.0.0.RELEASE
+ * @since 1.0.4.RELEASE
  */
 @Data
-public class TransactionQueryParams {
+public class AvailableWeek {
+
     /**
-     * 商户id
+     * 当天可用时间段
+     * <p>
+     * 可以填写多个时间段，最多不超过2个。
      */
-    private String mchId;
+    private List<AvailableDayTimeItem> availableDayTime;
     /**
-     * <ul>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionByOutTradeNo(TransactionQueryParams)} 传递【商户侧订单号】</li>
-     *     <li>调用 {@link WechatDirectPayApi#queryTransactionById(TransactionQueryParams)} (TransactionQueryParams)} 传递【微信支付订单号】</li>
-     * </ul>
+     * 可用星期数
+     * <p>
+     * 0代表周日，1代表周一，以此类推
+     * <p>
+     * 当填写{@link #availableDayTime}时，{@code weekDay}必填
      */
-    private String transactionIdOrOutTradeNo;
+    private List<Integer> weekDay;
 }

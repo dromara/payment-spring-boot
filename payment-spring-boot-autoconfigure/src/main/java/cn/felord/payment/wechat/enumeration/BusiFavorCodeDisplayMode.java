@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,32 +13,26 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model;
-
-import lombok.Data;
-
-import java.util.List;
+package cn.felord.payment.wechat.enumeration;
 
 /**
- * 支付优惠功能.
+ * code展示模式
  *
  * @author felord.cn
- * @since 1.0.0.RELEASE
+ * @since 1.0.4.RELEASE
  */
-@Data
-public class Detail {
+public enum BusiFavorCodeDisplayMode {
     /**
-     * 订单原价
+     * 不展示code
      */
-    private int costPrice;
+    NOT_SHOW,
     /**
-     * 商品小票ID
+     * 一维码（条形码）
      */
-    private String invoiceId;
+    BARCODE,
     /**
-     * 单品列表
+     * 二维码
      */
-    private List<Goods> goodsDetail;
+    QRCODE
 }

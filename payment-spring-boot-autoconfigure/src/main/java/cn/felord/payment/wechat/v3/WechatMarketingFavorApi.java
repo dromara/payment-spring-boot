@@ -92,10 +92,11 @@ public class WechatMarketingFavorApi extends AbstractApi {
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
                 .toUri();
-
-        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
-        String mchId = v3.getMchId();
-        params.setBelongMerchant(mchId);
+        if (!StringUtils.hasText(params.getBelongMerchant())) {
+            WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+            String mchId = v3.getMchId();
+            params.setBelongMerchant(mchId);
+        }
         return Post(uri, params);
     }
 
@@ -490,7 +491,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param stockId the stock id
      * @return the wechat response entity
-     * @see AbstractApi#billDownload(String) 对账单下载api
+     * @see AbstractApi#billDownload(String) AbstractApi#billDownload(String)对账单下载api
      */
     public WechatResponseEntity<ObjectNode> downloadStockUseFlow(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -512,7 +513,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param stockId the stock id
      * @return the wechat response entity
-     * @see AbstractApi#billDownload(String) 对账单下载api
+     * @see AbstractApi#billDownload(String) AbstractApi#billDownload(String)对账单下载api
      */
     public WechatResponseEntity<ObjectNode> downloadStockRefundFlow(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -601,7 +602,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param notifyUrl the notify url
      * @return the wechat response entity
-     * @see WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer) 核销回调
+     * @see WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer) WechatPayCallback#couponCallback(ResponseSignVerifyParams, Consumer)核销回调
      */
     public WechatResponseEntity<ObjectNode> setMarketingFavorCallback(String notifyUrl) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -630,6 +631,40 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .build()
                 .toUri();
         return Post(uri, body);
+    }
+
+    /**
+     * 发放消费卡API
+     * <p>
+     * 商户通过调用本接口向用户发放消费卡，用户领到卡的同时会领取到一批代金券，消费卡会自动放入卡包中。
+     * <p>
+     * 注意：
+     * <ul>
+     *     <li>调用该接口前，需要在微信支付商户平台创建“消费卡”，获得card_id。</li>
+     *     <li>此功能仅向指定邀约商户开放，如有需要请联系微信支付运营经理。</li>
+     * </ul>
+     *
+     * @param params the params
+     * @return wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> sendCouponsCard(CouponsCardSendParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.MARKETING_FAVOR_COUPONS_SEND, params)
+                .function((type, sendParams) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(sendParams.getCardId())
+                            .toUri();
+                    sendParams.setCardId(null);
+                    if (!StringUtils.hasText(sendParams.getAppid())) {
+                        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                        sendParams.setAppid(v3.getAppId());
+                    }
+                    return Post(uri, sendParams);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
     }
 }
 

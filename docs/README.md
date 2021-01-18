@@ -18,10 +18,14 @@
 - [x] **微信支付V3** 全量支持，并支持多租户以同时满足移动应用App、公众号、小程序等支付场景
 - [x] **支付宝**  集成SDK，作简单适配
 
-## 微信支付V3进度
-- 微信支付营销-代金券 `WechatMarketingFavorApi` 100%
-- 微信支付 支付功能-普通支付直连模式 `WechatDirectPayApi` 100%
-- 微信合单支付 `WechatCombinePayApi` 100% 
+## 功能
+- 实现微信支付多商户
+- 集成支付宝SDK、快速接入Spring Boot
+- 实现微信支付V3 基础支付
+- 实现微信支付V3 合单支付
+- 实现微信支付V3 代金券
+- 实现微信支付V3 微信支付分
+- 实现微信支付V3 先享卡
 
 ## Maven 中央仓库坐标
 > 推荐使用最新版本
@@ -29,7 +33,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.3.RELEASE</version>
+    <version>1.0.4.RELEASE</version>
 </dependency>
 ```
 ## 采用技术
