@@ -7,7 +7,7 @@
     <version>1.0.4.RELEASE</version>
 </dependency>
 ```
-> 基于 **Spring Boot 2.4.1** 
+> 基于 **Spring Boot 2.x** 
 
 ## Spring Boot 版本适配
 
