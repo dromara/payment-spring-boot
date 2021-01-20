@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  * @author felord.cn
  * @since 1.0.3.RELEASE
  */
+@Order
 public class WechatPayConfiguredCondition extends SpringBootCondition {
 
     /**
@@ -57,7 +59,8 @@ public class WechatPayConfiguredCondition extends SpringBootCondition {
     }
 
     private Map<String, WechatPayProperties.V3> getV3(Environment environment) {
-        return Binder.get(environment).bind("wechat.pay.v3", STRING_WECHAT_V3_MAP)
+        return Binder.get(environment)
+                .bind("wechat.pay.v3", STRING_WECHAT_V3_MAP)
                 .orElse(Collections.emptyMap());
     }
 
