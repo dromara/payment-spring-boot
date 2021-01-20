@@ -18,6 +18,10 @@
  */
 package cn.felord.payment.wechat.v3;
 
+import cn.felord.payment.wechat.v2.WechatPayRedpackApi;
+import cn.felord.payment.wechat.v2.WechatPayTransfersApi;
+import cn.felord.payment.wechat.v2.WechatV2Client;
+
 /**
  * 微信支付工具.
  *
@@ -116,6 +120,36 @@ public class WechatApiProvider {
      */
     public WechatPayCallback callback(String tenantId) {
         return new WechatPayCallback(wechatPayClient.signatureProvider(), tenantId);
+    }
+
+    /**
+     * 现金红包，基于V2
+     *
+     * @param tenantId the tenant id
+     * @return wechat pay redpack api
+     * @since 1.0.5.RELEASE
+     */
+    public WechatPayRedpackApi redpackApi(String tenantId) {
+        WechatMetaBean wechatMeta = wechatPayClient.signatureProvider()
+                .wechatMetaContainer()
+                .getWechatMeta(tenantId);
+        WechatV2Client wechatV2Client = new WechatV2Client(wechatMeta);
+        return new WechatPayRedpackApi(wechatV2Client);
+    }
+
+    /**
+     * 企业付款到零钱，目前不包括到银行卡，基于V2
+     *
+     * @param tenantId the tenant id
+     * @return wechat pay redpack api
+     * @since 1.0.5.RELEASE
+     */
+    public WechatPayTransfersApi transfersApi(String tenantId) {
+        WechatMetaBean wechatMeta = wechatPayClient.signatureProvider()
+                .wechatMetaContainer()
+                .getWechatMeta(tenantId);
+        WechatV2Client wechatV2Client = new WechatV2Client(wechatMeta);
+        return new WechatPayTransfersApi(wechatV2Client);
     }
 
 }
