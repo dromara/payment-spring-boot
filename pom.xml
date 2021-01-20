@@ -54,6 +54,8 @@
         <lombok.verison>1.18.12</lombok.verison>
         <jackson.version>2.9.10</jackson.version>
         <bcprov.version>1.66</bcprov.version>
+        <jackson.version>2.11.4</jackson.version>
+        <httpclient.version>4.5.13</httpclient.version>
     </properties>
 
     <distributionManagement>
@@ -115,6 +117,16 @@
                 <groupId>cn.felord</groupId>
                 <artifactId>payment-spring-boot-autoconfigure</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
