@@ -34,7 +34,7 @@ import java.util.Map;
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Conditional(WechatPayConfiguredCondition.class)
 @EnableConfigurationProperties(WechatPayProperties.class)
 public class WechatPayConfiguration {
