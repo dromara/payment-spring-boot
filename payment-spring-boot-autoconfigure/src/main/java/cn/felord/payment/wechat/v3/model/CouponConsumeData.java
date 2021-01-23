@@ -18,6 +18,7 @@
  */
 package cn.felord.payment.wechat.v3.model;
 
+import cn.felord.payment.wechat.enumeration.CouponStatus;
 import lombok.Data;
 
 /**
@@ -30,67 +31,68 @@ import lombok.Data;
 public class CouponConsumeData {
 
     /**
-     * The Available begin time.
+     * 可用开始时间 YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
      */
     private String availableBeginTime;
     /**
-     * The Available end time.
+     * 可用结束时间  YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
      */
     private String availableEndTime;
     /**
-     * The Consume information.
+     * 实扣代金券信息
      */
     private ConsumeInformation consumeInformation;
     /**
-     * The Coupon id.
+     * 代金券id
      */
     private String couponId;
     /**
-     * The Coupon name.
+     * 代金券名称
      */
     private String couponName;
     /**
-     * The Coupon type.
+     * 代金券类型
      */
     private CouponType couponType;
     /**
-     * The Create time.
+     * 领券时间
      */
     private String createTime;
     /**
-     * The Description.
+     * 代金券描述
      */
     private String description;
     /**
-     * The Discount to.
+     * 减至优惠特定信息
      */
     private DiscountTo discountTo;
     /**
-     * The No cash.
+     * 是否无资金流
      */
     private Boolean noCash;
     /**
-     * The Normal coupon information.
+     * 普通满减券信息
      */
     private NormalCouponInformation normalCouponInformation;
     /**
-     * The Singleitem.
+     * 是否单品优惠
      */
     private Boolean singleitem;
     /**
-     * The Singleitem discount off.
+     * 单品优惠特定信息
      */
     private SingleitemDiscountOff singleitemDiscountOff;
     /**
-     * The Status.
+     * 代金券状态
+     * @see CouponStatus
      */
-    private String status;
+    private CouponStatus status;
     /**
-     * The Stock creator mchid.
+     * 创建批次的商户号
      */
     private String stockCreatorMchid;
     /**
-     * The Stock id.
+     * 批次号
      */
     private String stockId;
 

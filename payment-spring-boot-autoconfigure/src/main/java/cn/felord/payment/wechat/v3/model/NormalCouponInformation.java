@@ -30,11 +30,11 @@ import lombok.Data;
 public class NormalCouponInformation {
 
     /**
-     * The Coupon amount.
+     * 面额，单位：分。
      */
     private Long couponAmount;
     /**
-     * The Transaction minimum.
+     * 	使用券金额门槛，单位：分。
      */
     private Long transactionMinimum;
 

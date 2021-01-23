@@ -24,7 +24,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * The type Promotion detail.
+ * 优惠功能
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -33,52 +33,60 @@ import java.util.List;
 public class PromotionDetail {
 
     /**
-     * The Amount.
+     * 优惠券面额，单位【分】
      */
     private Long amount;
     /**
-     * The Coupon id.
+     * 券ID
      */
     private String couponId;
     /**
-     * The Currency.
+     * 优惠币种，内商户号仅支持人民币 CNY
      */
     private String currency;
     /**
-     * The Goods detail.
+     * 单品列表信息
      */
     private List<GoodsDetail> goodsDetail;
     /**
-     * The Merchant contribute.
+     * 商户出资，单位为分
      */
     private Long merchantContribute;
     /**
-     * The Name.
+     * 优惠名称
      */
     private String name;
     /**
-     * The Other contribute.
+     * 其他出资，单位为分
      */
     private Long otherContribute;
     /**
-     * The Scope.
+     * 优惠范围
+     * <ul>
+     *     <li>GLOBAL：全场代金券</li>
+     *     <li>SINGLE：单品优惠</li>
+     * </ul>
      */
     private String scope;
     /**
-     * The Stock id.
+     * 活动ID
      */
     private String stockId;
     /**
-     * The Type.
+     * 优惠类型
+     * <ul>
+     *     <li>CASH：充值</li>
+     *     <li>NOCASH：预充值</li>
+     * </ul>
      */
     private String type;
     /**
-     * The Wechatpay contribute.
+     * 微信出资，单位为分
      */
     private Long wechatpayContribute;
 
     /**
-     * The type Goods detail.
+     * 单品列表信息
      *
      * @author felord.cn
      * @since 1.0.0.RELEASE
@@ -87,23 +95,23 @@ public class PromotionDetail {
     public static class GoodsDetail {
 
         /**
-         * The Goods id.
+         * 商品编码
          */
         private String goodsId;
         /**
-         * The Quantity.
+         * 商品数量
          */
         private Long quantity;
         /**
-         * The Unit price.
+         * 商品单价
          */
         private Long unitPrice;
         /**
-         * The Discount amount.
+         * 商品优惠金额，单位【分】
          */
         private Long discountAmount;
         /**
-         * The Goods remark.
+         * 商品备注
          */
         private String goodsRemark;
 

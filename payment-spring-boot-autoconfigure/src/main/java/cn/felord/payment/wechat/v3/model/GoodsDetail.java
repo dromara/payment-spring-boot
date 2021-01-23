@@ -30,19 +30,19 @@ import lombok.Data;
 public class GoodsDetail {
 
     /**
-     * The Discount amount.
+     * 优惠金额，单位【分】
      */
     private Long discountAmount;
     /**
-     * The Goods id.
+     * 单品券创建时录入的单品编码。
      */
     private String goodsId;
     /**
-     * The Price.
+     * 单品单价
      */
     private Long price;
     /**
-     * The Quantity.
+     * 单品数量
      */
     private Long quantity;
 
