@@ -29,6 +29,9 @@ import lombok.Data;
 @Data
 public class SingleitemDiscountOff {
 
+    /**
+     * 单品最高优惠价格，单位：分。
+     */
     private Long singlePriceMax;
 
 }

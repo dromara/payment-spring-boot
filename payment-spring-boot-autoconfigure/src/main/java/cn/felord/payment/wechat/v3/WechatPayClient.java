@@ -262,7 +262,7 @@ public class WechatPayClient {
                     responseConsumer.accept(responseEntity);
                 }
             } else {
-                throw new PayException("wechat pay signature failed, Request-ID " + requestId);
+                throw new PayException("wechat pay signature verify failed, Request-ID " + requestId);
             }
         }
 

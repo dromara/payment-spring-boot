@@ -61,7 +61,7 @@ import java.security.cert.CertificateException;
  * @since 1.0.5.RELEASE
  */
 @Getter
-public class BaseModel {
+public abstract class BaseModel {
     private static final XmlMapper XML_MAPPER = new XmlMapper();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 

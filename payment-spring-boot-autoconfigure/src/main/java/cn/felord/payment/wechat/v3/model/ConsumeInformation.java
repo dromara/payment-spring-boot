@@ -32,22 +32,22 @@ import java.util.List;
 public class ConsumeInformation {
 
     /**
-     * The Consume mchid.
+     * 核销商户号
      */
     private String consumeMchid;
 
     /**
-     * The Consume time.
+     * 核销时间  YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE
      */
     private String consumeTime;
 
     /**
-     * The Goods detail.
+     * 商户下单接口传的单品信息
      */
     private List<GoodsDetail> goodsDetail;
 
     /**
-     * The Transaction id.
+     * 核销订单号
      */
     private String transactionId;
 

@@ -25,6 +25,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 支付成功通知解密
+ *
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
@@ -32,67 +34,71 @@ import java.util.List;
 public class TransactionConsumeData {
 
     /**
-     * The Amount.
+     * 订单金额
      */
     private Amount amount;
     /**
-     * The Appid.
+     * 应用ID
      */
     private String appid;
     /**
-     * The Attach.
+     * 附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用
      */
     private String attach;
     /**
-     * The Bank type.
+     * 银行类型，采用字符串类型的银行标识。银行标识请参考 <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/terms_definition/chapter1_1_3.shtml#part-6">《银行类型对照表》</a>
      */
     private String bankType;
     /**
-     * The Mchid.
+     * 商户号
      */
     private String mchid;
     /**
-     * The Out trade no.
+     * 商户订单号
      */
     private String outTradeNo;
     /**
-     * The Payer.
+     * 支付者信息
      */
     private Payer payer;
     /**
-     * The Promotion detail.
+     * 优惠功能，享受优惠时返回该字段。
      */
     private List<PromotionDetail> promotionDetail;
     /**
-     * The Scene info.
+     * 支付场景信息描述
      */
     private SceneInfo sceneInfo;
     /**
-     * The Success time.
+     * 支付完成时间 YYYY-MM-DDTHH:mm:ss+TIMEZONE
      */
     private String successTime;
     /**
      * 在 1.0.0.RELEASE 直接返回了枚举字符串，1.0.2.RELEASE 中变更为枚举
+     *
      * @since 1.0.0.RELEASE
      */
     private TradeState tradeState;
     /**
-     * The Trade state desc.
+     * 交易状态描述
      */
     private String tradeStateDesc;
     /**
+     * 交易类型
+     * <p>
      * 在 1.0.0.RELEASE 直接返回了枚举字符串，1.0.2.RELEASE 中变更为枚举
+     *
      * @since 1.0.0.RELEASE
      */
     private TradeType tradeType;
     /**
-     * The Transaction id.
+     * 微信支付订单号
      */
     private String transactionId;
 
 
     /**
-     * The type Payer.
+     * 支付者信息
      *
      * @author felord.cn
      * @since 1.0.0.RELEASE
@@ -100,13 +106,13 @@ public class TransactionConsumeData {
     @Data
     public static class Payer {
         /**
-         * The Openid.
+         * 用户在直连商户appid下的唯一标识。
          */
         private String openid;
     }
 
     /**
-     * The type Scene info.
+     * 支付场景信息描述
      *
      * @author felord.cn
      * @since 1.0.0.RELEASE
@@ -114,13 +120,13 @@ public class TransactionConsumeData {
     @Data
     public static class SceneInfo {
         /**
-         * The Device id.
+         * 商户端设备号（门店号或收银设备ID）。
          */
         private String deviceId;
     }
 
     /**
-     * The type Amount.
+     * 订单金额
      *
      * @author felord.cn
      * @since 1.0.0.RELEASE
@@ -128,19 +134,19 @@ public class TransactionConsumeData {
     @Data
     public static class Amount {
         /**
-         * The Total.
+         * 订单总金额，单位为分。
          */
         private Integer total;
         /**
-         * The Payer total.
+         * 用户支付金额，单位为分。
          */
         private Integer payerTotal;
         /**
-         * The Currency.
+         * CNY：人民币，境内商户号仅支持人民币。
          */
         private String currency;
         /**
-         * The Payer currency.
+         * 用户支付币种
          */
         private String payerCurrency;
     }
