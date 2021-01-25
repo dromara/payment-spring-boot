@@ -38,6 +38,7 @@ import org.bouncycastle.crypto.digests.MD5Digest;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -146,7 +147,7 @@ public abstract class BaseModel {
         RequestEntity<String> body = RequestEntity.method(method, UriComponentsBuilder.fromHttpUrl(url)
                 .build()
                 .toUri())
-                .header("Content-Type", "application/x-www-form-urlencoded")
+                .contentType(MediaType.valueOf("application/x-www-form-urlencoded;charset=UTF-8"))
                 .body(xml);
         ResponseEntity<String> responseEntity = this.getRestTemplateClientAuthentication(mchId)
                 .exchange(url, method, body, String.class);
