@@ -31,7 +31,7 @@ public class H5Info {
     /**
      * 场景类型
      */
-    private String type;
+    private H5SceneType type;
     /**
      * 应用名称
      */
@@ -48,4 +48,26 @@ public class H5Info {
      * Android 平台 PackageName
      */
     private String packageName;
+
+    /**
+     * H5 场景类型
+     *
+     * @author felord.cn
+     * @since 1.0.5.RELEASE
+     */
+    public enum H5SceneType {
+
+        /**
+         * IOS
+         */
+        iOS,
+        /**
+         * Android
+         */
+        Android,
+        /**
+         * Wap
+         */
+        Wap
+    }
 }
