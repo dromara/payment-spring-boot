@@ -41,9 +41,9 @@ public class Goods {
     /**
      * 商品数量
      */
-    private int quantity;
+    private Integer quantity;
     /**
      * 商品单价
      */
-    private int unitPrice;
+    private Integer unitPrice;
 }
