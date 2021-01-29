@@ -257,7 +257,6 @@ public class WechatDirectPayApi extends AbstractApi {
         queryParams.add("mchid", v3.getMchId());
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
-                .queryParams(queryParams)
                 .build()
                 .expand(outTradeNo)
                 .toUri();
