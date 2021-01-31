@@ -34,6 +34,8 @@ import java.net.URI;
 import java.security.PrivateKey;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -253,8 +255,8 @@ public class WechatDirectPayApi extends AbstractApi {
     private RequestEntity<?> closeByOutTradeNoFunction(WechatPayV3Type type, String outTradeNo) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("mchid", v3.getMchId());
+        Map<String, String> queryParams = new HashMap<>(1);
+        queryParams.put("mchid", v3.getMchId());
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
