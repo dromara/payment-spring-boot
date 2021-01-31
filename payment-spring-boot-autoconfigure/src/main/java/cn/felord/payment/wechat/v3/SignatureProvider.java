@@ -87,9 +87,9 @@ public class SignatureProvider {
      */
     private static final Map<String, Certificate> CERTIFICATE_MAP = new ConcurrentHashMap<>();
     /**
-     * 加密算法提供方
+     * 加密算法提供方 - BouncyCastle
      */
-    private static final Provider PROVIDER = new BouncyCastleProvider();
+    private static final String BC_PROVIDER = "BC";
 
 
     /**
@@ -107,6 +107,8 @@ public class SignatureProvider {
      * @param wechatMetaContainer the wechat meta container
      */
     public SignatureProvider(WechatMetaContainer wechatMetaContainer) {
+        Provider bouncyCastleProvider = new BouncyCastleProvider();
+        Security.addProvider(bouncyCastleProvider);
         this.wechatMetaContainer = wechatMetaContainer;
         wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
     }
@@ -151,7 +153,7 @@ public class SignatureProvider {
      */
     @SneakyThrows
     public String doRequestSign(PrivateKey privateKey, String... orderedComponents) {
-        Signature signer = Signature.getInstance("SHA256withRSA");
+        Signature signer = Signature.getInstance("SHA256withRSA",BC_PROVIDER);
         signer.initSign(privateKey);
         final String signatureStr = createSign(orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
@@ -250,7 +252,7 @@ public class SignatureProvider {
      */
     public String decryptResponseBody(String tenantId, String associatedData, String nonce, String ciphertext) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", PROVIDER);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", BC_PROVIDER);
             String apiV3Key = wechatMetaContainer.getWechatMeta(tenantId).getV3().getAppV3Secret();
             SecretKeySpec key = new SecretKeySpec(apiV3Key.getBytes(StandardCharsets.UTF_8), "AES");
             GCMParameterSpec spec = new GCMParameterSpec(128, nonce.getBytes(StandardCharsets.UTF_8));
@@ -265,8 +267,7 @@ public class SignatureProvider {
                 throw new PayException(e);
             }
             return new String(bytes, StandardCharsets.UTF_8);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException |
-                InvalidKeyException | InvalidAlgorithmParameterException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchProviderException e) {
             throw new PayException(e);
         }
     }
