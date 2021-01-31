@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.http.*;
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.Base64Utils;
@@ -85,6 +86,12 @@ public class SignatureProvider {
      * 微信平台证书容器  key = 序列号  value = 证书对象
      */
     private static final Map<String, Certificate> CERTIFICATE_MAP = new ConcurrentHashMap<>();
+    /**
+     * 加密算法提供方
+     */
+    private static final Provider PROVIDER = new BouncyCastleProvider();
+
+
     /**
      * The Rest operations.
      */
@@ -243,7 +250,7 @@ public class SignatureProvider {
      */
     public String decryptResponseBody(String tenantId, String associatedData, String nonce, String ciphertext) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", PROVIDER);
             String apiV3Key = wechatMetaContainer.getWechatMeta(tenantId).getV3().getAppV3Secret();
             SecretKeySpec key = new SecretKeySpec(apiV3Key.getBytes(StandardCharsets.UTF_8), "AES");
             GCMParameterSpec spec = new GCMParameterSpec(128, nonce.getBytes(StandardCharsets.UTF_8));
