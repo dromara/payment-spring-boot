@@ -23,10 +23,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpMethod;
 
 /**
- * The type Wechat pay refund api.
+ * 退款相关API.
  *
  * @author felord.cn
- * @since 1.0.4.RELEASE
+ * @since 1.0.5.RELEASE
  */
 public class WechatPayRefundApi {
     private final WechatV2Client wechatV2Client;

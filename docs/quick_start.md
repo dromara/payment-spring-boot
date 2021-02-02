@@ -4,7 +4,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.4.RELEASE</version>
+    <version>1.0.5.RELEASE</version>
 </dependency>
 ```
 > 基于 **Spring Boot 2.x** 
@@ -50,7 +50,7 @@ wechat:
      <tentantID>: 
 #  应用appId 必填
       app-id: xxxxxxxx
-#  api 密钥 可不填
+#  v2 api 密钥  1.0.5版本以后如果用到V2的接口时必填
       app-secret: xxxxxxxxxxx
 #  api v3 密钥 必填
       app-v3-secret: xxxxxxxx
