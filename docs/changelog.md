@@ -6,7 +6,7 @@
   - refactor:优化了一些底层功能
   - refactor:整了支付配置Spring注入的顺序
   - refactor:JCE由SPI提供，不再使用JDK内置
-  - fix: 关单接口调用异常[(#4)](https://github.com/NotFound403/payment-spring-boot/issues/4)
+  - fix: 关单接口调用异常
 
 ## 1.0.4.RELEASE
 - 微信支付
