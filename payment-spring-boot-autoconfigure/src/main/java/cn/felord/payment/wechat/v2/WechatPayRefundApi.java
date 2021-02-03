@@ -28,6 +28,7 @@ import org.springframework.http.HttpMethod;
  * @author felord.cn
  * @since 1.0.5.RELEASE
  */
+@Deprecated
 public class WechatPayRefundApi {
     private final WechatV2Client wechatV2Client;
 
