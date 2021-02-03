@@ -18,10 +18,7 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.v3.model.CallbackParams;
-import cn.felord.payment.wechat.v3.model.CouponConsumeData;
-import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
-import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
+import cn.felord.payment.wechat.v3.model.*;
 import cn.felord.payment.wechat.v3.model.busifavor.BusiFavorReceiveConsumeData;
 import cn.felord.payment.wechat.v3.model.combine.CombineTransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardAcceptedConsumeData;
@@ -273,6 +270,34 @@ public class WechatPayCallback {
     }
 
     /**
+     * 退款结果通知API
+     * <p>
+     * 退款状态改变后，微信会把相关退款结果发送给商户。
+     *
+     * @param params              the params
+     * @param consumeDataConsumer the consume data consumer
+     * @return map
+     */
+    @SneakyThrows
+    public Map<String, ?> refundCallback(ResponseSignVerifyParams params, Consumer<RefundConsumeData> consumeDataConsumer) {
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
+
+        if (!Objects.equals(eventType, EventType.REFUND_CLOSED.event)||
+                !Objects.equals(eventType,EventType.REFUND_ABNORMAL.event)||
+                !Objects.equals(eventType,EventType.REFUND_SUCCESS.event)) {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
+        String data = this.decrypt(callbackParams);
+        RefundConsumeData consumeData = MAPPER.readValue(data, RefundConsumeData.class);
+
+        consumeDataConsumer.accept(consumeData);
+        return Collections.singletonMap("code", "SUCCESS");
+    }
+
+
+    /**
      * Callback.
      *
      * @param params    the params
@@ -403,7 +428,28 @@ public class WechatPayCallback {
          *
          * @since 1.0.0.RELEASE
          */
-        TRANSACTION("TRANSACTION.SUCCESS");
+        TRANSACTION("TRANSACTION.SUCCESS"),
+
+        /**
+         * 退款成功事件.
+         *
+         * @since 1.0.6.RELEASE
+         */
+        REFUND_SUCCESS("REFUND.SUCCESS"),
+
+        /**
+         * 退款异常事件.
+         *
+         * @since 1.0.6.RELEASE
+         */
+        REFUND_ABNORMAL("REFUND.ABNORMAL"),
+
+        /**
+         * 退款关闭事件.
+         *
+         * @since 1.0.6.RELEASE
+         */
+        REFUND_CLOSED("REFUND.CLOSED");
 
         /**
          * The Event.
