@@ -323,6 +323,8 @@ public class WechatMarketingFavorApi extends AbstractApi {
      * 查询代金券详情API
      * <p>
      * 通过此接口可查询代金券信息，包括代金券的基础信息、状态。如代金券已核销，会包括代金券核销的订单信息（订单号、单品信息等）。
+     * <p>
+     * 2021-1 微信侧不再返回{@code consume_information}字段
      *
      * @param params the params
      * @return the wechat response entity
