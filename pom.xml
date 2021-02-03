@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot</artifactId>
-    <version>1.0.5.RELEASE</version>
+    <version>1.0.6.RELEASE</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -30,7 +30,7 @@
     </developers>
 
     <scm>
-        <tag>payment-spring-boot-1.0.5.RELEASE</tag>
+        <tag>payment-spring-boot-1.0.6.RELEASE</tag>
         <url>https://github.com/NotFound403/payment-spring-boot</url>
         <connection>scm:git:https://github.com/NotFound403/payment-spring-boot.git</connection>
         <developerConnection>scm:git:https://github.com/NotFound403/payment-spring-boot.git</developerConnection>

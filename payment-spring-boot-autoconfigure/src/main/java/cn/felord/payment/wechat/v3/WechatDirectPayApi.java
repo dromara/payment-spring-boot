@@ -23,6 +23,7 @@ import cn.felord.payment.wechat.WechatPayProperties;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.PayParams;
+import cn.felord.payment.wechat.v3.model.RefundParams;
 import cn.felord.payment.wechat.v3.model.TransactionQueryParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.RequestEntity;
@@ -263,6 +264,49 @@ public class WechatDirectPayApi extends AbstractApi {
                 .expand(outTradeNo)
                 .toUri();
         return Post(uri, queryParams);
+    }
+
+    /**
+     * 申请退款API
+     *
+     * @param refundParams the refund params
+     * @return the wechat response entity
+     * @since 1.0.6.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> refund(RefundParams refundParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.REFUND, refundParams)
+                .function(((type, params) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .toUri();
+                    return Post(uri, params);
+                }))
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 查询单笔退款API
+     *
+     * @param outRefundNo the out refund no
+     * @return the wechat response entity
+     * @since 1.0.6.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> queryRefundInfo(String outRefundNo) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.QUERY_REFUND, outRefundNo)
+                .function(((type, param) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(param)
+                            .toUri();
+                    return Get(uri);
+                }))
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
     }
 
 }

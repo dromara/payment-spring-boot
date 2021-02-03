@@ -93,17 +93,29 @@ public enum WechatPayV3Type {
      */
     CLOSE(HttpMethod.POST, "%s/v3/pay/transactions/out-trade-no/{out_trade_no}/close"),
     /**
-     * 微信支付订单号查询.
+     * 微信支付订单号查询API.
      *
      * @since 1.0.0.RELEASE
      */
     TRANSACTION_TRANSACTION_ID(HttpMethod.GET, "%s/v3/pay/transactions/id/{transaction_id}"),
     /**
-     * 商户订单号查询.
+     * 商户订单号查询API.
      *
      * @since 1.0.0.RELEASE
      */
     TRANSACTION_OUT_TRADE_NO(HttpMethod.GET, "%s/v3/pay/transactions/out-trade-no/{out_trade_no}"),
+    /**
+     * 申请退款API.
+     *
+     * @since 1.0.6.RELEASE
+     */
+    REFUND(HttpMethod.POST, "%s/v3/refund/domestic/refunds"),
+    /**
+     * 查询退款API.
+     *
+     * @since 1.0.6.RELEASE
+     */
+    QUERY_REFUND(HttpMethod.GET, "%s/v3/refund/domestic/refunds/{out_refund_no}"),
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
