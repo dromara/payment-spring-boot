@@ -67,4 +67,10 @@ public enum TradeState {
      * @since 1.0.0.RELEASE
      */
     PAYERROR,
+    /**
+     * 已接收，等待扣款
+     *
+     * @since 1.0.6.RELEASE
+     */
+    ACCEPT,
 }

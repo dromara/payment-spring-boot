@@ -1,10 +1,10 @@
 ## 1.0.5.RELEASE
 - 微信支付
-  - feat:增加V2 退款接口
-  - feat:增加V2 企业付款到零钱接口
-  - feat:增加V2 红包接口
+  - feat:增加V2退款接口
+  - feat:增加V2企业付款到零钱接口
+  - feat:增加V2红包接口
   - refactor:优化了一些底层功能
-  - refactor:整了支付配置Spring注入的顺序
+  - refactor:调整了支付配置Spring注入的顺序
   - refactor:JCE由SPI提供，不再使用JDK内置
   - fix: 关单接口调用异常
 
