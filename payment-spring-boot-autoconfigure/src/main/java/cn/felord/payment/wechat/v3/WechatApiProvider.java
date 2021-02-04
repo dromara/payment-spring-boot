@@ -31,7 +31,7 @@ import cn.felord.payment.wechat.v2.WechatV2Client;
  */
 public class WechatApiProvider {
     /**
-     * The Wechat pay client.
+     * 微信支付客户端.
      */
     private final WechatPayClient wechatPayClient;
 
