@@ -269,15 +269,12 @@ public class WechatMarketingBusiFavorApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.MARKETING_BUSI_FAVOR_GET_CALLBACKS, mchId)
                 .function((type, id) -> {
-
                     UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA));
-
                     if (StringUtils.hasText(id)) {
                         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
                         queryParams.add("mchid", id);
                         uriComponentsBuilder.queryParams(queryParams);
                     }
-
                     URI uri = uriComponentsBuilder
                             .build()
                             .toUri();
