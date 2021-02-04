@@ -18,8 +18,46 @@
 package cn.felord.payment.wechat.enumeration;
 
 /**
+ *  退款成功事件.
+ *
  * @author felord.cn
  * @since 1.0.6.RELEASE
  */
 public enum RefundStatus {
+    /**
+     * 退款异常事件.
+     *
+     * @since 1.0.6.RELEASE
+     */
+    ABNORMAL("REFUND.ABNORMAL"),
+
+    /**
+     * 退款关闭事件.
+     *
+     * @since 1.0.6.RELEASE
+     */
+    CLOSED("REFUND.CLOSED"),
+    /**
+     * 支付成功事件.
+     *
+     * @since 1.0.0.RELEASE
+     */
+    TRANSACTION("TRANSACTION.SUCCESS");
+    /**
+     * The Event.
+     */
+    private final String refundStatus;
+
+    /**
+     * Instantiates a new Event type.
+     *
+     * @param refundStatus the event
+     */
+    RefundStatus(String refundStatus) {
+        this.refundStatus = refundStatus;
+    }
+
+    public String getRefundStatus() {
+        return refundStatus;
+    }
 }

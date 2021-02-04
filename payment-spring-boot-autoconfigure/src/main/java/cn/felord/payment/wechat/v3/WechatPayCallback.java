@@ -283,9 +283,9 @@ public class WechatPayCallback {
         CallbackParams callbackParams = resolve(params);
         String eventType = callbackParams.getEventType();
 
-        if (!Objects.equals(eventType, EventType.REFUND_CLOSED.event)||
-                !Objects.equals(eventType,EventType.REFUND_ABNORMAL.event)||
-                !Objects.equals(eventType,EventType.REFUND_SUCCESS.event)) {
+        if (!(Objects.equals(eventType, EventType.REFUND_CLOSED.event) ||
+                Objects.equals(eventType, EventType.REFUND_ABNORMAL.event) ||
+                Objects.equals(eventType, EventType.REFUND_SUCCESS.event))) {
             log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
             throw new PayException(" wechat pay event type is not matched");
         }

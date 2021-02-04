@@ -280,6 +280,8 @@ public class WechatDirectPayApi extends AbstractApi {
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()
                             .toUri();
+                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                    params.setNotifyUrl(v3.getDomain().concat(params.getNotifyUrl()));
                     return Post(uri, params);
                 }))
                 .consumer(wechatResponseEntity::convert)
