@@ -28,9 +28,7 @@ import org.springframework.http.HttpMethod;
  * @since 1.0.0.RELEASE
  */
 public enum WechatPayV3Type {
-
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     /**
      * 获取证书.
      *
@@ -445,8 +443,50 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.4.RELEASES
      */
-    MARKETING_BUSI_FAVOR_DEACTIVATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/deactivate");
-
+    MARKETING_BUSI_FAVOR_DEACTIVATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/deactivate"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 发起批量转账API.
+     *
+     * @since 1.0.6.RELEASES
+     */
+    BATCH_TRANSFER_REQ(HttpMethod.POST, "%s/v3/transfer/batches"),
+    /**
+     * 微信批次单号查询批次单API.
+     *
+     * @since 1.0.6.RELEASES
+     */
+    BATCH_TRANSFER_BATCH_ID(HttpMethod.GET, "%s/v3/transfer/batches/batch-id/{batch_id}"),
+    /**
+     * 微信明细单号查询明细单API.
+     *
+     * @since 1.0.6.RELEASES
+     */
+    BATCH_TRANSFER_DETAIL_WECHAT(HttpMethod.GET, "%s/v3/transfer/batches/batch-id/{batch_id}/details/detail-id/{detail_id}"),
+    /**
+     * 商家批次单号查询批次单API.
+     *
+     * @since 1.0.6.RELEASES
+     */
+    BATCH_TRANSFER_OUT_BATCH_NO(HttpMethod.GET, "%s/v3/transfer/batches/out-batch-no/{out_batch_no}"),
+    /**
+     * 商家明细单号查询明细单API.
+     *
+     * @since 1.0.6.RELEASES
+     */
+    BATCH_TRANSFER_DETAIL_MCH(HttpMethod.GET, "%s/v3/transfer/batches/out-batch-no/{out_batch_no}/details/out-detail-no/{out_detail_no}"),
+    /**
+     * 转账电子回单申请受理API.
+     *
+     * @since 1.0.6.RELEASES
+     */
+    BATCH_TRANSFER_BILL_RECEIPT(HttpMethod.POST, "%s/v3/transfer/bill-receipt"),
+    /**
+     * 查询转账电子回单并下载.
+     *
+     * @since 1.0.6.RELEASES
+     */
+    BATCH_TRANSFER_DOWNLOAD_BILL(HttpMethod.GET, "%s/v3/transfer/bill-receipt/{out_batch_no}");
     /**
      * The Pattern.
      *
@@ -492,7 +532,6 @@ public enum WechatPayV3Type {
         return this.pattern;
     }
 
-
     /**
      * 默认支付URI.
      *
@@ -503,5 +542,4 @@ public enum WechatPayV3Type {
     public String uri(WeChatServer weChatServer) {
         return String.format(this.pattern, weChatServer.domain());
     }
-
 }

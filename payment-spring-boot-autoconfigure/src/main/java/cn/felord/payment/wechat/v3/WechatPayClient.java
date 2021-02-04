@@ -24,6 +24,7 @@ import cn.felord.payment.wechat.WechatPayResponseErrorHandler;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
@@ -176,6 +177,17 @@ public class WechatPayClient {
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
             return this.doDownload(this.header(wechatRequestEntity));
         }
+        /**
+         * Download string.
+         *
+         * @return the string
+         * @since 1.0.6.RELEASE
+         */
+        public  ResponseEntity<Resource> resource() {
+            RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
+            WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
+            return this.doResource(this.header(wechatRequestEntity));
+        }
 
 
         /**
@@ -267,7 +279,7 @@ public class WechatPayClient {
         }
 
         /**
-         * Do download string.
+         * 下载文件返回的是字符串类型的.
          *
          * @param <T>           the type parameter
          * @param requestEntity the request entity
@@ -284,6 +296,28 @@ public class WechatPayClient {
                 throw new PayException("wechat pay server error, Request-ID  " + requestId + " , statusCode " + statusCode + ",result : " + responseEntity);
             }
             return Optional.ofNullable(responseEntity.getBody()).orElse("");
+        }
+
+
+        /**
+         * 下载文件返回的是流类型的.
+         *
+         * @param <T>           the type parameter
+         * @param requestEntity the request entity
+         * @return the resource
+         * @since 1.0.6.RELEASE
+         */
+        private <T>  ResponseEntity<Resource> doResource(WechatRequestEntity<T> requestEntity) {
+
+            ResponseEntity<Resource> responseEntity = restOperations.exchange(requestEntity, Resource.class);
+
+            HttpStatus statusCode = responseEntity.getStatusCode();
+            // 微信请求id
+            String requestId = requestEntity.getHeaders().getFirst("Request-ID");
+            if (!statusCode.is2xxSuccessful()) {
+                throw new PayException("wechat pay server error, Request-ID  " + requestId + " , statusCode " + statusCode + ",result : " + responseEntity);
+            }
+            return responseEntity;
         }
 
     }
