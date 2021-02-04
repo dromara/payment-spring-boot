@@ -1,3 +1,9 @@
+## 1.0.6.RELEASE
+- 微信支付
+  - feat:实现微信支付V3批量转账到零钱所有API（WechatBatchTransferApi），助力抗击新冠疫情。
+  - feat:实现微信支付V3退款以及退款通知等所有退款相关的API，推荐使用新的V3退款。
+  - refactor: V2退款进入过期模式，由于V3已经推出了退款功能，所以V2退款 WechatPayRefundApi 被标记为 Deprecated 未来会被移除。
+  - refactor: 交易状态增加等待扣款状态，根据微信最新的业务变动增加 “ACCEPT” 字段用来标记“已接收，等待扣款”状态。
 ## 1.0.5.RELEASE
 - 微信支付
   - feat:增加V2退款接口
