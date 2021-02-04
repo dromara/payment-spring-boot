@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.http.*;
 import org.springframework.util.AlternativeJdkIdGenerator;
@@ -36,6 +37,7 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import sun.security.x509.X509CertImpl;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -44,15 +46,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.cert.*;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -68,6 +66,7 @@ import java.util.stream.Collectors;
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
+@Slf4j
 public class SignatureProvider {
 
     /**
@@ -153,7 +152,7 @@ public class SignatureProvider {
      */
     @SneakyThrows
     public String doRequestSign(PrivateKey privateKey, String... orderedComponents) {
-        Signature signer = Signature.getInstance("SHA256withRSA",BC_PROVIDER);
+        Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initSign(privateKey);
         final String signatureStr = createSign(orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
@@ -271,6 +270,43 @@ public class SignatureProvider {
             throw new PayException(e);
         }
     }
+
+    /**
+     * 对请求敏感字段进行加密
+     *
+     * @param message the message
+     * @return encrypt message
+     * @since 1.0.6.RELEASE
+     */
+    public String encryptRequestMessage(String message,Certificate certificate) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BC_PROVIDER);
+            cipher.init(Cipher.ENCRYPT_MODE, certificate.getPublicKey());
+
+            byte[] data = message.getBytes(StandardCharsets.UTF_8);
+            byte[] cipherdata = cipher.doFinal(data);
+          return Base64Utils.encodeToString(cipherdata);
+
+        } catch (Exception e) {
+            throw new PayException(e);
+        }
+    }
+
+    public X509CertImpl  getCertificate(){
+        for (String serial : CERTIFICATE_MAP.keySet()) {
+            X509CertImpl x509Cert = (X509CertImpl) CERTIFICATE_MAP.get(serial);
+            try {
+                x509Cert.checkValidity();
+              return x509Cert;
+            } catch (Exception e) {
+                log.warn("the wechat certificate is invalid , {}", e.getMessage());
+                // Async?
+                wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
+            }
+        }
+        throw new PayException("failed to obtain wechat pay x509Certificate ");
+    }
+
 
     /**
      * Wechat meta container.
