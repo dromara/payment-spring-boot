@@ -28,7 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.core.io.Resource;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -166,10 +168,10 @@ public abstract class AbstractApi {
 
 
     /**
-     * 对账单下载。
+     * 对账单内容下载，非流文件。
      *
      * @param link the link
-     * @return 对账单内容，有可能为空字符 “”
+     * @return 对账单内容 ，有可能为空字符 “”
      */
     protected String billDownload(String link) {
         return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
@@ -182,6 +184,22 @@ public abstract class AbstractApi {
                 .download();
     }
 
+    /**
+     * 对账单下载，流文件。
+     *
+     * @param link the link
+     * @return response entity
+     */
+    protected ResponseEntity<Resource> billResource(String link) {
+        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
+                .function((type, downloadUrl) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(downloadUrl)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })
+                .resource();
+    }
 
     /**
      * 申请交易账单API
