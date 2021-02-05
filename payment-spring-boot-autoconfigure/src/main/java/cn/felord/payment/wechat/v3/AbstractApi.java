@@ -189,6 +189,7 @@ public abstract class AbstractApi {
      * 构建Get请求对象.
      *
      * @param uri the uri
+     * @param httpHeaders the http headers
      * @return the request entity
      */
     protected RequestEntity<?> Get(URI uri, HttpHeaders httpHeaders) {
