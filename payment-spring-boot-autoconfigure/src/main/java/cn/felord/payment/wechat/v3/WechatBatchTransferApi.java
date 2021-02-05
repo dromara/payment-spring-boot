@@ -24,6 +24,7 @@ import cn.felord.payment.wechat.v3.model.batchtransfer.QueryBatchTransferDetailP
 import cn.felord.payment.wechat.v3.model.batchtransfer.QueryBatchTransferParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -31,9 +32,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
-import sun.security.x509.X509CertImpl;
 
 import java.net.URI;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,15 +77,16 @@ public class WechatBatchTransferApi extends AbstractApi {
         List<CreateBatchTransferParams.TransferDetailListItem> transferDetailList = createBatchTransferParams.getTransferDetailList();
 
         SignatureProvider signatureProvider = this.client().signatureProvider();
-        final X509CertImpl certificate = signatureProvider.getCertificate();
+        final X509WechatCertificateInfo certificate = signatureProvider.getCertificate();
         List<CreateBatchTransferParams.TransferDetailListItem> encrypted = transferDetailList.stream()
                 .peek(transferDetailListItem -> {
                     String userName = transferDetailListItem.getUserName();
-                    String encryptedUserName = signatureProvider.encryptRequestMessage(userName, certificate);
+                    X509Certificate x509Certificate = certificate.getX509Certificate();
+                    String encryptedUserName = signatureProvider.encryptRequestMessage(userName, x509Certificate);
                     transferDetailListItem.setUserName(encryptedUserName);
                     String userIdCard = transferDetailListItem.getUserIdCard();
                     if (StringUtils.hasText(userIdCard)) {
-                        String encryptedUserIdCard = signatureProvider.encryptRequestMessage(userIdCard, certificate);
+                        String encryptedUserIdCard = signatureProvider.encryptRequestMessage(userIdCard, x509Certificate);
                         transferDetailListItem.setUserIdCard(encryptedUserIdCard);
                     }
                 }).collect(Collectors.toList());
@@ -93,7 +95,9 @@ public class WechatBatchTransferApi extends AbstractApi {
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
                 .toUri();
-        return Post(uri, createBatchTransferParams);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+        return Post(uri, createBatchTransferParams, httpHeaders);
     }
 
     /**
@@ -249,7 +253,7 @@ public class WechatBatchTransferApi extends AbstractApi {
                 .consumer(wechatResponseEntity::convert)
                 .request();
         String downloadUrl = wechatResponseEntity.getBody().get("download_url").asText();
-        Assert.hasText(downloadUrl,"download url has no text");
+        Assert.hasText(downloadUrl, "download url has no text");
         return this.billResource(downloadUrl);
     }
 }

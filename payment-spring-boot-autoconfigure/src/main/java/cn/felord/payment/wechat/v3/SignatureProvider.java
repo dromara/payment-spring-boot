@@ -37,7 +37,6 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import sun.security.x509.X509CertImpl;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -46,11 +45,16 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.cert.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -219,7 +223,7 @@ public class SignatureProvider {
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
             CERTIFICATE_MAP.clear();
-            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
+            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509",BC_PROVIDER);
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
                 String associatedData = encryptCertificate.get("associated_data").asText();
@@ -275,6 +279,7 @@ public class SignatureProvider {
      * 对请求敏感字段进行加密
      *
      * @param message the message
+     * @param certificate the certificate
      * @return encrypt message
      * @since 1.0.6.RELEASE
      */
@@ -292,12 +297,15 @@ public class SignatureProvider {
         }
     }
 
-    public X509CertImpl  getCertificate(){
+    public X509WechatCertificateInfo  getCertificate(){
         for (String serial : CERTIFICATE_MAP.keySet()) {
-            X509CertImpl x509Cert = (X509CertImpl) CERTIFICATE_MAP.get(serial);
+            X509Certificate x509Cert = (X509Certificate) CERTIFICATE_MAP.get(serial);
             try {
                 x509Cert.checkValidity();
-              return x509Cert;
+                X509WechatCertificateInfo x509WechatCertificateInfo = new X509WechatCertificateInfo();
+                 x509WechatCertificateInfo.setWechatPaySerial(serial);
+                 x509WechatCertificateInfo.setX509Certificate(x509Cert);
+                return x509WechatCertificateInfo;
             } catch (Exception e) {
                 log.warn("the wechat certificate is invalid , {}", e.getMessage());
                 // Async?

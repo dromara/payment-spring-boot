@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -156,6 +157,25 @@ public abstract class AbstractApi {
     }
 
     /**
+     * 构建Post请求对象.
+     *
+     * @param uri         the uri
+     * @param params      the params
+     * @param httpHeaders the http headers
+     * @return request entity
+     */
+    protected RequestEntity<?> Post(URI uri, Object params, HttpHeaders httpHeaders) {
+        try {
+            return RequestEntity.post(uri)
+                    .header("Pay-TenantId", tenantId)
+                    .headers(httpHeaders)
+                    .body(mapper.writeValueAsString(params));
+        } catch (JsonProcessingException e) {
+            throw new PayException("wechat app pay json failed");
+        }
+    }
+
+    /**
      * 构建Get请求对象.
      *
      * @param uri the uri
@@ -165,7 +185,18 @@ public abstract class AbstractApi {
         return RequestEntity.get(uri).header("Pay-TenantId", tenantId)
                 .build();
     }
-
+    /**
+     * 构建Get请求对象.
+     *
+     * @param uri the uri
+     * @return the request entity
+     */
+    protected RequestEntity<?> Get(URI uri, HttpHeaders httpHeaders) {
+        return RequestEntity.get(uri)
+                .header("Pay-TenantId", tenantId)
+                .headers(httpHeaders)
+                .build();
+    }
 
     /**
      * 对账单内容下载，非流文件。
