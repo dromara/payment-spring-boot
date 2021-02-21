@@ -19,7 +19,6 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.v2.WechatPayRedpackApi;
-import cn.felord.payment.wechat.v2.WechatPayRefundApi;
 import cn.felord.payment.wechat.v2.WechatPayTransfersApi;
 import cn.felord.payment.wechat.v2.WechatV2Client;
 
@@ -134,22 +133,6 @@ public class WechatApiProvider {
      */
     public WechatPayCallback callback(String tenantId) {
         return new WechatPayCallback(wechatPayClient.signatureProvider(), tenantId);
-    }
-
-    /**
-     * 退款，基于V2
-     *
-     * @param tenantId the tenant id
-     * @return the wechat pay refund api
-     * @since 1.0.6.RELEASE
-     */
-    @Deprecated
-    public WechatPayRefundApi refund(String tenantId) {
-        WechatMetaBean wechatMeta = wechatPayClient.signatureProvider()
-                .wechatMetaContainer()
-                .getWechatMeta(tenantId);
-        WechatV2Client wechatV2Client = new WechatV2Client(wechatMeta);
-        return new WechatPayRefundApi(wechatV2Client);
     }
 
     /**
