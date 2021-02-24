@@ -289,8 +289,8 @@ public class SignatureProvider {
             cipher.init(Cipher.ENCRYPT_MODE, certificate.getPublicKey());
 
             byte[] data = message.getBytes(StandardCharsets.UTF_8);
-            byte[] cipherdata = cipher.doFinal(data);
-          return Base64Utils.encodeToString(cipherdata);
+            byte[] cipherData = cipher.doFinal(data);
+          return Base64Utils.encodeToString(cipherData);
 
         } catch (Exception e) {
             throw new PayException(e);
