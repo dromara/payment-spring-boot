@@ -48,4 +48,9 @@ public class WechatV2Client {
     public WechatMetaBean getWechatMetaBean() {
         return wechatMetaBean;
     }
+
+
+    public static void main(String[] args) {
+        System.out.println("hello 2021");
+    }
 }
