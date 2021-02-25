@@ -226,7 +226,8 @@ public class WechatPayClient {
             httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             // for upload
             if (Objects.isNull(httpHeaders.getContentType())) {
-                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                // 避免出现因为中文导致的 HttpRetryException
+                httpHeaders.setContentType(MediaType.parseMediaType("application/json;charset=UTF-8"));
             }
             httpHeaders.add("Authorization", authorization);
             httpHeaders.add("User-Agent", "X-Pay-Service");
