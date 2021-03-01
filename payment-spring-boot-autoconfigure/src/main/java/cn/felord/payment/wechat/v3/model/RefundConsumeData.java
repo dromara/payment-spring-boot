@@ -59,7 +59,7 @@ public class RefundConsumeData {
     /**
      * 退款成功时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
     private OffsetDateTime successTime;
     /**
      * 退款入账账户
