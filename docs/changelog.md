@@ -1,4 +1,4 @@
-##
+## 1.0.7.RELEASE
 - 微信支付
   - refactor: X509证书加载优化。
   - refactor: 移除过期的`WechatPayRefundApi`。
