@@ -1,3 +1,11 @@
+##
+- 微信支付
+  - refactor: X509证书加载优化。
+  - refactor: 移除过期的`WechatPayRefundApi`。
+  - refactor: 优化RestTemplate在低版本引起的一个I/O异常,详见 [spring-framework#21321](https://github.com/spring-projects/spring-framework/issues/21321)。
+  - refactor: 在请求头Content-Type中声明字符集UTF-8,避免中文乱码。
+  - fix: 修复退款回调中退款状态枚举无法正确被解析的异常([#11](https://github.com/NotFound403/payment-spring-boot/issues/11))。
+
 ## 1.0.6.RELEASE
 - 微信支付
   - feat:实现微信支付V3批量转账到零钱所有API（WechatBatchTransferApi），助力抗击新冠疫情。
