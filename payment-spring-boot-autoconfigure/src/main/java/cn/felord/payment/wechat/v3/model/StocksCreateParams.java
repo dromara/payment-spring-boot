@@ -44,12 +44,12 @@ public class StocksCreateParams {
      */
     private String belongMerchant;
     /**
-     * 批次开始时间 rfc 3339   yyyy-MM-ddTHH:mm:ss+TIMEZONE
+     * 批次开始时间 rfc 3339   yyyy-MM-ddTHH:mm:ss.sss+TIMEZONE
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
     private OffsetDateTime availableBeginTime;
     /**
-     * 批次结束时间 rfc 3339   yyyy-MM-ddTHH:mm:ss+TIMEZONE
+     * 批次结束时间 rfc 3339   yyyy-MM-ddTHH:mm:ss.sss+TIMEZONE
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
     private OffsetDateTime availableEndTime;
