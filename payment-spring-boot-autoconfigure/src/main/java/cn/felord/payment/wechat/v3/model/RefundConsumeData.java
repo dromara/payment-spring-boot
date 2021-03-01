@@ -65,6 +65,11 @@ public class RefundConsumeData {
      * 退款入账账户
      */
     private String userReceivedAccount;
+    /**
+     * 金额信息
+     */
+    private Amount amount;
+
 
     /**
      * 微信支付退款金额信息
@@ -85,7 +90,6 @@ public class RefundConsumeData {
         /**
          * 用户实际支付金额，单位为分
          */
-
         private Integer payerTotal;
         /**
          * 退款给用户的金额，单位为分，不包含所有优惠券金额
