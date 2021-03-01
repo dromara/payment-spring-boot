@@ -33,6 +33,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -71,6 +73,8 @@ public class WechatPayCallback {
     static {
         MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        SimpleModule module = new JavaTimeModule();
+        MAPPER.registerModule(module);
     }
 
     /**
