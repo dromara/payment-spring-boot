@@ -33,7 +33,7 @@ public class Detail {
     /**
      * 订单原价
      */
-    private int costPrice;
+    private Integer costPrice;
     /**
      * 商品小票ID
      */
