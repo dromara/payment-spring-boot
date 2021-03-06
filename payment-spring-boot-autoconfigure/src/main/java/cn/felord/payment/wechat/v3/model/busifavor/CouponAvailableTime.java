@@ -40,7 +40,7 @@ public class CouponAvailableTime {
      * <p>
      * 需配合{@link #availableDayAfterReceive} 一同填写，不可单独填写。
      */
-    private int waitDaysAfterReceive;
+    private Integer waitDaysAfterReceive;
     /**
      * 生效后N天内有效
      * <p>
@@ -50,7 +50,7 @@ public class CouponAvailableTime {
      * <p>
      * 可配合{@link  #waitDaysAfterReceive}一同填写，也可单独填写。单独填写时，有效期内领券后立即生效，生效后x天内有效。
      */
-    private int availableDayAfterReceive;
+    private Integer availableDayAfterReceive;
     /**
      * 批次开始时间 rfc 3339   yyyy-MM-ddTHH:mm:ss+TIMEZONE
      */
