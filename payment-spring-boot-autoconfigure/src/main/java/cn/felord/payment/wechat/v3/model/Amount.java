@@ -31,7 +31,7 @@ public class Amount {
     /**
      * 金额，单位【分】。
      */
-    private int total;
+    private Integer total;
     /**
      * 货币单位，固定为 CNY 。
      */
