@@ -178,13 +178,14 @@ public class WechatPayClient {
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
             return this.doDownload(this.header(wechatRequestEntity));
         }
+
         /**
          * Download string.
          *
          * @return the string
          * @since 1.0.6.RELEASE
          */
-        public  ResponseEntity<Resource> resource() {
+        public ResponseEntity<Resource> resource() {
             RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
             return this.doResource(this.header(wechatRequestEntity));
@@ -253,7 +254,9 @@ public class WechatPayClient {
             // 微信请求id
             String requestId = headers.getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error, Request-ID " + requestId + " , statusCode " + statusCode + ",result : " + body);
+                PayException payException = new PayException("wechat pay server error, Request-ID " + requestId + " , statusCode " + statusCode + ",result : " + body);
+                payException.setResponse(responseEntity);
+                throw payException;
             }
 
             ResponseSignVerifyParams params = new ResponseSignVerifyParams();
@@ -276,7 +279,9 @@ public class WechatPayClient {
                     responseConsumer.accept(responseEntity);
                 }
             } else {
-                throw new PayException("wechat pay signature verify failed, Request-ID " + requestId);
+                PayException payException = new PayException("wechat pay signature verify failed, Request-ID " + requestId);
+                payException.setResponse(responseEntity);
+                throw payException;
             }
         }
 
@@ -295,7 +300,9 @@ public class WechatPayClient {
             // 微信请求id
             String requestId = requestEntity.getHeaders().getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error, Request-ID  " + requestId + " , statusCode " + statusCode + ",result : " + responseEntity);
+                PayException payException = new PayException("wechat pay server error, Request-ID  " + requestId + " , statusCode " + statusCode + ",result : " + responseEntity);
+                payException.setResponse(responseEntity);
+                throw payException;
             }
             return Optional.ofNullable(responseEntity.getBody()).orElse("");
         }
@@ -309,7 +316,7 @@ public class WechatPayClient {
          * @return the resource
          * @since 1.0.6.RELEASE
          */
-        private <T>  ResponseEntity<Resource> doResource(WechatRequestEntity<T> requestEntity) {
+        private <T> ResponseEntity<Resource> doResource(WechatRequestEntity<T> requestEntity) {
 
             ResponseEntity<Resource> responseEntity = restOperations.exchange(requestEntity, Resource.class);
 
@@ -317,7 +324,9 @@ public class WechatPayClient {
             // 微信请求id
             String requestId = requestEntity.getHeaders().getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
-                throw new PayException("wechat pay server error, Request-ID  " + requestId + " , statusCode " + statusCode + ",result : " + responseEntity);
+                PayException payException = new PayException("wechat pay server error, Request-ID  " + requestId + " , statusCode " + statusCode + ",result : " + responseEntity);
+                payException.setResponse(responseEntity);
+                throw payException;
             }
             return responseEntity;
         }

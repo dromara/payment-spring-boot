@@ -18,11 +18,17 @@
  */
 package cn.felord.payment;
 
+import org.springframework.http.ResponseEntity;
+
 /**
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
 public class PayException extends RuntimeException {
+    /**
+     * response maybe null
+     */
+    private ResponseEntity<?> response;
 
     public PayException() {
     }
@@ -41,5 +47,13 @@ public class PayException extends RuntimeException {
 
     public PayException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public ResponseEntity<?> getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseEntity<?> response) {
+        this.response = response;
     }
 }
