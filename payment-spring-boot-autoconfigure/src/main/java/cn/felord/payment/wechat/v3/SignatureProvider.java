@@ -120,6 +120,7 @@ public class SignatureProvider {
     /**
      * 我方请求前用 SHA256withRSA 加签，使用API证书.
      *
+     * @param newLine      the new line
      * @param tenantId     the properties key
      * @param method       the method
      * @param canonicalUrl the canonical url
@@ -127,7 +128,7 @@ public class SignatureProvider {
      * @return the string
      */
     @SneakyThrows
-    public String requestSign(String tenantId, String method, String canonicalUrl, String body) {
+    public String requestSign(boolean newLine,String tenantId, String method, String canonicalUrl, String body) {
 
         long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         String nonceStr = nonceStrGenerator.generateId()
@@ -135,7 +136,7 @@ public class SignatureProvider {
                 .replaceAll("-", "");
         WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
         PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
-        String encode = this.doRequestSign(privateKey, method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
+        String encode = this.doRequestSign(newLine,privateKey, method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
         // 序列号
         String serialNo = wechatMetaBean.getSerialNumber();
         // 生成token
@@ -149,16 +150,17 @@ public class SignatureProvider {
     /**
      * Do request sign.
      *
+     * @param newLine           the has suffix
      * @param privateKey        the private key
      * @param orderedComponents the orderedComponents
      * @return the string
      * @since 1.0.4.RELEASE
      */
     @SneakyThrows
-    public String doRequestSign(PrivateKey privateKey, String... orderedComponents) {
+    public String doRequestSign(boolean newLine,PrivateKey privateKey, String... orderedComponents) {
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initSign(privateKey);
-        final String signatureStr = createSign(orderedComponents);
+        final String signatureStr = createSign(newLine,orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
         return Base64Utils.encodeToString(signer.sign());
     }
@@ -178,7 +180,7 @@ public class SignatureProvider {
         }
         Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial);
 
-        final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
+        final String signatureStr = createSign(true,params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
         Signature signer = Signature.getInstance("SHA256withRSA");
         signer.initVerify(certificate);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
@@ -206,7 +208,7 @@ public class SignatureProvider {
         }
         // 签名
         HttpMethod httpMethod = WechatPayV3Type.CERT.method();
-        String authorization = requestSign(tenantId, httpMethod.name(), canonicalUrl, "");
+        String authorization = requestSign(true,tenantId, httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -278,7 +280,7 @@ public class SignatureProvider {
     /**
      * 对请求敏感字段进行加密
      *
-     * @param message the message
+     * @param message     the message
      * @param certificate the certificate
      * @return encrypt message
      * @since 1.0.6.RELEASE
@@ -297,6 +299,11 @@ public class SignatureProvider {
         }
     }
 
+    /**
+     * Get certificate x 509 wechat certificate info.
+     *
+     * @return the x 509 wechat certificate info
+     */
     public X509WechatCertificateInfo  getCertificate(){
         for (String serial : CERTIFICATE_MAP.keySet()) {
             X509Certificate x509Cert = (X509Certificate) CERTIFICATE_MAP.get(serial);
@@ -341,9 +348,11 @@ public class SignatureProvider {
      * @param components the components
      * @return string string
      */
-    private static String createSign(String... components) {
+    private static String createSign(boolean newLine,String... components) {
+
+        String suffix = newLine? "\n":"";
         return Arrays.stream(components)
-                .collect(Collectors.joining("\n", "", "\n"));
+                .collect(Collectors.joining("\n", "", suffix));
     }
 
 }
