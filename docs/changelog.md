@@ -1,3 +1,12 @@
+## 1.0.8.RELEASE
+
+- 微信支付
+  - feat: 对基础支付-服务商支付进行支持
+  - refactor: 在异常返回时对非2xx状态返回的元信息进行包装方便序列化([#16](https://github.com/NotFound403/payment-spring-boot/issues/16))
+  - fix: 修复退款数据中时间无法解析的异常([#13](https://github.com/NotFound403/payment-spring-boot/issues/13))
+  - fix: 修复类成员的属性([#14](https://github.com/NotFound403/payment-spring-boot/issues/14))
+  - fix: 查询并下载转账电子回单API接口，下载文件接口签名失败([#18](https://github.com/NotFound403/payment-spring-boot/issues/18))
+
 ## 1.0.7.RELEASE
 
 - 微信支付

@@ -48,13 +48,13 @@ wechat:
     v3:
 #    租户id  
      <tentantID>: 
-#  应用appId 必填
+#  应用appId  服务商模式下为服务商的appid 必填  
       app-id: xxxxxxxx
 #  v2 api 密钥  1.0.5版本以后如果用到V2的接口时必填
       app-secret: xxxxxxxxxxx
 #  api v3 密钥 必填
       app-v3-secret: xxxxxxxx
-#  微信支付商户号 必填
+#  微信支付商户号 服务商模式下为服务商的mchid 必填
       mch-id: xxxxxxx
 #  商户服务器域名 用于回调  需要放开回调接口的安全策略 必填
       domain: https://felord.cn
