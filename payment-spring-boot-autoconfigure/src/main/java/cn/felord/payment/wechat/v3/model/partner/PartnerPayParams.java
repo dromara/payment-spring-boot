@@ -1,6 +1,5 @@
 /*
- *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,30 +13,36 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
-package cn.felord.payment.wechat.v3.model;
 
+package cn.felord.payment.wechat.v3.model.partner;
 
+import cn.felord.payment.wechat.v3.model.AbstractPayParams;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 支付请求参数.
- *
  * @author felord.cn
- * @since 1.0.0.RELEASE
+ * @since 1.0.8.RELEASE
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PayParams extends AbstractPayParams {
+public class PartnerPayParams extends AbstractPayParams {
     /**
-     * The Appid.
+     * 服务商公众号ID
      */
-    private String appid;
+    private String spAppid;
     /**
-     * The Mchid.
+     * 服务商户号
      */
-    private String mchid;
+    private String spMchid;
+    /**
+     * 子商户appid.
+     */
+    private String subAppid;
+    /**
+     * 子商户号
+     */
+    private String subMchid;
 
 }

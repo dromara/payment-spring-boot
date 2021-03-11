@@ -40,9 +40,29 @@ public class TransactionConsumeData {
      */
     private Amount amount;
     /**
-     * 应用ID
+     * 直连模式应用ID，服务商模式请解析spAppid
      */
     private String appid;
+    /**
+     * 直连模式商户号，服务商模式请解析spMchid
+     */
+    private String mchid;
+    /**
+     * 服务商模式-服务商APPID
+     */
+    private String spAppid;
+    /**
+     * 服务商模式-服务商户号
+     */
+    private String spMchid;
+    /**
+     * 服务商模式-子商户appid
+     */
+    private String subAppid;
+    /**
+     * 服务商模式-子商户商户id
+     */
+    private String subMchid;
     /**
      * 附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用
      */
@@ -51,10 +71,6 @@ public class TransactionConsumeData {
      * 银行类型，采用字符串类型的银行标识。银行标识请参考 <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/terms_definition/chapter1_1_3.shtml#part-6">《银行类型对照表》</a>
      */
     private String bankType;
-    /**
-     * 商户号
-     */
-    private String mchid;
     /**
      * 商户订单号
      */

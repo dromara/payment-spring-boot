@@ -486,7 +486,57 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.6.RELEASES
      */
-    BATCH_TRANSFER_DOWNLOAD_BILL(HttpMethod.GET, "%s/v3/transfer/bill-receipt/{out_batch_no}");
+    BATCH_TRANSFER_DOWNLOAD_BILL(HttpMethod.GET, "%s/v3/transfer/bill-receipt/{out_batch_no}"),
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    /**
+     * 服务商APP下单API.
+     *
+     * @since 1.0.8.RELEASES
+     */
+    APP_PARTNER(HttpMethod.POST, "%s/v3/pay/partner/transactions/app"),
+
+    /**
+     * 微信公众号支付或者小程序支付.
+     *
+     * @since 1.0.8.RELEASE
+     */
+    JSAPI_PARTNER(HttpMethod.POST, "%s/v3/pay/partner/transactions/jsapi"),
+
+    /**
+     * 微信扫码支付.
+     *
+     * @since 1.0.8.RELEASE
+     */
+    NATIVE_PARTNER(HttpMethod.POST, "%s/v3/pay/partner/transactions/native"),
+
+    /**
+     * H5支付.
+     *
+     * @since 1.0.8.RELEASE
+     */
+    MWEB_PARTNER(HttpMethod.POST, "%s/v3/pay/partner/transactions/h5"),
+
+    /**
+     * 关闭订单.
+     *
+     * @since 1.0.0.RELEASE
+     */
+    CLOSE_PARTNER(HttpMethod.POST, "%s/v3/pay/partner/transactions/out-trade-no/{out_trade_no}/close"),
+    /**
+     * 微信支付订单号查询API.
+     *
+     * @since 1.0.0.RELEASE
+     */
+    TRANSACTION_TRANSACTION_ID_PARTNER(HttpMethod.GET, "%s/v3/pay/partner/transactions/id/{transaction_id}"),
+    /**
+     * 商户订单号查询API.
+     *
+     * @since 1.0.0.RELEASE
+     */
+    TRANSACTION_OUT_TRADE_NO_PARTNER(HttpMethod.GET, "%s/v3/pay/partner/transactions/out-trade-no/{out_trade_no}"),
+    ;
     /**
      * The Pattern.
      *
