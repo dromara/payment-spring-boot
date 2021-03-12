@@ -65,6 +65,18 @@ public class WechatApiProvider {
         return new WechatDirectPayApi(wechatPayClient, tenantId);
     }
 
+
+    /**
+     * 普通支付-服务商模式.
+     *
+     * @param tenantId the tenant id
+     * @return the wechat pay api
+     * @since 1.0.9.RELEASE
+     */
+    public WechatPartnerPayApi partnerPayApi(String tenantId) {
+        return new WechatPartnerPayApi(wechatPayClient, tenantId);
+    }
+
     /**
      * 合单支付.
      *
