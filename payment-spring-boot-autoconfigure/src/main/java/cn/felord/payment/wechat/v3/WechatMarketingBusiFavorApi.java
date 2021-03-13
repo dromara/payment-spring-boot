@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * 微信支付商家券.
@@ -146,7 +147,10 @@ public class WechatMarketingBusiFavorApi extends AbstractApi {
                         queryParams.add("appid", appid);
                     }
                     queryParams.add("stock_id", userBusiFavorQueryParams.getStockId());
-                    queryParams.add("coupon_state", userBusiFavorQueryParams.getCouponState().name());
+
+                    Optional.ofNullable(userBusiFavorQueryParams.getCouponState())
+                            .ifPresent(state-> queryParams.add("coupon_state", state.name()));
+
                     queryParams.add("creator_merchant", userBusiFavorQueryParams.getCreatorMerchant());
                     queryParams.add("belong_merchant", userBusiFavorQueryParams.getBelongMerchant());
                     queryParams.add("sender_merchant", userBusiFavorQueryParams.getSenderMerchant());
