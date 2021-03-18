@@ -49,7 +49,7 @@ public class BusiFavorReceiveConsumeData {
     /**
      * 发放时间 rfc 3339  yyyy-MM-ddTHH:mm:ss+TIMEZONE
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
     private OffsetDateTime sendTime;
     /**
      * 微信用户在appid下的唯一标识。
