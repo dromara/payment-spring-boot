@@ -31,6 +31,7 @@ import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -73,6 +74,7 @@ public class WechatPayCallback {
     static {
         MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         SimpleModule module = new JavaTimeModule();
         MAPPER.registerModule(module);
     }
