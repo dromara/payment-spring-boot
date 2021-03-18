@@ -99,6 +99,10 @@ public class PayScoreUserPaidConsumeData {
      */
     private TimeRange timeRange;
     /**
+     * stateDescription
+     */
+    private String stateDescription;
+    /**
      * The Total amount.
      */
     private String totalAmount;
