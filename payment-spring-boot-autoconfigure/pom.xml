@@ -5,11 +5,11 @@
     <parent>
         <groupId>cn.felord</groupId>
         <artifactId>payment-spring-boot</artifactId>
-        <version>1.0.8.RELEASE</version>
+        <version>1.0.9.RELEASE</version>
     </parent>
 
     <artifactId>payment-spring-boot-autoconfigure</artifactId>
-    <version>1.0.8.RELEASE</version>
+    <version>1.0.9.RELEASE</version>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
