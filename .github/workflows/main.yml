@@ -1,9 +1,8 @@
 name: Maven Central Repo Deployment
-# 当合并到release 分支的
+# 当 release 的时候触发
 on:
-  create:
-    branches:
-      - release
+  release:
+    types: [released]
 jobs:
   publish:
     runs-on: ubuntu-latest
