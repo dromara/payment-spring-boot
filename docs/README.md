@@ -35,7 +35,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.8.RELEASE</version>
+    <version>1.0.9.RELEASE</version>
 </dependency>
 ```
 ## 采用技术
