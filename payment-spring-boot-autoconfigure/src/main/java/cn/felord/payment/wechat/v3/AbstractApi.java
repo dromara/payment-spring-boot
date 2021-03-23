@@ -24,9 +24,9 @@ import cn.felord.payment.wechat.v3.model.FundFlowBillParams;
 import cn.felord.payment.wechat.v3.model.TradeBillParams;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -88,10 +88,11 @@ public abstract class AbstractApi {
      * @param mapper the mapper
      */
     private void applyObjectMapper(ObjectMapper mapper) {
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        SimpleModule module = new JavaTimeModule();
-        mapper.registerModule(module);
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false)
+                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                .registerModule(new JavaTimeModule());
     }
 
 
@@ -185,10 +186,11 @@ public abstract class AbstractApi {
         return RequestEntity.get(uri).header("Pay-TenantId", tenantId)
                 .build();
     }
+
     /**
      * 构建Get请求对象.
      *
-     * @param uri the uri
+     * @param uri         the uri
      * @param httpHeaders the http headers
      * @return the request entity
      */
