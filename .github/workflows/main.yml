@@ -10,7 +10,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Git Repo
+        uses: actions/checkout@v2
       - name: Set up Maven Central Repo
         uses: actions/setup-java@v1
         with:
@@ -19,20 +20,16 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - id: install-secret-key
-        name: Install GPG Secret Key
-        run: |
-          cat <(echo -e "${{ secrets.GPG_PUB }}") | gpg --batch --import
-          gpg --list-secret-keys --keyid-format LONG
-      - id: publish-to-central
-        name: Publish to Maven Central Repo
+      - name: Publish to Maven Central Repo
+        uses: samuelmeuli/action-maven-publish@v1
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USER }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
-        run: |
-          mvn \
-            --no-transfer-progress \
-            --batch-mode \
-            -Dgpg.passphrase=${{ secrets.GPG_PASSWORD }} \
-            clean deploy
+          GPG_SECRET_KEY: ${{ secrets.GPG_PUB }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
+        with:
+          gpg_private_key: GPG_SECRET_KEY
+          gpg_passphrase: MAVEN_GPG_PASSPHRASE
+          nexus_username: MAVEN_USERNAME
+          nexus_password: MAVEN_PASSWORD
+
