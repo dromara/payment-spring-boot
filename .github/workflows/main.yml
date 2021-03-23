@@ -10,7 +10,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Git Repo
+      - name: Checkout
         uses: actions/checkout@v2
       - name: Set up Maven Central Repo
         uses: actions/setup-java@v1
@@ -22,14 +22,9 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Publish to Maven Central Repo
         uses: samuelmeuli/action-maven-publish@v1
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USER }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          GPG_SECRET_KEY: ${{ secrets.GPG_SECRET }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
         with:
-          gpg_private_key: GPG_SECRET_KEY
-          gpg_passphrase: GPG_PASSPHRASE
-          nexus_username: MAVEN_USERNAME
-          nexus_password: MAVEN_PASSWORD
+          gpg_private_key: ${{ secrets.GPG_SECRET }}
+          gpg_passphrase: ${{ secrets.GPG_PASSWORD }}
+          nexus_username: ${{ secrets.OSSRH_USER }}
+          nexus_password: ${{ secrets.OSSRH_PASSWORD }}
 
