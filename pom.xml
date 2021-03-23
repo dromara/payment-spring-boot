@@ -39,7 +39,7 @@
     <profiles>
         <!-- Deployment profile (required so these plugins are only used when deploying) -->
         <profile>
-            <id>ossrh</id>
+            <id>deploy</id>
             <build>
                 <plugins>
                     <plugin>
