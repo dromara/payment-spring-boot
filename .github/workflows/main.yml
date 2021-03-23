@@ -29,7 +29,7 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
         with:
           gpg_private_key: GPG_SECRET_KEY
-          gpg_passphrase: MAVEN_GPG_PASSPHRASE
+          gpg_passphrase: GPG_PASSPHRASE
           nexus_username: MAVEN_USERNAME
           nexus_password: MAVEN_PASSWORD
 
