@@ -77,8 +77,8 @@ public class AliPayConfiguration {
     private String appRSAPrivateKey(String classPath) {
         ClassPathResource resource = new ClassPathResource(classPath);
         try {
-            FileReader in = new FileReader(resource.getFile());
-            try(BufferedReader bufferedReader = new BufferedReader(in)){
+            InputStreamReader inputStreamReader = new InputStreamReader(resource.getInputStream());
+            try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)){
                 return bufferedReader.readLine();
             }
         } catch (IOException e) {
