@@ -10,7 +10,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up Maven Central Repo
@@ -28,4 +27,3 @@ jobs:
           gpg_passphrase: ${{ secrets.GPG_PASSWORD }}
           nexus_username: ${{ secrets.OSSRH_USER }}
           nexus_password: ${{ secrets.OSSRH_PASSWORD }}
-          server-id: sonatype-nexus-staging

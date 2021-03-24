@@ -83,7 +83,7 @@
 
     <distributionManagement>
         <repository>
-            <id>sonatype-nexus-staging</id>
+            <id>ossrh</id>
             <name>Nexus Release Repository</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
@@ -217,7 +217,7 @@
                     <version>1.6.8</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <serverId>sonatype-nexus-staging</serverId>
+                        <serverId>ossrh</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>false</autoReleaseAfterClose>
                     </configuration>
