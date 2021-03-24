@@ -29,64 +29,42 @@ public enum CouponBgColor {
     /**
      * Color 010 coupon bg color.
      */
-    COLOR010("#63B359"),
+    Color010,
     /**
      * Color 020 coupon bg color.
      */
-    COLOR020("#2C9F67"),
+    Color020,
     /**
      * Color 030 coupon bg color.
      */
-    COLOR030("#509FC9"),
+    Color030,
     /**
      * Color 040 coupon bg color.
      */
-    COLOR040("#5885CF"),
+    Color040,
     /**
      * Color 050 coupon bg color.
      */
-    COLOR050("#9062C0"),
+    Color050,
     /**
      * Color 060 coupon bg color.
      */
-    COLOR060("#D09A45"),
+    Color060,
     /**
      * Color 070 coupon bg color.
      */
-    COLOR070("#E4B138"),
+    Color070,
     /**
      * Color 080 coupon bg color.
      */
-    COLOR080("#EE903C"),
+    Color080,
     /**
      * Color 090 coupon bg color.
      */
-    COLOR090("#DD6549"),
+    Color090,
     /**
      * Color 100 coupon bg color.
      */
-    COLOR100("#CC463D");
+    Color100
 
-    /**
-     * The Color.
-     */
-    private final String color;
-
-    /**
-     * Instantiates a new Coupon bg color.
-     *
-     * @param color the color
-     */
-    CouponBgColor(String color) {
-        this.color = color;
-    }
-
-    /**
-     * Color string.
-     *
-     * @return the string
-     */
-    public String color() {
-        return this.color;
-    }
 }
