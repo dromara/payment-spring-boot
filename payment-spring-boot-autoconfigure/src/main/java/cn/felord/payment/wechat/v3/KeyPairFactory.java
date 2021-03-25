@@ -56,9 +56,9 @@ public class KeyPairFactory {
                 if (store == null) {
                     synchronized (lock) {
                         store = KeyStore.getInstance("PKCS12");
-                        store.load(resource.getInputStream(), pem);
                     }
                 }
+                store.load(resource.getInputStream(), pem);
             }
             X509Certificate certificate = (X509Certificate) store.getCertificate(keyAlias);
             certificate.checkValidity();
