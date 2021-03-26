@@ -1,3 +1,9 @@
+## 1.0.9.RELEASE
+
+- 微信支付
+  - refactor: 服务商支付 WechatPartnerPayApi 加入Spring IOC
+  - fix: 支付分支付成功回调反序列化异常 ([#21](https://github.com/NotFound403/payment-spring-boot/issues/21))
+  - fix: 修复枚举空指针问题 ([#22](https://github.com/NotFound403/payment-spring-boot/issues/22))
 ## 1.0.8.RELEASE
 
 - 微信支付
