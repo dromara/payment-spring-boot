@@ -203,6 +203,21 @@ public abstract class AbstractApi {
     }
 
     /**
+     * 构建Post请求对象.
+     *
+     * @param uri    the uri
+     * @param params the params
+     * @return the request entity
+     */
+    protected RequestEntity<?> Patch(URI uri, Object params) {
+        try {
+            return RequestEntity.patch(uri).header("Pay-TenantId", tenantId)
+                    .body(mapper.writeValueAsString(params));
+        } catch (JsonProcessingException e) {
+            throw new PayException("wechat app pay json failed");
+        }
+    }
+    /**
      * 对账单内容下载，非流文件。
      *
      * @param link the link
