@@ -1,5 +1,11 @@
 package cn.felord.payment.wechat.v2.model.allocation;
 
+/**
+ * The enum Type.
+ *
+ * @author wangzecheng
+ * @since 1.0.10.RELEASE
+ */
 public enum Type {
 
     /**
@@ -10,5 +16,5 @@ public enum Type {
     /**
      * 个人openid
      */
-    PERSONAL_OPENID;
+    PERSONAL_OPENID
 }

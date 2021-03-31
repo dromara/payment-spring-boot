@@ -18,6 +18,7 @@
 package cn.felord.payment.wechat.v2;
 
 import cn.felord.payment.wechat.WechatPayProperties;
+import cn.felord.payment.wechat.v2.model.BaseModel;
 import cn.felord.payment.wechat.v2.model.allocation.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -83,7 +84,7 @@ public class WechatAllocationApi {
         profitSharingSModel.setOutOrderNo(profitSharingModel.getOutOrderNo());
 
         profitSharingSModel.certPath(v3.getCertPath());
-        profitSharingSModel.signType("HMAC-SHA256");
+        profitSharingSModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingSModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/secapi/pay/profitsharing");
@@ -109,7 +110,7 @@ public class WechatAllocationApi {
         multiProfitSharingSModel.setOutOrderNo(multiProfitSharingModel.getOutOrderNo());
 
         multiProfitSharingSModel.certPath(v3.getCertPath());
-        multiProfitSharingSModel.signType("HMAC-SHA256");
+        multiProfitSharingSModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(multiProfitSharingSModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/secapi/pay/multiprofitsharing");
@@ -125,7 +126,7 @@ public class WechatAllocationApi {
         WechatPayProperties.V3 v3 = wechatV2Client.getWechatMetaBean().getV3();
         profitSharingQueryModel.setMchId(v3.getMchId());
         profitSharingQueryModel.certPath(v3.getCertPath());
-        profitSharingQueryModel.signType("HMAC-SHA256");
+        profitSharingQueryModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingQueryModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/pay/profitsharingquery");
@@ -148,7 +149,7 @@ public class WechatAllocationApi {
         profitSharingAddReceiverSModel.setMchId(v3.getMchId());
 
         profitSharingAddReceiverSModel.certPath(v3.getCertPath());
-        profitSharingAddReceiverSModel.signType("HMAC-SHA256");
+        profitSharingAddReceiverSModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingAddReceiverSModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/pay/profitsharingaddreceiver");
@@ -171,7 +172,7 @@ public class WechatAllocationApi {
         profitSharingRemoveReceiverSModel.setMchId(v3.getMchId());
 
         profitSharingRemoveReceiverSModel.certPath(v3.getCertPath());
-        profitSharingRemoveReceiverSModel.signType("HMAC-SHA256");
+        profitSharingRemoveReceiverSModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingRemoveReceiverSModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/pay/profitsharingremovereceiver");
@@ -188,7 +189,7 @@ public class WechatAllocationApi {
         profitSharingFinishModel.setAppid(v3.getAppId());
         profitSharingFinishModel.setMchId(v3.getMchId());
         profitSharingFinishModel.certPath(v3.getCertPath());
-        profitSharingFinishModel.signType("HMAC-SHA256");
+        profitSharingFinishModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingFinishModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/secapi/pay/profitsharingfinish");
@@ -204,7 +205,7 @@ public class WechatAllocationApi {
         WechatPayProperties.V3 v3 = wechatV2Client.getWechatMetaBean().getV3();
         profitSharingOrderAmountQueryModel.setMchId(v3.getMchId());
         profitSharingOrderAmountQueryModel.certPath(v3.getCertPath());
-        profitSharingOrderAmountQueryModel.signType("HMAC-SHA256");
+        profitSharingOrderAmountQueryModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingOrderAmountQueryModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/pay/profitsharingorderamountquery");
@@ -221,7 +222,7 @@ public class WechatAllocationApi {
         profitSharingReturnModel.setAppid(v3.getAppId());
         profitSharingReturnModel.setMchId(v3.getMchId());
         profitSharingReturnModel.certPath(v3.getCertPath());
-        profitSharingReturnModel.signType("HMAC-SHA256");
+        profitSharingReturnModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingReturnModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/secapi/pay/profitsharingreturn");
@@ -238,7 +239,7 @@ public class WechatAllocationApi {
         profitSharingReturnQueryModel.setAppid(v3.getAppId());
         profitSharingReturnQueryModel.setMchId(v3.getMchId());
         profitSharingReturnQueryModel.certPath(v3.getCertPath());
-        profitSharingReturnQueryModel.signType("HMAC-SHA256");
+        profitSharingReturnQueryModel.signType(BaseModel.HMAC_SHA256);
         return wechatV2Client.wechatPayRequest(profitSharingReturnQueryModel,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/pay/profitsharingreturnquery");

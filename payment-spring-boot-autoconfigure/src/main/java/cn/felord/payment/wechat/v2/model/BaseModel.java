@@ -65,6 +65,7 @@ import java.security.cert.CertificateException;
  */
 @Getter
 public abstract class BaseModel {
+    public static final String HMAC_SHA256="HMAC-SHA256";
     private static final XmlMapper XML_MAPPER = new XmlMapper();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -115,7 +116,7 @@ public abstract class BaseModel {
     @SneakyThrows
     private String xml() {
         String link = link(this);
-        if ("HMAC-SHA256".equals(signType)) {
+        if (HMAC_SHA256.equals(signType)) {
             this.sign = this.hmacSha256(link);
         } else {
             this.sign = this.md5(link);
