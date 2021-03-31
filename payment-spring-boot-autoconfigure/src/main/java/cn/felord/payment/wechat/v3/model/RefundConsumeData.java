@@ -22,7 +22,7 @@ import cn.felord.payment.wechat.enumeration.RefundStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 /**
  * 微信支付退款结果通知解密
@@ -60,7 +60,7 @@ public class RefundConsumeData {
      * 退款成功时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-    private OffsetDateTime successTime;
+    private LocalDateTime successTime;
     /**
      * 退款入账账户
      */

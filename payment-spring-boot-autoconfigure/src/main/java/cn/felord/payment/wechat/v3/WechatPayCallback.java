@@ -101,7 +101,7 @@ public class WechatPayCallback {
      */
     @SneakyThrows
     public Map<String, ?> profitSharingCallback(ResponseSignVerifyParams params, Consumer<ProfitSharingConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.COUPON_USE);
+        String data = this.callback(params, EventType.TRANSACTION);
         ProfitSharingConsumeData consumeData = MAPPER.readValue(data, ProfitSharingConsumeData.class);
         consumeDataConsumer.accept(consumeData);
         Map<String, Object> responseBody = new HashMap<>(2);
