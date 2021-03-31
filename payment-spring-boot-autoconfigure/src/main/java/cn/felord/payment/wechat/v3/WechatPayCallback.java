@@ -92,6 +92,27 @@ public class WechatPayCallback {
 
 
     /**
+     * 微信支付分账回调.
+     *
+     * @param params              the params
+     * @param consumeDataConsumer the consume data consumer
+     * @return the map
+     * @since 1.0.10.RELEASE
+     */
+    @SneakyThrows
+    public Map<String, ?> profitSharingCallback(ResponseSignVerifyParams params, Consumer<ProfitSharingConsumeData> consumeDataConsumer) {
+        String data = this.callback(params, EventType.COUPON_USE);
+        ProfitSharingConsumeData consumeData = MAPPER.readValue(data, ProfitSharingConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
+        Map<String, Object> responseBody = new HashMap<>(2);
+        responseBody.put("code", 200);
+        responseBody.put("message", "SUCCESS");
+        return responseBody;
+
+    }
+
+
+    /**
      * 微信支付代金券核销回调.
      *
      * @param params              the params

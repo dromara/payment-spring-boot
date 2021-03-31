@@ -48,6 +48,8 @@ import org.springframework.util.IdGenerator;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -84,10 +86,24 @@ public abstract class BaseModel {
     private String sign;
     @JsonIgnore
     private String appSecret;
-
+    @JsonIgnore
+    private String certPath;
+    @JsonIgnore
+    private String signType;
 
     public BaseModel appSecret(String appSecret) {
         this.appSecret = appSecret;
+        return this;
+    }
+
+    public BaseModel certPath(String certPath) {
+        this.certPath = certPath;
+        return this;
+    }
+
+
+    public BaseModel signType(String signType) {
+        this.signType = signType;
         return this;
     }
 
@@ -99,7 +115,11 @@ public abstract class BaseModel {
     @SneakyThrows
     private String xml() {
         String link = link(this);
-        this.sign = this.md5(link);
+        if ("HMAC-SHA256".equals(signType)) {
+            this.sign = this.hmacSha256(link);
+        } else {
+            this.sign = this.md5(link);
+        }
         return XML_MAPPER.writer()
                 .withRootName("xml")
                 .writeValueAsString(this);
@@ -121,6 +141,21 @@ public abstract class BaseModel {
     }
 
     /**
+     * hmacSha256.
+     *
+     * @param src the src
+     * @return the string
+     */
+    @SneakyThrows
+    private String hmacSha256(String src) {
+        Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secret_key = new SecretKeySpec(appSecret.getBytes(),"HmacSHA256");
+        sha256_HMAC.init(secret_key);
+        byte[] bytes = sha256_HMAC.doFinal(src.getBytes(StandardCharsets.UTF_8));
+        return Hex.toHexString(bytes).toUpperCase();
+    }
+
+    /**
      * 按照格式拼接参数以生成签名
      *
      * @param <T> the type parameter
@@ -130,14 +165,13 @@ public abstract class BaseModel {
     @SneakyThrows
     private <T> String link(T t) {
         Assert.hasText(appSecret, "wechat pay appSecret is required");
-        return OBJECT_MAPPER
+        String link = OBJECT_MAPPER
                 .writer()
                 .writeValueAsString(t)
                 .replaceAll("\":\"", "=")
                 .replaceAll("\",\"", "&")
-                .replaceAll("\\{\"", "")
-                .replaceAll("\"}", "")
-                .concat("&key=").concat(this.appSecret);
+                .replaceAll("\\\\\"", "\"");
+        return link.substring(2, link.length() - 2).concat("&key=").concat(this.appSecret);
     }
 
 
@@ -164,7 +198,7 @@ public abstract class BaseModel {
     private RestTemplate getRestTemplateClientAuthentication(String mchId)
             throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException,
             KeyStoreException, KeyManagementException {
-        ClassPathResource resource = new ClassPathResource("wechat/apiclient_cert.p12");
+        ClassPathResource resource = new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
 
         char[] pem = mchId.toCharArray();
 
