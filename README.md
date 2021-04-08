@@ -26,6 +26,7 @@
 - 实现微信支付V3 商家券
 - 实现微信支付V3 批量转账到零钱
 
+更多参考[changelog](https://notfound403.github.io/payment-spring-boot/#/changelog)
 
 ## 核心API结构
 ![](https://asset.felord.cn/blog/20210112211759.png)
