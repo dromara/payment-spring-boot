@@ -1,3 +1,18 @@
+## 1.0.10.RELEASE
+- 微信支付
+  - feat: 微信支付V2分账接口实现，感谢**zacone**同学贡献的PR
+  - factor: 优化证书加载方式
+  - factor: 商家券修改API的请求方式变更为`Patch`
+  - fix: 修复微信支付V3中native支付通知回调`successTime`字段无时区信息的问题([#I3ED43](https://gitee.com/felord/payment-spring-boot/issues/I3ED43)) 
+- 支付宝    
+  - fix: 修复支付宝Maven打包无法读取证书的问题([#24](https://github.com/NotFound403/payment-spring-boot/issues/24))
+
+## 1.0.9.RELEASE
+- 微信支付
+  - refactor: `WechatPartnerPayApi` 加入**Spring IOC**
+  - fix: 支付分支付成功回调反序列化异常 ([#21](https://github.com/NotFound403/payment-spring-boot/issues/21))
+  - fix: 修复枚举空指针问题 ([#22](https://github.com/NotFound403/payment-spring-boot/issues/22))
+
 ## 1.0.8.RELEASE
 
 - 微信支付

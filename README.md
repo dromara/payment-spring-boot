@@ -11,7 +11,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.9.RELEASE</version>
+    <version>1.0.10.RELEASE</version>
 </dependency>
 ```
 
