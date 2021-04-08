@@ -431,7 +431,7 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.4.RELEASES
      */
-    MARKETING_BUSI_FAVOR_UPDATE(HttpMethod.POST, "%s/v3/marketing/busifavor/stocks/{stock_id}"),
+    MARKETING_BUSI_FAVOR_UPDATE(HttpMethod.PATCH, "%s/v3/marketing/busifavor/stocks/{stock_id}"),
     /**
      * 申请退券API.
      *

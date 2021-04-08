@@ -19,11 +19,12 @@
 package cn.felord.payment.alipay;
 
 
+import cn.felord.payment.PayException;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
-import cn.felord.payment.PayException;
+import com.alipay.api.internal.util.file.IOUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -32,7 +33,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * @author felord.cn
@@ -57,28 +60,28 @@ public class AliPayConfiguration {
         propertyMapper.from(v1::getFormat).to(certAlipayRequest::setFormat);
         propertyMapper.from(v1::getCharset).to(certAlipayRequest::setCharset);
         propertyMapper.from(v1::getSignType).to(certAlipayRequest::setSignType);
-        propertyMapper.from(v1::getAppCertPublicKeyPath).as(this::getFileAbsolutePath).to(certAlipayRequest::setCertPath);
-        propertyMapper.from(v1::getAlipayPublicCertPath).as(this::getFileAbsolutePath).to(certAlipayRequest::setAlipayPublicCertPath);
-        propertyMapper.from(v1::getAlipayRootCertPath).as(this::getFileAbsolutePath).to(certAlipayRequest::setRootCertPath);
+        propertyMapper.from(v1::getAppCertPublicKeyPath).as(this::getContentFromClassPath).to(certAlipayRequest::setCertContent);
+        propertyMapper.from(v1::getAlipayPublicCertPath).as(this::getContentFromClassPath).to(certAlipayRequest::setAlipayPublicCertContent);
+        propertyMapper.from(v1::getAlipayRootCertPath).as(this::getContentFromClassPath).to(certAlipayRequest::setRootCertContent);
         return new DefaultAlipayClient(certAlipayRequest);
     }
 
-    private String getFileAbsolutePath(String classPath) {
-        try {
-            return new ClassPathResource(classPath).getFile().getAbsolutePath();
-        } catch (IOException e) {
-            log.error("ali pay cert path is not exist ,{}", e.getMessage());
-            throw new PayException("ali pay cert path is not exist");
-        }
 
+    private String getContentFromClassPath(String classPath) {
+        ClassPathResource resource = new ClassPathResource(classPath);
+        try (InputStreamReader in = new InputStreamReader(resource.getInputStream())) {
+            return IOUtils.toString(in);
+        } catch (IOException e) {
+            log.error("ali pay root cert is invalid ,{}", e.getMessage());
+            throw new PayException("ali pay root cert path is invalid");
+        }
     }
 
 
     private String appRSAPrivateKey(String classPath) {
         ClassPathResource resource = new ClassPathResource(classPath);
-        try {
-            FileReader in = new FileReader(resource.getFile());
-            try(BufferedReader bufferedReader = new BufferedReader(in)){
+        try (InputStreamReader inputStreamReader = new InputStreamReader(resource.getInputStream())) {
+            try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 return bufferedReader.readLine();
             }
         } catch (IOException e) {
@@ -86,6 +89,5 @@ public class AliPayConfiguration {
             throw new PayException("ali pay app private key is required");
         }
     }
-
 
 }

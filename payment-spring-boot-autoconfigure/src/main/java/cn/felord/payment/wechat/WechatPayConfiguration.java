@@ -60,7 +60,7 @@ public class WechatPayConfiguration {
             WechatPayProperties.V3 v3 = v3Map.get(tenantId);
             String certPath = v3.getCertPath();
             String mchId = v3.getMchId();
-            WechatMetaBean wechatMetaBean = keyPairFactory.createPKCS12(certPath, CERT_ALIAS, mchId);
+            WechatMetaBean wechatMetaBean = keyPairFactory.initWechatMetaBean(certPath, CERT_ALIAS, mchId);
             wechatMetaBean.setV3(v3);
             wechatMetaBean.setTenantId(tenantId);
             container.addWechatMeta(tenantId, wechatMetaBean);

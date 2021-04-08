@@ -384,7 +384,7 @@ public class WechatMarketingBusiFavorApi extends AbstractApi {
                             .expand(updateParams.getStockId())
                             .toUri();
                     updateParams.setStockId(null);
-                    return Post(uri, updateParams);
+                    return Patch(uri, updateParams);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();
