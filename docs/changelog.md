@@ -1,4 +1,5 @@
 ## 1.0.10.RELEASE
+
 - 微信支付
   - feat: 微信支付V2分账接口实现，感谢**zacone**同学贡献的PR
   - factor: 优化证书加载方式
@@ -8,6 +9,7 @@
   - fix: 修复支付宝Maven打包无法读取证书的问题([#24](https://github.com/NotFound403/payment-spring-boot/issues/24))
 
 ## 1.0.9.RELEASE
+
 - 微信支付
   - refactor: `WechatPartnerPayApi` 加入**Spring IOC**
   - fix: 支付分支付成功回调反序列化异常 ([#21](https://github.com/NotFound403/payment-spring-boot/issues/21))
