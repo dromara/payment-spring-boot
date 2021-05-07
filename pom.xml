@@ -76,7 +76,7 @@
         <oss-starter.version>1.0.0.RELEASE</oss-starter.version>
         <lombok.verison>1.18.12</lombok.verison>
         <jackson.version>2.9.10</jackson.version>
-        <bcprov.version>1.66</bcprov.version>
+        <bcprov.version>1.67</bcprov.version>
         <jackson.version>2.11.4</jackson.version>
         <httpclient.version>4.5.13</httpclient.version>
     </properties>
