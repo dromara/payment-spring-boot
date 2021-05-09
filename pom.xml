@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot</artifactId>
-    <version>1.0.10.RELEASE</version>
+    <version>1.0.11.RELEASE</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -76,7 +76,7 @@
         <oss-starter.version>1.0.0.RELEASE</oss-starter.version>
         <lombok.verison>1.18.12</lombok.verison>
         <jackson.version>2.9.10</jackson.version>
-        <bcprov.version>1.66</bcprov.version>
+        <bcprov.version>1.67</bcprov.version>
         <jackson.version>2.11.4</jackson.version>
         <httpclient.version>4.5.13</httpclient.version>
     </properties>

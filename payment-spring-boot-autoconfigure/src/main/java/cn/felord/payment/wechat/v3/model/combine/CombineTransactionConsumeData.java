@@ -19,6 +19,7 @@ package cn.felord.payment.wechat.v3.model.combine;
 
 import cn.felord.payment.wechat.enumeration.TradeState;
 import cn.felord.payment.wechat.enumeration.TradeType;
+import cn.felord.payment.wechat.v3.model.PromotionDetail;
 import cn.felord.payment.wechat.v3.model.SceneInfo;
 import lombok.Data;
 
@@ -124,6 +125,13 @@ public class CombineTransactionConsumeData {
          * 微信支付侧订单号
          */
         private String transactionId;
+
+        /**
+         * 优惠功能，子单有核销优惠券时有返回
+         *
+         * @since 1.0.11.RELEASE
+         */
+        private List<PromotionDetail> promotionDetail;
 
     }
 
