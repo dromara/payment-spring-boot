@@ -224,7 +224,7 @@ public class SignatureProvider {
         }
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
-            CERTIFICATE_MAP.clear();
+            CERTIFICATE_MAP.remove(tenantId);
             final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509",BC_PROVIDER);
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
