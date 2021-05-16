@@ -30,9 +30,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.http.*;
-import org.springframework.util.AlternativeJdkIdGenerator;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.IdGenerator;
+import org.springframework.util.*;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -128,7 +126,7 @@ public class SignatureProvider {
      * @return the string
      */
     @SneakyThrows
-    public String requestSign(boolean newLine,String tenantId, String method, String canonicalUrl, String body) {
+    public String requestSign(boolean newLine, String tenantId, String method, String canonicalUrl, String body) {
 
         long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         String nonceStr = nonceStrGenerator.generateId()
@@ -136,7 +134,7 @@ public class SignatureProvider {
                 .replaceAll("-", "");
         WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
         PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
-        String encode = this.doRequestSign(newLine,privateKey, method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
+        String encode = this.doRequestSign(newLine, privateKey, method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
         // 序列号
         String serialNo = wechatMetaBean.getSerialNumber();
         // 生成token
@@ -157,10 +155,10 @@ public class SignatureProvider {
      * @since 1.0.4.RELEASE
      */
     @SneakyThrows
-    public String doRequestSign(boolean newLine,PrivateKey privateKey, String... orderedComponents) {
+    public String doRequestSign(boolean newLine, PrivateKey privateKey, String... orderedComponents) {
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initSign(privateKey);
-        final String signatureStr = createSign(newLine,orderedComponents);
+        final String signatureStr = createSign(newLine, orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
         return Base64Utils.encodeToString(signer.sign());
     }
@@ -180,7 +178,7 @@ public class SignatureProvider {
         }
         Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial);
 
-        final String signatureStr = createSign(true,params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
+        final String signatureStr = createSign(true, params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
         Signature signer = Signature.getInstance("SHA256withRSA");
         signer.initVerify(certificate);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
@@ -208,7 +206,7 @@ public class SignatureProvider {
         }
         // 签名
         HttpMethod httpMethod = WechatPayV3Type.CERT.method();
-        String authorization = requestSign(true,tenantId, httpMethod.name(), canonicalUrl, "");
+        String authorization = requestSign(true, tenantId, httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -225,7 +223,7 @@ public class SignatureProvider {
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
             CERTIFICATE_MAP.clear();
-            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509",BC_PROVIDER);
+            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509", BC_PROVIDER);
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
                 String associatedData = encryptCertificate.get("associated_data").asText();
@@ -256,6 +254,15 @@ public class SignatureProvider {
      * @return the string
      */
     public String decryptResponseBody(String tenantId, String associatedData, String nonce, String ciphertext) {
+
+        try {
+            Assert.hasText(associatedData, "associatedData is invalid");
+            Assert.hasText(nonce, "nonce is invalid");
+            Assert.hasText(ciphertext, "ciphertext is invalid");
+        } catch (Exception e) {
+            throw new PayException(e.getMessage());
+        }
+
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", BC_PROVIDER);
             String apiV3Key = wechatMetaContainer.getWechatMeta(tenantId).getV3().getAppV3Secret();
@@ -285,14 +292,14 @@ public class SignatureProvider {
      * @return encrypt message
      * @since 1.0.6.RELEASE
      */
-    public String encryptRequestMessage(String message,Certificate certificate) {
+    public String encryptRequestMessage(String message, Certificate certificate) {
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BC_PROVIDER);
             cipher.init(Cipher.ENCRYPT_MODE, certificate.getPublicKey());
 
             byte[] data = message.getBytes(StandardCharsets.UTF_8);
             byte[] cipherData = cipher.doFinal(data);
-          return Base64Utils.encodeToString(cipherData);
+            return Base64Utils.encodeToString(cipherData);
 
         } catch (Exception e) {
             throw new PayException(e);
@@ -304,14 +311,14 @@ public class SignatureProvider {
      *
      * @return the x 509 wechat certificate info
      */
-    public X509WechatCertificateInfo  getCertificate(){
+    public X509WechatCertificateInfo getCertificate() {
         for (String serial : CERTIFICATE_MAP.keySet()) {
             X509Certificate x509Cert = (X509Certificate) CERTIFICATE_MAP.get(serial);
             try {
                 x509Cert.checkValidity();
                 X509WechatCertificateInfo x509WechatCertificateInfo = new X509WechatCertificateInfo();
-                 x509WechatCertificateInfo.setWechatPaySerial(serial);
-                 x509WechatCertificateInfo.setX509Certificate(x509Cert);
+                x509WechatCertificateInfo.setWechatPaySerial(serial);
+                x509WechatCertificateInfo.setX509Certificate(x509Cert);
                 return x509WechatCertificateInfo;
             } catch (Exception e) {
                 log.warn("the wechat certificate is invalid , {}", e.getMessage());
@@ -348,9 +355,9 @@ public class SignatureProvider {
      * @param components the components
      * @return string string
      */
-    private static String createSign(boolean newLine,String... components) {
+    private static String createSign(boolean newLine, String... components) {
 
-        String suffix = newLine? "\n":"";
+        String suffix = newLine ? "\n" : "";
         return Arrays.stream(components)
                 .collect(Collectors.joining("\n", "", suffix));
     }
