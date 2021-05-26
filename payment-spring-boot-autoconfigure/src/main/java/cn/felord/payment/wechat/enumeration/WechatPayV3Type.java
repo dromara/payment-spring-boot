@@ -47,13 +47,13 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.3.RELEASE
      */
-    TRADEBILL(HttpMethod.GET, "%s/v3/bill/tradebill"),
+    TRADE_BILL(HttpMethod.GET, "%s/v3/bill/tradebill"),
     /**
      * 申请资金账单API.
      *
      * @since 1.0.3.RELEASE
      */
-    FUNDFLOWBILL(HttpMethod.GET, "%s/v3/bill/fundflowbill"),
+    FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/bill/fundflowbill"),
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

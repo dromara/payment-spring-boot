@@ -257,7 +257,7 @@ public abstract class AbstractApi {
     public ResponseEntity<Resource> downloadTradeBill(TradeBillParams tradeBillParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
 
-        this.client().withType(WechatPayV3Type.TRADEBILL, tradeBillParams)
+        this.client().withType(WechatPayV3Type.TRADE_BILL, tradeBillParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
                     LocalDate billDate = params.getBillDate();
@@ -304,7 +304,7 @@ public abstract class AbstractApi {
      */
     public ResponseEntity<Resource> downloadFundFlowBill(FundFlowBillParams fundFlowBillParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.FUNDFLOWBILL, fundFlowBillParams)
+        this.client().withType(WechatPayV3Type.FUND_FLOW_BILL, fundFlowBillParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
                     LocalDate billDate = params.getBillDate();

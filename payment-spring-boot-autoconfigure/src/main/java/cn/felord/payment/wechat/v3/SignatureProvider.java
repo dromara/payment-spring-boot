@@ -118,7 +118,7 @@ public class SignatureProvider {
     /**
      * 我方请求前用 SHA256withRSA 加签，使用API证书.
      *
-     * @param newLine      the new line
+     * @param newLine      签名协议不兼容而增加的开关 github issues#18
      * @param tenantId     the properties key
      * @param method       the method
      * @param canonicalUrl the canonical url
