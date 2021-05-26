@@ -43,6 +43,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * The type Abstract api.
@@ -267,7 +268,7 @@ public abstract class AbstractApi {
      * @param tradeBillParams tradeBillParams
      * @since 1.0.3.RELEASE
      */
-    public final void downloadTradeBill(TradeBillParams tradeBillParams) {
+    public final void downloadTradeBill(TradeBillParams tradeBillParams,Consumer<String> consumer) {
         this.client().withType(WechatPayV3Type.TRADEBILL, tradeBillParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -291,7 +292,10 @@ public abstract class AbstractApi {
                             .build().toUri();
                     return Get(uri);
                 })
-                .consumer(response -> this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText()))
+                .consumer(response -> {
+                     String data = this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText());
+                     consumer.accept(data);
+                })
                 .request();
     }
 
@@ -309,7 +313,7 @@ public abstract class AbstractApi {
      * @param fundFlowBillParams fundFlowBillParams
      * @since 1.0.3.RELEASE
      */
-    public final void downloadFundFlowBill(FundFlowBillParams fundFlowBillParams) {
+    public final void downloadFundFlowBill(FundFlowBillParams fundFlowBillParams,Consumer<String> consumer) {
         this.client().withType(WechatPayV3Type.FUNDFLOWBILL, fundFlowBillParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -328,7 +332,10 @@ public abstract class AbstractApi {
                             .build().toUri();
                     return Get(uri);
                 })
-                .consumer(response -> this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText()))
+                .consumer(response ->{
+                    String data = this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText());
+                    consumer.accept(data);
+                })
                 .request();
     }
 }
