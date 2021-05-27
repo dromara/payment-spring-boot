@@ -254,6 +254,6 @@ public class WechatBatchTransferApi extends AbstractApi {
                 .request();
         String downloadUrl = wechatResponseEntity.getBody().get("download_url").asText();
         Assert.hasText(downloadUrl, "download url has no text");
-        return this.billResource(downloadUrl);
+        return this.billResource(downloadUrl, false);
     }
 }

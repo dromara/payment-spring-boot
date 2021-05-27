@@ -185,10 +185,10 @@ public class WechatPayClient {
          * @return the string
          * @since 1.0.6.RELEASE
          */
-        public ResponseEntity<Resource> resource() {
+        protected ResponseEntity<Resource> resource(boolean newLine) {
             RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
-            return this.doResource(this.header(false,wechatRequestEntity));
+            return this.doResource(this.header(newLine,wechatRequestEntity));
         }
 
 

@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -224,7 +225,7 @@ public abstract class AbstractApi {
      *
      * @param link the link
      * @return 对账单内容 ，有可能为空字符 “”
-     * @see AbstractApi#billResource(String)
+     * @see AbstractApi#billResource(String) AbstractApi#billResource(String)AbstractApi#billResource(String)
      */
     protected String billCsvDownload(String link) {
         return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
@@ -241,6 +242,8 @@ public abstract class AbstractApi {
     /**
      * 申请交易账单API
      * <p>
+     * 返回值直接返回前端，会下载tradebill-前缀加上日期的txt文件（默认）或者gzip文件。
+     * <p>
      * 微信支付按天提供交易账单文件，商户可以通过该接口获取账单文件的下载地址。文件内包含交易相关的金额、时间、营销等信息，供商户核对订单、退款、银行到账等情况。
      * <p>
      * 注意：
@@ -252,6 +255,7 @@ public abstract class AbstractApi {
      * </ul>
      *
      * @param tradeBillParams tradeBillParams
+     * @return the response entity
      * @since 1.0.3.RELEASE
      */
     public ResponseEntity<Resource> downloadTradeBill(TradeBillParams tradeBillParams) {
@@ -285,7 +289,10 @@ public abstract class AbstractApi {
         String downloadUrl = Objects.requireNonNull(wechatResponseEntity.getBody())
                 .get("download_url")
                 .asText();
-        return this.billResource(downloadUrl);
+
+        String ext = Objects.equals(TarType.GZIP, tradeBillParams.getTarType()) ? ".gzip" : ".txt";
+        String filename = "tradebill-" + tradeBillParams.getBillDate().toString() + ext;
+        return fileEntity(downloadUrl, filename);
     }
 
     /**
@@ -300,6 +307,7 @@ public abstract class AbstractApi {
      * </ul>
      *
      * @param fundFlowBillParams fundFlowBillParams
+     * @return the response entity
      * @since 1.0.3.RELEASE
      */
     public ResponseEntity<Resource> downloadFundFlowBill(FundFlowBillParams fundFlowBillParams) {
@@ -327,9 +335,19 @@ public abstract class AbstractApi {
         String downloadUrl = Objects.requireNonNull(wechatResponseEntity.getBody())
                 .get("download_url")
                 .asText();
-        return this.billResource(downloadUrl);
+
+        String ext = Objects.equals(TarType.GZIP, fundFlowBillParams.getTarType()) ? ".gzip" : ".txt";
+        String filename = "fundflowbill-" + fundFlowBillParams.getBillDate().toString() + ext;
+        return fileEntity(downloadUrl, filename);
     }
 
+    private ResponseEntity<Resource> fileEntity(String downloadUrl, String filename) {
+        ResponseEntity<Resource> responseEntity = this.billResource(downloadUrl);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        // utf is not support
+        httpHeaders.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+        return ResponseEntity.ok().headers(httpHeaders).body(responseEntity.getBody());
+    }
 
     /**
      * 对账单下载，流文件。
@@ -345,6 +363,25 @@ public abstract class AbstractApi {
                             .toUri();
                     return Get(uri);
                 })
-                .resource();
+                .resource(true);
+    }
+
+
+    /**
+     * todo 对账单下载，流文件。
+     *
+     * @param link    the link
+     * @param newLine the new line
+     * @return response entity
+     */
+    protected ResponseEntity<Resource> billResource(String link, boolean newLine) {
+        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
+                .function((type, downloadUrl) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(downloadUrl)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })
+                .resource(newLine);
     }
 }
