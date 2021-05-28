@@ -225,7 +225,7 @@ public abstract class AbstractApi {
      *
      * @param link the link
      * @return 对账单内容 ，有可能为空字符 “”
-     * @see AbstractApi#billResource(String) AbstractApi#billResource(String)AbstractApi#billResource(String)
+     * @see AbstractApi#billResource(String) AbstractApi#billResource(String)AbstractApi#billResource(String)AbstractApi#billResource(String)
      */
     protected String billCsvDownload(String link) {
         return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
@@ -292,7 +292,7 @@ public abstract class AbstractApi {
 
         String ext = Objects.equals(TarType.GZIP, tradeBillParams.getTarType()) ? ".gzip" : ".txt";
         String filename = "tradebill-" + tradeBillParams.getBillDate().toString() + ext;
-        return fileEntity(downloadUrl, filename);
+        return downloadBillResponse(downloadUrl, filename);
     }
 
     /**
@@ -338,10 +338,17 @@ public abstract class AbstractApi {
 
         String ext = Objects.equals(TarType.GZIP, fundFlowBillParams.getTarType()) ? ".gzip" : ".txt";
         String filename = "fundflowbill-" + fundFlowBillParams.getBillDate().toString() + ext;
-        return fileEntity(downloadUrl, filename);
+        return this.downloadBillResponse(downloadUrl, filename);
     }
 
-    private ResponseEntity<Resource> fileEntity(String downloadUrl, String filename) {
+    /**
+     * 调用{@code /v3/billdownload/file}直接下载为文件.
+     *
+     * @param downloadUrl  格式为 {@code https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx}
+     * @param filename    文件名称包含扩展名
+     * @return the response entity
+     */
+    public ResponseEntity<Resource> downloadBillResponse(String downloadUrl, String filename) {
         ResponseEntity<Resource> responseEntity = this.billResource(downloadUrl);
         HttpHeaders httpHeaders = new HttpHeaders();
         // utf is not support
@@ -350,7 +357,7 @@ public abstract class AbstractApi {
     }
 
     /**
-     * 对账单下载，流文件。
+     * 调用{@code /v3/billdownload/file}下载返回的原始文件流
      *
      * @param link the link
      * @return response entity
@@ -363,25 +370,6 @@ public abstract class AbstractApi {
                             .toUri();
                     return Get(uri);
                 })
-                .resource(true);
-    }
-
-
-    /**
-     * todo 对账单下载，流文件。
-     *
-     * @param link    the link
-     * @param newLine the new line
-     * @return response entity
-     */
-    protected ResponseEntity<Resource> billResource(String link, boolean newLine) {
-        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
-                .function((type, downloadUrl) -> {
-                    URI uri = UriComponentsBuilder.fromHttpUrl(downloadUrl)
-                            .build()
-                            .toUri();
-                    return Get(uri);
-                })
-                .resource(newLine);
+                .resource();
     }
 }

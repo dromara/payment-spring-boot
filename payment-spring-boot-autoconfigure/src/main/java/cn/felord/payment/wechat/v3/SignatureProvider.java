@@ -118,7 +118,6 @@ public class SignatureProvider {
     /**
      * 我方请求前用 SHA256withRSA 加签，使用API证书.
      *
-     * @param newLine      签名协议不兼容而增加的开关 github issues#18
      * @param tenantId     the properties key
      * @param method       the method
      * @param canonicalUrl the canonical url
@@ -126,7 +125,7 @@ public class SignatureProvider {
      * @return the string
      */
     @SneakyThrows
-    public String requestSign(boolean newLine, String tenantId, String method, String canonicalUrl, String body) {
+    public String requestSign(String tenantId, String method, String canonicalUrl, String body) {
 
         long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         String nonceStr = nonceStrGenerator.generateId()
@@ -134,7 +133,7 @@ public class SignatureProvider {
                 .replaceAll("-", "");
         WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
         PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
-        String encode = this.doRequestSign(newLine, privateKey, method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
+        String encode = this.doRequestSign(privateKey, method, canonicalUrl, String.valueOf(timestamp), nonceStr, body);
         // 序列号
         String serialNo = wechatMetaBean.getSerialNumber();
         // 生成token
@@ -148,17 +147,16 @@ public class SignatureProvider {
     /**
      * Do request sign.
      *
-     * @param newLine           the has suffix
      * @param privateKey        the private key
      * @param orderedComponents the orderedComponents
      * @return the string
      * @since 1.0.4.RELEASE
      */
     @SneakyThrows
-    public String doRequestSign(boolean newLine, PrivateKey privateKey, String... orderedComponents) {
+    public String doRequestSign(PrivateKey privateKey, String... orderedComponents) {
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initSign(privateKey);
-        final String signatureStr = createSign(newLine, orderedComponents);
+        final String signatureStr = createSign(true, orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
         return Base64Utils.encodeToString(signer.sign());
     }
@@ -206,7 +204,7 @@ public class SignatureProvider {
         }
         // 签名
         HttpMethod httpMethod = WechatPayV3Type.CERT.method();
-        String authorization = requestSign(true, tenantId, httpMethod.name(), canonicalUrl, "");
+        String authorization = requestSign(tenantId, httpMethod.name(), canonicalUrl, "");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -223,7 +221,7 @@ public class SignatureProvider {
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
             CERTIFICATE_MAP.remove(tenantId);
-            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509",BC_PROVIDER);
+            final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509", BC_PROVIDER);
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
                 String associatedData = encryptCertificate.get("associated_data").asText();

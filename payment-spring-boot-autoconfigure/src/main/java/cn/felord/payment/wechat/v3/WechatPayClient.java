@@ -164,7 +164,7 @@ public class WechatPayClient {
         public void request() {
             RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
-            this.doExecute(this.header(true,wechatRequestEntity));
+            this.doExecute(this.header(wechatRequestEntity));
         }
 
 
@@ -176,7 +176,7 @@ public class WechatPayClient {
         public String download() {
             RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
-            return this.doDownload(this.header(true,wechatRequestEntity));
+            return this.doDownload(this.header(wechatRequestEntity));
         }
 
         /**
@@ -185,10 +185,10 @@ public class WechatPayClient {
          * @return the string
          * @since 1.0.6.RELEASE
          */
-        protected ResponseEntity<Resource> resource(boolean newLine) {
+        protected ResponseEntity<Resource> resource() {
             RequestEntity<?> requestEntity = this.requestEntityBiFunction.apply(this.wechatPayV3Type, this.model);
             WechatRequestEntity<?> wechatRequestEntity = WechatRequestEntity.of(requestEntity, this.responseBodyConsumer);
-            return this.doResource(this.header(newLine,wechatRequestEntity));
+            return this.doResource(this.header(wechatRequestEntity));
         }
 
 
@@ -199,7 +199,7 @@ public class WechatPayClient {
          * @param requestEntity the request entity
          * @return the wechat request entity
          */
-        private <T> WechatRequestEntity<T> header(boolean newLine,WechatRequestEntity<T> requestEntity) {
+        private <T> WechatRequestEntity<T> header(WechatRequestEntity<T> requestEntity) {
 
             UriComponents uri = UriComponentsBuilder.fromUri(requestEntity.getUrl()).build();
             String canonicalUrl = uri.getPath();
@@ -220,7 +220,7 @@ public class WechatPayClient {
             }
 
             String tenantId = Objects.requireNonNull(headers.get("Pay-TenantId")).get(0);
-            String authorization = signatureProvider.requestSign(newLine,tenantId, httpMethod.name(), canonicalUrl, body);
+            String authorization = signatureProvider.requestSign(tenantId, httpMethod.name(), canonicalUrl, body);
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.addAll(headers);
