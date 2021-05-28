@@ -487,6 +487,35 @@ public enum WechatPayV3Type {
      * @since 1.0.6.RELEASES
      */
     BATCH_TRANSFER_DOWNLOAD_BILL(HttpMethod.GET, "%s/v3/transfer/bill-receipt/{out_batch_no}"),
+    /**
+     * 转账明细电子回单受理API.
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_ELECTRONIC(HttpMethod.POST, "%s/v3/transfer-detail/electronic-receipts"),
+    /**
+     * 查询转账明细电子回单受理结果API.
+     * 请求方式同{@link WechatPayV3Type#BATCH_TRANSFER_ELECTRONIC}不同
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_ELECTRONIC_DETAIL(HttpMethod.GET, "%s/v3/transfer-detail/electronic-receipts"),
+    /**
+     * 查询账户实时余额API
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_FUND_BALANCE(HttpMethod.GET, "%s/v3/merchant/fund/balance/{account_type}"),
+    /**
+     * 查询账户日终余额API
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_FUND_DAY_BALANCE(HttpMethod.GET, "%s/v3/merchant/fund/dayendbalance/{account_type}"),    /**
+     * 商户银行来账查询API
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_FUND_INCOME_RECORDS(HttpMethod.GET, "%s/v3/merchantfund/merchant/income-records"),
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
