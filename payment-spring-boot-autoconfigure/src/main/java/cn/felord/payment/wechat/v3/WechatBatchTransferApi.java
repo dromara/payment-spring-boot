@@ -140,9 +140,9 @@ public class WechatBatchTransferApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_WECHAT, queryBatchTransferDetailParams)
                 .function((type, params) -> {
-                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-                    queryParams.add("batch_id", params.getBatchIdOrOutBatchNo());
-                    queryParams.add("detail_id", params.getDetailIdOrOutDetailNo());
+                    Map<String, String> queryParams = new HashMap<>();
+                    queryParams.put("batch_id", params.getBatchIdOrOutBatchNo());
+                    queryParams.put("detail_id", params.getDetailIdOrOutDetailNo());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()
@@ -195,9 +195,9 @@ public class WechatBatchTransferApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_MCH, queryBatchTransferDetailParams)
                 .function((type, params) -> {
-                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-                    queryParams.add("out_batch_no", params.getBatchIdOrOutBatchNo());
-                    queryParams.add("out_detail_no", params.getDetailIdOrOutDetailNo());
+                    Map<String, String> queryParams = new HashMap<>();
+                    queryParams.put("batch_id", params.getBatchIdOrOutBatchNo());
+                    queryParams.put("detail_id", params.getDetailIdOrOutDetailNo());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()
