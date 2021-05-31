@@ -36,6 +36,7 @@ import java.util.List;
  * 微信支付分账
  * <p>
  *
+ * @author felord.cn
  * @since 1.0.10.RELEASE
  */
 @Slf4j
@@ -72,20 +73,20 @@ public class WechatAllocationApi {
      */
     @SneakyThrows
     public JsonNode profitSharing(ProfitSharingModel profitSharingModel) {
-        ProfitSharingSModel profitSharingSModel = new ProfitSharingSModel();
+        ProfitSharingSModel model = new ProfitSharingSModel();
         List<Receiver> receivers = profitSharingModel.getReceivers();
-        profitSharingSModel.setReceivers(MAPPER.writeValueAsString(receivers));
+        model.setReceivers(MAPPER.writeValueAsString(receivers));
 
         WechatPayProperties.V3 v3 = wechatV2Client.getWechatMetaBean().getV3();
-        profitSharingSModel.setAppid(v3.getAppId());
-        profitSharingSModel.setMchId(v3.getMchId());
+        model.setAppid(v3.getAppId());
+        model.setMchId(v3.getMchId());
 
-        profitSharingSModel.setTransactionId(profitSharingModel.getTransactionId());
-        profitSharingSModel.setOutOrderNo(profitSharingModel.getOutOrderNo());
+        model.setTransactionId(profitSharingModel.getTransactionId());
+        model.setOutOrderNo(profitSharingModel.getOutOrderNo());
 
-        profitSharingSModel.certPath(v3.getCertPath());
-        profitSharingSModel.signType(BaseModel.HMAC_SHA256);
-        return wechatV2Client.wechatPayRequest(profitSharingSModel,
+        model.certPath(v3.getCertPath());
+        model.signType(BaseModel.HMAC_SHA256);
+        return wechatV2Client.wechatPayRequest(model,
                 HttpMethod.POST,
                 "https://api.mch.weixin.qq.com/secapi/pay/profitsharing");
     }

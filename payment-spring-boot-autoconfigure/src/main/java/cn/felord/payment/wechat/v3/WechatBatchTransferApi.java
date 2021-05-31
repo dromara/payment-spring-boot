@@ -77,11 +77,11 @@ public class WechatBatchTransferApi extends AbstractApi {
         List<CreateBatchTransferParams.TransferDetailListItem> transferDetailList = createBatchTransferParams.getTransferDetailList();
 
         SignatureProvider signatureProvider = this.client().signatureProvider();
-        final X509WechatCertificateInfo certificate = signatureProvider.getCertificate();
+        X509WechatCertificateInfo certificate = signatureProvider.getCertificate();
+        final X509Certificate x509Certificate = certificate.getX509Certificate();
         List<CreateBatchTransferParams.TransferDetailListItem> encrypted = transferDetailList.stream()
                 .peek(transferDetailListItem -> {
                     String userName = transferDetailListItem.getUserName();
-                    X509Certificate x509Certificate = certificate.getX509Certificate();
                     String encryptedUserName = signatureProvider.encryptRequestMessage(userName, x509Certificate);
                     transferDetailListItem.setUserName(encryptedUserName);
                     String userIdCard = transferDetailListItem.getUserIdCard();
@@ -262,7 +262,7 @@ public class WechatBatchTransferApi extends AbstractApi {
      * <p>
      * 受理转账明细电子回单接口，商户通过该接口可以申请受理转账明细单电子回单服务。
      * <p>
-     * 返回的下载链接可调用{@link this#downloadBillResponse(String, String)}下载文件
+     * 返回的下载链接可调用{@link #downloadBillResponse(String, String)}下载文件
      *
      * @param params the params
      * @return the wechat response entity
