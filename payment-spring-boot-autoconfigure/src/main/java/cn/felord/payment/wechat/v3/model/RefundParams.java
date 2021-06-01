@@ -76,6 +76,12 @@ public class RefundParams {
     @Data
     public static class RefundAmount {
         /**
+         * 退款出资账户及金额
+         *
+         * @since 1.0.11.RELEASE
+         */
+        private List<RefundForm> form;
+        /**
          * 原订单金额，币种的最小单位，只能为整数，不能超过原订单支付金额。
          */
         private Integer total;
@@ -89,4 +95,43 @@ public class RefundParams {
         private Integer refund;
     }
 
+    /**
+     * 退款出资账户及金额
+     * <p>
+     * 退款需要从指定账户出资时，传递此参数指定出资金额（币种的最小单位，只能为整数）。
+     * <p>
+     * 同时指定多个账户出资退款的使用场景需要满足以下条件：
+     * <p>
+     * <ol>
+     *  <li>未开通退款支出分离产品功能；</li>
+     *  <li>订单属于分账订单，且分账处于待分账或分账中状态。</li>
+     * </ol>
+     * <p>
+     * 参数传递需要满足条件：
+     * <p>
+     * <ol>
+     *   <li>基本账户可用余额出资金额与基本账户不可用余额出资金额之和等于退款金额；</li>
+     *   <li>账户类型不能重复。</li>
+     * </ol>
+     * <p>
+     * 上述任一条件不满足将返回错误
+     *
+     * @author felord.cn
+     * @since 1.0.11.RELEASE
+     */
+    @Data
+    public static class RefundForm {
+        /**
+         * 出资账户类型
+         * <p>
+         * {@code AVAILABLE}  可用余额
+         * {@code UNAVAILABLE} 不可用余额
+         */
+        private String account;
+        /**
+         * 对应账户出资金额
+         */
+        private String amount;
+
+    }
 }
