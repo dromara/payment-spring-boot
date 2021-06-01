@@ -5,17 +5,27 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 直连商户-请求分账API-请求参数
+ * 服务商请求分账API-请求参数
  *
  * @author felord.cn
  * @since 1.0.11.RELEASE
  */
 @Data
-public class ProfitSharingOrder {
+public class PartnerProfitSharingOrder {
     /**
-     * 应用ID，自动注入
+     * 子商户号，选填
+     */
+    private String subMchid;
+    /**
+     * 服务商应用ID，自动注入
      */
     private String appid;
+    /**
+     * 子商户应用ID，选填
+     * <p>
+     * 分账接收方类型包含{@code PERSONAL_SUB_OPENID}时必填
+     */
+    private String subAppid;
     /**
      * 微信订单号，必填
      */

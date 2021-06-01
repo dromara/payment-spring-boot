@@ -140,7 +140,7 @@ public class WechatBatchTransferApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_WECHAT, queryBatchTransferDetailParams)
                 .function((type, params) -> {
-                    Map<String, String> queryParams = new HashMap<>();
+                    Map<String, String> queryParams = new HashMap<>(2);
                     queryParams.put("batch_id", params.getBatchIdOrOutBatchNo());
                     queryParams.put("detail_id", params.getDetailIdOrOutDetailNo());
 
@@ -195,7 +195,7 @@ public class WechatBatchTransferApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_MCH, queryBatchTransferDetailParams)
                 .function((type, params) -> {
-                    Map<String, String> queryParams = new HashMap<>();
+                    Map<String, String> queryParams = new HashMap<>(2);
                     queryParams.put("batch_id", params.getBatchIdOrOutBatchNo());
                     queryParams.put("detail_id", params.getDetailIdOrOutDetailNo());
 

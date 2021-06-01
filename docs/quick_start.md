@@ -92,7 +92,7 @@ wechat:
 
 ### 支付宝
 
-在Spring Boot项目中的`application.yaml`中配置`ali.pay.v1`相关参数。
+在Spring Boot项目中的`application.yaml`中配置`ali.pay.v1`相关参数。证书细节参见【日常踩坑】
 ```yaml
 ali:
   pay:

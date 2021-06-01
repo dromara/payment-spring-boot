@@ -353,9 +353,9 @@ public class WechatMarketingFavorApi extends AbstractApi {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("appid", v3.getAppId());
 
-        MultiValueMap<String, String> pathParams = new LinkedMultiValueMap<>();
-        pathParams.add("openid", params.getOpenId());
-        pathParams.add("coupon_id", params.getCouponId());
+        Map<String, String> pathParams = new HashMap<>(2);
+        pathParams.put("openid", params.getOpenId());
+        pathParams.put("coupon_id", params.getCouponId());
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
                 .build()

@@ -606,6 +606,12 @@ public enum WechatPayV3Type {
      */
     PROFITSHARING_AMOUNTS(HttpMethod.GET, "%s/v3/profitsharing/transactions/{transaction_id}/amounts"),
     /**
+     * 服务商专用-查询最大分账比例API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_MCH_CONFIG(HttpMethod.GET, "%s/v3/profitsharing/merchant-configs/{sub_mchid}"),
+    /**
      * 添加分账接收方API.
      *
      * @since 1.0.11.RELEASE

@@ -26,20 +26,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 直连商户-微信支付分账动账通知参数
+ * 服务商-微信支付分账动账通知参数
  *
  * @author felord.cn
  * @since 1.0.11.RELEASE
  */
 @Data
-public class ProfitsharingConsumeData {
+public class PartnerProfitsharingConsumeData {
 
     /**
-     * 直连商户号.
+     * 服务商商户号.
      * <p>
-     * 直连模式分账发起和出资商户
+     * 服务商模式分账发起商户
      */
     private String mchid;
+    /**
+     * 子商户号
+     * <p>
+     * 服务商模式分账出资商户
+     */
+    private String subMchid;
 
     /**
      * 微信订单号.
