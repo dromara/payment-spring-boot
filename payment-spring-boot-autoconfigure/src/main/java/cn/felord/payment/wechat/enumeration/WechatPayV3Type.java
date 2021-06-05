@@ -47,13 +47,13 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.3.RELEASE
      */
-    TRADEBILL(HttpMethod.GET, "%s/v3/bill/tradebill"),
+    TRADE_BILL(HttpMethod.GET, "%s/v3/bill/tradebill"),
     /**
      * 申请资金账单API.
      *
      * @since 1.0.3.RELEASE
      */
-    FUNDFLOWBILL(HttpMethod.GET, "%s/v3/bill/fundflowbill"),
+    FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/bill/fundflowbill"),
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -487,6 +487,37 @@ public enum WechatPayV3Type {
      * @since 1.0.6.RELEASES
      */
     BATCH_TRANSFER_DOWNLOAD_BILL(HttpMethod.GET, "%s/v3/transfer/bill-receipt/{out_batch_no}"),
+    /**
+     * 转账明细电子回单受理API.
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_ELECTRONIC(HttpMethod.POST, "%s/v3/transfer-detail/electronic-receipts"),
+    /**
+     * 查询转账明细电子回单受理结果API.
+     * 请求方式同{@link WechatPayV3Type#BATCH_TRANSFER_ELECTRONIC}不同
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_ELECTRONIC_DETAIL(HttpMethod.GET, "%s/v3/transfer-detail/electronic-receipts"),
+    /**
+     * 查询账户实时余额API
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_FUND_BALANCE(HttpMethod.GET, "%s/v3/merchant/fund/balance/{account_type}"),
+    /**
+     * 查询账户日终余额API
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_FUND_DAY_BALANCE(HttpMethod.GET, "%s/v3/merchant/fund/dayendbalance/{account_type}"),
+    /**
+     * 商户银行来账查询API
+     *
+     * @since 1.0.11.RELEASES
+     */
+    BATCH_TRANSFER_FUND_INCOME_RECORDS(HttpMethod.GET, "%s/v3/merchantfund/merchant/income-records"),
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -536,7 +567,62 @@ public enum WechatPayV3Type {
      * @since 1.0.0.RELEASE
      */
     TRANSACTION_OUT_TRADE_NO_PARTNER(HttpMethod.GET, "%s/v3/pay/partner/transactions/out-trade-no/{out_trade_no}"),
-    ;
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 请求分账API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_ORDERS(HttpMethod.POST, "%s/v3/profitsharing/orders"),
+    /**
+     * 查询分账结果API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_ORDERS_RESULT(HttpMethod.GET, "%s/v3/profitsharing/orders/{out_order_no}"),
+    /**
+     * 请求分账回退API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_RETURN_ORDERS(HttpMethod.POST, "%s/v3/profitsharing/return-orders"),
+    /**
+     * 查询分账回退结果API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_RETURN_ORDERS_RESULT(HttpMethod.GET, "%s/v3/profitsharing/return-orders"),
+    /**
+     * 解冻剩余资金API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_ORDERS_UNFREEZE(HttpMethod.POST, "%s/v3/profitsharing/orders/unfreeze"),
+    /**
+     * 查询剩余待分金额API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_AMOUNTS(HttpMethod.GET, "%s/v3/profitsharing/transactions/{transaction_id}/amounts"),
+    /**
+     * 服务商专用-查询最大分账比例API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_MCH_CONFIG(HttpMethod.GET, "%s/v3/profitsharing/merchant-configs/{sub_mchid}"),
+    /**
+     * 添加分账接收方API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_RECEIVERS_ADD(HttpMethod.POST, "%s/v3/profitsharing/receivers/add"),
+    /**
+     * 删除分账接收方API.
+     *
+     * @since 1.0.11.RELEASE
+     */
+    PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/profitsharing/receivers/add");
     /**
      * The Pattern.
      *

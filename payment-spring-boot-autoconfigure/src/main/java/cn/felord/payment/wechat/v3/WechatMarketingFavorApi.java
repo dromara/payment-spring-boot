@@ -353,9 +353,9 @@ public class WechatMarketingFavorApi extends AbstractApi {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("appid", v3.getAppId());
 
-        MultiValueMap<String, String> pathParams = new LinkedMultiValueMap<>();
-        pathParams.add("openid", params.getOpenId());
-        pathParams.add("coupon_id", params.getCouponId());
+        Map<String, String> pathParams = new HashMap<>(2);
+        pathParams.put("openid", params.getOpenId());
+        pathParams.put("coupon_id", params.getCouponId());
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .queryParams(queryParams)
                 .build()
@@ -493,7 +493,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param stockId the stock id
      * @return the wechat response entity
-     * @see AbstractApi#billDownload(String) AbstractApi#billDownload(String)对账单下载api
+     * @see AbstractApi#billCsvDownload(String) AbstractApi#billDownload(String)对账单下载api
      */
     public WechatResponseEntity<ObjectNode> downloadStockUseFlow(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -501,7 +501,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .function(this::downloadFlowFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
-        String csv = this.billDownload(wechatResponseEntity.getBody().get("url").asText());
+        String csv = this.billCsvDownload(wechatResponseEntity.getBody().get("url").asText());
         wechatResponseEntity.getBody().put("csv", csv);
         return wechatResponseEntity;
     }
@@ -515,7 +515,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
      *
      * @param stockId the stock id
      * @return the wechat response entity
-     * @see AbstractApi#billDownload(String) AbstractApi#billDownload(String)对账单下载api
+     * @see AbstractApi#billCsvDownload(String) AbstractApi#billDownload(String)对账单下载api
      */
     public WechatResponseEntity<ObjectNode> downloadStockRefundFlow(String stockId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
@@ -523,7 +523,7 @@ public class WechatMarketingFavorApi extends AbstractApi {
                 .function(this::downloadFlowFunction)
                 .consumer(wechatResponseEntity::convert)
                 .request();
-        String csv = this.billDownload(wechatResponseEntity.getBody().get("url").asText());
+        String csv = this.billCsvDownload(wechatResponseEntity.getBody().get("url").asText());
         wechatResponseEntity.getBody().put("csv", csv);
         return wechatResponseEntity;
     }

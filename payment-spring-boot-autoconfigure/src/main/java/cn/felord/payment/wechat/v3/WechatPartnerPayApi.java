@@ -87,7 +87,7 @@ public class WechatPartnerPayApi extends AbstractApi {
                             .toString()
                             .replaceAll("-", "");
                     String prepayId = body.get("prepay_id").asText();
-                    String paySign = signatureProvider.doRequestSign(true, privateKey, subAppid, timestamp, nonceStr, prepayId);
+                    String paySign = signatureProvider.doRequestSign(privateKey, subAppid, timestamp, nonceStr, prepayId);
 
                     body.put("appid", subAppid);
                     body.put("partnerid", partnerPayParams.getSubMchid());
@@ -136,7 +136,7 @@ public class WechatPartnerPayApi extends AbstractApi {
                             .toString()
                             .replaceAll("-", "");
                     String packageStr = "prepay_id=" + body.get("prepay_id").asText();
-                    String paySign = signatureProvider.doRequestSign(true, privateKey, subAppid, timestamp, nonceStr, packageStr);
+                    String paySign = signatureProvider.doRequestSign(privateKey, subAppid, timestamp, nonceStr, packageStr);
 
                     body.put("appId", subAppid);
                     body.put("timeStamp", timestamp);

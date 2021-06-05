@@ -27,8 +27,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -89,7 +91,7 @@ public abstract class AbstractApi {
      */
     private void applyObjectMapper(ObjectMapper mapper) {
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 // empty string error
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
@@ -217,13 +219,15 @@ public abstract class AbstractApi {
             throw new PayException("wechat app pay json failed");
         }
     }
+
     /**
-     * 对账单内容下载，非流文件。
+     * 对账单CSV内容下载，非流文件。
      *
      * @param link the link
      * @return 对账单内容 ，有可能为空字符 “”
+     * @see AbstractApi#billResource(String) AbstractApi#billResource(String)AbstractApi#billResource(String)AbstractApi#billResource(String)
      */
-    protected String billDownload(String link) {
+    protected String billCsvDownload(String link) {
         return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
                 .function((type, downloadUrl) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(downloadUrl)
@@ -234,25 +238,11 @@ public abstract class AbstractApi {
                 .download();
     }
 
-    /**
-     * 对账单下载，流文件。
-     *
-     * @param link the link
-     * @return response entity
-     */
-    protected ResponseEntity<Resource> billResource(String link) {
-        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
-                .function((type, downloadUrl) -> {
-                    URI uri = UriComponentsBuilder.fromHttpUrl(downloadUrl)
-                            .build()
-                            .toUri();
-                    return Get(uri);
-                })
-                .resource();
-    }
 
     /**
      * 申请交易账单API
+     * <p>
+     * 返回值直接返回前端，会下载tradebill-前缀加上日期的txt文件（默认）或者gzip文件。
      * <p>
      * 微信支付按天提供交易账单文件，商户可以通过该接口获取账单文件的下载地址。文件内包含交易相关的金额、时间、营销等信息，供商户核对订单、退款、银行到账等情况。
      * <p>
@@ -265,10 +255,13 @@ public abstract class AbstractApi {
      * </ul>
      *
      * @param tradeBillParams tradeBillParams
+     * @return the response entity
      * @since 1.0.3.RELEASE
      */
-    public final void downloadTradeBill(TradeBillParams tradeBillParams) {
-        this.client().withType(WechatPayV3Type.TRADEBILL, tradeBillParams)
+    public ResponseEntity<Resource> downloadTradeBill(TradeBillParams tradeBillParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+
+        this.client().withType(WechatPayV3Type.TRADE_BILL, tradeBillParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
                     LocalDate billDate = params.getBillDate();
@@ -291,8 +284,15 @@ public abstract class AbstractApi {
                             .build().toUri();
                     return Get(uri);
                 })
-                .consumer(response -> this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText()))
+                .consumer(wechatResponseEntity::convert)
                 .request();
+        String downloadUrl = Objects.requireNonNull(wechatResponseEntity.getBody())
+                .get("download_url")
+                .asText();
+
+        String ext = Objects.equals(TarType.GZIP, tradeBillParams.getTarType()) ? ".gzip" : ".txt";
+        String filename = "tradebill-" + tradeBillParams.getBillDate().toString() + ext;
+        return downloadBillResponse(downloadUrl, filename);
     }
 
     /**
@@ -307,10 +307,12 @@ public abstract class AbstractApi {
      * </ul>
      *
      * @param fundFlowBillParams fundFlowBillParams
+     * @return the response entity
      * @since 1.0.3.RELEASE
      */
-    public final void downloadFundFlowBill(FundFlowBillParams fundFlowBillParams) {
-        this.client().withType(WechatPayV3Type.FUNDFLOWBILL, fundFlowBillParams)
+    public ResponseEntity<Resource> downloadFundFlowBill(FundFlowBillParams fundFlowBillParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.FUND_FLOW_BILL, fundFlowBillParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
                     LocalDate billDate = params.getBillDate();
@@ -328,7 +330,46 @@ public abstract class AbstractApi {
                             .build().toUri();
                     return Get(uri);
                 })
-                .consumer(response -> this.billDownload(Objects.requireNonNull(response.getBody()).get("download_url").asText()))
+                .consumer(wechatResponseEntity::convert)
                 .request();
+        String downloadUrl = Objects.requireNonNull(wechatResponseEntity.getBody())
+                .get("download_url")
+                .asText();
+
+        String ext = Objects.equals(TarType.GZIP, fundFlowBillParams.getTarType()) ? ".gzip" : ".txt";
+        String filename = "fundflowbill-" + fundFlowBillParams.getBillDate().toString() + ext;
+        return this.downloadBillResponse(downloadUrl, filename);
+    }
+
+    /**
+     * 调用{@code /v3/billdownload/file}直接下载为文件.
+     *
+     * @param downloadUrl  格式为 {@code https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx}
+     * @param filename    文件名称包含扩展名
+     * @return the response entity
+     */
+    public ResponseEntity<Resource> downloadBillResponse(String downloadUrl, String filename) {
+        ResponseEntity<Resource> responseEntity = this.billResource(downloadUrl);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        // utf is not support
+        httpHeaders.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+        return ResponseEntity.ok().headers(httpHeaders).body(responseEntity.getBody());
+    }
+
+    /**
+     * 调用{@code /v3/billdownload/file}下载返回的原始文件流
+     *
+     * @param link the link
+     * @return response entity
+     */
+    protected ResponseEntity<Resource> billResource(String link) {
+        return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
+                .function((type, downloadUrl) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(downloadUrl)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })
+                .resource();
     }
 }

@@ -71,6 +71,10 @@ public class AliPayProperties {
          */
         private String charset = "utf-8";
         /**
+         * use classpath or not ,default true
+         */
+        private boolean classpathUsed = true;
+        /**
          * alipay public cert path
          */
         private String alipayPublicCertPath;

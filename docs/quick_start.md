@@ -4,7 +4,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.10.RELEASE</version>
+    <version>1.0.11.RELEASE</version>
 </dependency>
 ```
 > 基于 **Spring Boot 2.x** 
@@ -92,7 +92,7 @@ wechat:
 
 ### 支付宝
 
-在Spring Boot项目中的`application.yaml`中配置`ali.pay.v1`相关参数。
+在Spring Boot项目中的`application.yaml`中配置`ali.pay.v1`相关参数。证书细节参见【日常踩坑】
 ```yaml
 ali:
   pay:

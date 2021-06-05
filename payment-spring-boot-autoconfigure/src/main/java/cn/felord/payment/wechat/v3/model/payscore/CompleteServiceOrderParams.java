@@ -78,7 +78,7 @@ public class CompleteServiceOrderParams {
      * false：不分账，默认：false
      * true：分账。
      */
-    private Boolean profitSharing = Boolean.TRUE;
+    private Boolean profitSharing = Boolean.FALSE;
     /**
      * 订单优惠标记，选填
      * <p>

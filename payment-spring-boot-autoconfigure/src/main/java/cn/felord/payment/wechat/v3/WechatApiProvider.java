@@ -123,7 +123,7 @@ public class WechatApiProvider {
     }
 
     /**
-     *  批量转账到零钱.
+     * 批量转账到零钱.
      * <p>
      * 批量转账到零钱提供商户同时向多个用户微信零钱转账的能力。商户可以使用批量转账到零钱用于费用报销、员工福利发放、合作伙伴货款或服务款项支付等场景，提高转账效率。
      *
@@ -193,4 +193,23 @@ public class WechatApiProvider {
         return new WechatAllocationApi(wechatV2Client);
     }
 
+    /**
+     * 直连商户微信支付分账，基于V3
+     *
+     * @param tenantId the tenant id
+     * @return the wechat profitsharing api
+     */
+    public WechatProfitsharingApi profitsharingApi(String tenantId) {
+        return new WechatProfitsharingApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商微信支付分账，基于V3
+     *
+     * @param tenantId the tenant id
+     * @return the wechat partner profitsharing api
+     */
+    public WechatPartnerProfitsharingApi partnerProfitsharingApi(String tenantId) {
+        return new WechatPartnerProfitsharingApi(wechatPayClient, tenantId);
+    }
 }

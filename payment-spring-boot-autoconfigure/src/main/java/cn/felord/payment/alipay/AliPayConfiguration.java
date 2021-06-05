@@ -33,9 +33,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.function.Function;
 
 /**
  * @author felord.cn
@@ -56,34 +56,33 @@ public class AliPayConfiguration {
         CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
         propertyMapper.from(v1::getServerUrl).to(certAlipayRequest::setServerUrl);
         propertyMapper.from(v1::getAppId).to(certAlipayRequest::setAppId);
-        propertyMapper.from(v1::getAppPrivateKeyPath).as(this::appRSAPrivateKey).to(certAlipayRequest::setPrivateKey);
+        propertyMapper.from(v1::getAppPrivateKeyPath)
+                .as(this::loadFile)
+                .to(certAlipayRequest::setPrivateKey);
+
         propertyMapper.from(v1::getFormat).to(certAlipayRequest::setFormat);
         propertyMapper.from(v1::getCharset).to(certAlipayRequest::setCharset);
         propertyMapper.from(v1::getSignType).to(certAlipayRequest::setSignType);
-        propertyMapper.from(v1::getAppCertPublicKeyPath).as(this::getContentFromClassPath).to(certAlipayRequest::setCertContent);
-        propertyMapper.from(v1::getAlipayPublicCertPath).as(this::getContentFromClassPath).to(certAlipayRequest::setAlipayPublicCertContent);
-        propertyMapper.from(v1::getAlipayRootCertPath).as(this::getContentFromClassPath).to(certAlipayRequest::setRootCertContent);
+
+        Function<String,String> certStrategyFunc = v1.isClasspathUsed()?this::loadFile:s -> s;
+
+        propertyMapper.from(v1::getAppCertPublicKeyPath)
+                .as(certStrategyFunc)
+                .to(certAlipayRequest::setCertContent);
+        propertyMapper.from(v1::getAlipayPublicCertPath)
+                .as(certStrategyFunc)
+                .to(certAlipayRequest::setAlipayPublicCertContent);
+        propertyMapper.from(v1::getAlipayRootCertPath)
+                .as(certStrategyFunc)
+                .to(certAlipayRequest::setRootCertContent);
         return new DefaultAlipayClient(certAlipayRequest);
     }
 
 
-    private String getContentFromClassPath(String classPath) {
-        ClassPathResource resource = new ClassPathResource(classPath);
-        try (InputStreamReader in = new InputStreamReader(resource.getInputStream())) {
-            return IOUtils.toString(in);
-        } catch (IOException e) {
-            log.error("ali pay root cert is invalid ,{}", e.getMessage());
-            throw new PayException("ali pay root cert path is invalid");
-        }
-    }
-
-
-    private String appRSAPrivateKey(String classPath) {
+    private String loadFile(String classPath) {
         ClassPathResource resource = new ClassPathResource(classPath);
         try (InputStreamReader inputStreamReader = new InputStreamReader(resource.getInputStream())) {
-            try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                return bufferedReader.readLine();
-            }
+            return IOUtils.toString(inputStreamReader);
         } catch (IOException e) {
             log.error("ali pay app private key is required ,{}", e.getMessage());
             throw new PayException("ali pay app private key is required");

@@ -29,6 +29,7 @@ import cn.felord.payment.wechat.v3.model.payscore.PayScoreConsumer;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
+import cn.felord.payment.wechat.v3.model.profitsharing.ProfitsharingConsumeData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -39,7 +40,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -73,8 +73,8 @@ public class WechatPayCallback {
     static {
         MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false)
-                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,true)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
                 .registerModule(new JavaTimeModule());
     }
 
@@ -92,7 +92,7 @@ public class WechatPayCallback {
 
 
     /**
-     * 微信支付分账回调.
+     * 微信支付分账V2回调.
      *
      * @param params              the params
      * @param consumeDataConsumer the consume data consumer
@@ -100,14 +100,11 @@ public class WechatPayCallback {
      * @since 1.0.10.RELEASE
      */
     @SneakyThrows
-    public Map<String, ?> profitSharingCallback(ResponseSignVerifyParams params, Consumer<ProfitSharingConsumeData> consumeDataConsumer) {
+    public Map<String, String> profitSharingCallback(ResponseSignVerifyParams params, Consumer<ProfitSharingConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.TRANSACTION);
         ProfitSharingConsumeData consumeData = MAPPER.readValue(data, ProfitSharingConsumeData.class);
         consumeDataConsumer.accept(consumeData);
-        Map<String, Object> responseBody = new HashMap<>(2);
-        responseBody.put("code", 200);
-        responseBody.put("message", "SUCCESS");
-        return responseBody;
+        return response();
 
     }
 
@@ -121,14 +118,11 @@ public class WechatPayCallback {
      * @since 1.0.0.RELEASE
      */
     @SneakyThrows
-    public Map<String, ?> couponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> consumeDataConsumer) {
+    public Map<String, String> couponCallback(ResponseSignVerifyParams params, Consumer<CouponConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.COUPON_USE);
         CouponConsumeData consumeData = MAPPER.readValue(data, CouponConsumeData.class);
         consumeDataConsumer.accept(consumeData);
-        Map<String, Object> responseBody = new HashMap<>(2);
-        responseBody.put("code", 200);
-        responseBody.put("message", "SUCCESS");
-        return responseBody;
+        return response();
 
     }
 
@@ -143,12 +137,11 @@ public class WechatPayCallback {
      * @since 1.0.0.RELEASE
      */
     @SneakyThrows
-    public Map<String, ?> transactionCallback(ResponseSignVerifyParams params, Consumer<TransactionConsumeData> consumeDataConsumer) {
+    public Map<String, String> transactionCallback(ResponseSignVerifyParams params, Consumer<TransactionConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.TRANSACTION);
         TransactionConsumeData consumeData = MAPPER.readValue(data, TransactionConsumeData.class);
         consumeDataConsumer.accept(consumeData);
-        return Collections.singletonMap("code", "SUCCESS");
-
+        return response();
     }
 
     /**
@@ -162,12 +155,11 @@ public class WechatPayCallback {
      * @since 1.0.0.RELEASE
      */
     @SneakyThrows
-    public Map<String, ?> combineTransactionCallback(ResponseSignVerifyParams params, Consumer<CombineTransactionConsumeData> consumeDataConsumer) {
+    public Map<String, String> combineTransactionCallback(ResponseSignVerifyParams params, Consumer<CombineTransactionConsumeData> consumeDataConsumer) {
         String data = this.callback(params, EventType.TRANSACTION);
         CombineTransactionConsumeData consumeData = MAPPER.readValue(data, CombineTransactionConsumeData.class);
         consumeDataConsumer.accept(consumeData);
-        return Collections.singletonMap("code", "SUCCESS");
-
+        return response();
     }
 
     /**
@@ -181,7 +173,7 @@ public class WechatPayCallback {
      * @since 1.0.2.RELEASE
      */
     @SneakyThrows
-    public Map<String, ?> payscoreUserOrderCallback(ResponseSignVerifyParams params, PayScoreConsumer payScoreConsumer) {
+    public Map<String, String> payscoreUserOrderCallback(ResponseSignVerifyParams params, PayScoreConsumer payScoreConsumer) {
         CallbackParams callbackParams = resolve(params);
         String eventType = callbackParams.getEventType();
 
@@ -197,8 +189,7 @@ public class WechatPayCallback {
             log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
             throw new PayException(" wechat pay event type is not matched");
         }
-
-        return Collections.singletonMap("code", "SUCCESS");
+        return response();
     }
 
     /**
@@ -213,7 +204,7 @@ public class WechatPayCallback {
      * @return the map
      */
     @SneakyThrows
-    public Map<String, ?> permissionCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserPermissionConsumeData> consumeDataConsumer) {
+    public Map<String, String> permissionCallback(ResponseSignVerifyParams params, Consumer<PayScoreUserPermissionConsumeData> consumeDataConsumer) {
         CallbackParams callbackParams = resolve(params);
         String eventType = callbackParams.getEventType();
         boolean closed;
@@ -229,7 +220,7 @@ public class WechatPayCallback {
         PayScoreUserPermissionConsumeData consumeData = MAPPER.readValue(data, PayScoreUserPermissionConsumeData.class);
         consumeData.setClosed(closed);
         consumeDataConsumer.accept(consumeData);
-        return Collections.singletonMap("code", "SUCCESS");
+        return response();
     }
 
     /**
@@ -265,7 +256,7 @@ public class WechatPayCallback {
             log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
             throw new PayException(" wechat pay event type is not matched");
         }
-        return Collections.singletonMap("code", "SUCCESS");
+        return response();
     }
 
     /**
@@ -280,7 +271,7 @@ public class WechatPayCallback {
      * @return the map
      */
     @SneakyThrows
-    public Map<String, ?> busiFavorReceiveCallback(ResponseSignVerifyParams params, Consumer<BusiFavorReceiveConsumeData> consumeDataConsumer) {
+    public Map<String, String> busiFavorReceiveCallback(ResponseSignVerifyParams params, Consumer<BusiFavorReceiveConsumeData> consumeDataConsumer) {
         CallbackParams callbackParams = resolve(params);
         String eventType = callbackParams.getEventType();
 
@@ -292,7 +283,7 @@ public class WechatPayCallback {
         BusiFavorReceiveConsumeData consumeData = MAPPER.readValue(data, BusiFavorReceiveConsumeData.class);
 
         consumeDataConsumer.accept(consumeData);
-        return Collections.singletonMap("code", "SUCCESS");
+        return response();
     }
 
     /**
@@ -302,10 +293,10 @@ public class WechatPayCallback {
      *
      * @param params              the params
      * @param consumeDataConsumer the consume data consumer
-     * @return map
+     * @return map map
      */
     @SneakyThrows
-    public Map<String, ?> refundCallback(ResponseSignVerifyParams params, Consumer<RefundConsumeData> consumeDataConsumer) {
+    public Map<String, String> refundCallback(ResponseSignVerifyParams params, Consumer<RefundConsumeData> consumeDataConsumer) {
         CallbackParams callbackParams = resolve(params);
         String eventType = callbackParams.getEventType();
 
@@ -319,9 +310,23 @@ public class WechatPayCallback {
         RefundConsumeData consumeData = MAPPER.readValue(data, RefundConsumeData.class);
 
         consumeDataConsumer.accept(consumeData);
-        return Collections.singletonMap("code", "SUCCESS");
+        return response();
     }
 
+    /**
+     * 微信支付分账V3动账通知
+     *
+     * @param params                           the params
+     * @param profitsharingConsumeDataConsumer the profitsharing consume data consumer
+     * @return map map
+     */
+    @SneakyThrows
+    public Map<String, String> profitsharingCallback(ResponseSignVerifyParams params, Consumer<ProfitsharingConsumeData> profitsharingConsumeDataConsumer) {
+        String callback = this.callback(params, EventType.TRANSACTION);
+        ProfitsharingConsumeData consumeData = MAPPER.readValue(callback, ProfitsharingConsumeData.class);
+        profitsharingConsumeDataConsumer.accept(consumeData);
+        return response();
+    }
 
     /**
      * Callback.
@@ -371,6 +376,18 @@ public class WechatPayCallback {
         String data = signatureProvider.decryptResponseBody(tenantId, associatedData, nonce, ciphertext);
         Assert.hasText(data, "decryptData is required");
         return data;
+    }
+
+    /**
+     * 回调应答
+     *
+     * @return response
+     */
+    private Map<String, String> response() {
+        Map<String, String> responseBody = new HashMap<>(2);
+        responseBody.put("code", "SUCCESS");
+        responseBody.put("message", "SUCCESS");
+        return responseBody;
     }
 
 
@@ -450,7 +467,7 @@ public class WechatPayCallback {
         COUPON_SEND("COUPON.SEND"),
 
         /**
-         * 支付成功事件.
+         * 支付成功、分账、分账回退事件.
          *
          * @since 1.0.0.RELEASE
          */

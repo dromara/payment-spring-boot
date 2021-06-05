@@ -29,6 +29,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信支付分API.
@@ -63,14 +65,14 @@ public class WechatPayScoreApi extends AbstractApi {
                 .function((wechatPayV3Type, userServiceStateParams) -> {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
-                    MultiValueMap<String, String> expandParams = new LinkedMultiValueMap<>();
-                    expandParams.add("appid", v3.getAppId());
-                    expandParams.add("service_id", params.getServiceId());
-                    expandParams.add("openid", params.getOpenId());
+                    Map<String, String> pathParams = new HashMap<>(3);
+                    pathParams.put("appid", v3.getAppId());
+                    pathParams.put("service_id", params.getServiceId());
+                    pathParams.put("openid", params.getOpenId());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
-                            .expand(expandParams)
+                            .expand(pathParams)
                             .toUri();
                     return Get(uri);
                 })
