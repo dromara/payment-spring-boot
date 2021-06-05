@@ -26,7 +26,6 @@ public class TransferDetailElectronicParams {
     private String outBatchNo;
     /**
      * 商家转账明细单号，必填。
-     * <p>
      * <ul>
      *     <li>受理类型为{@code BATCH_TRANSFER}时填写商家批量转账明细单号。</li>
      *     <li>受理类型为{@code TRANSFER_TO_POCKET}或{@code TRANSFER_TO_BANK}时填写商家转账单号。</li>
