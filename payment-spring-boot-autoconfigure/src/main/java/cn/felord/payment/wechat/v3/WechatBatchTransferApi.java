@@ -288,7 +288,7 @@ public class WechatBatchTransferApi extends AbstractApi {
      * 查询转账明细电子回单受理结果接口，商户通过该接口可以查询电子回单受理进度信息，
      * 包括电子回单据信息，电子回单文件的hash值，电子回单文件的下载地址等。
      * <p>
-     * 返回的下载链接可调用{@link this#downloadBillResponse(String, String)}下载文件
+     * 返回的下载链接可调用{@link #downloadBillResponse(String, String)}下载文件
      *
      * @param params the params
      * @return the wechat response entity
