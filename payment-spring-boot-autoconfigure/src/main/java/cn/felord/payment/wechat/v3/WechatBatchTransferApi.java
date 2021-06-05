@@ -140,13 +140,13 @@ public class WechatBatchTransferApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_WECHAT, queryBatchTransferDetailParams)
                 .function((type, params) -> {
-                    Map<String, String> queryParams = new HashMap<>(2);
-                    queryParams.put("batch_id", params.getBatchIdOrOutBatchNo());
-                    queryParams.put("detail_id", params.getDetailIdOrOutDetailNo());
+                    Map<String, String> pathParams = new HashMap<>(2);
+                    pathParams.put("batch_id", params.getBatchIdOrOutBatchNo());
+                    pathParams.put("detail_id", params.getDetailIdOrOutDetailNo());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()
-                            .expand(queryParams)
+                            .expand(pathParams)
                             .toUri();
                     return Get(uri);
                 })
@@ -195,13 +195,13 @@ public class WechatBatchTransferApi extends AbstractApi {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_MCH, queryBatchTransferDetailParams)
                 .function((type, params) -> {
-                    Map<String, String> queryParams = new HashMap<>(2);
-                    queryParams.put("batch_id", params.getBatchIdOrOutBatchNo());
-                    queryParams.put("detail_id", params.getDetailIdOrOutDetailNo());
+                    Map<String, String> pathParams = new HashMap<>(2);
+                    pathParams.put("batch_id", params.getBatchIdOrOutBatchNo());
+                    pathParams.put("detail_id", params.getDetailIdOrOutDetailNo());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()
-                            .expand(queryParams)
+                            .expand(pathParams)
                             .toUri();
                     return Get(uri);
                 })

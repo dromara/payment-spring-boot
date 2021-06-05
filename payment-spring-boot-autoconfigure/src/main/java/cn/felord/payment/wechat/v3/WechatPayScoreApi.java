@@ -65,14 +65,14 @@ public class WechatPayScoreApi extends AbstractApi {
                 .function((wechatPayV3Type, userServiceStateParams) -> {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
-                    Map<String, String> expandParams = new HashMap<>(3);
-                    expandParams.put("appid", v3.getAppId());
-                    expandParams.put("service_id", params.getServiceId());
-                    expandParams.put("openid", params.getOpenId());
+                    Map<String, String> pathParams = new HashMap<>(3);
+                    pathParams.put("appid", v3.getAppId());
+                    pathParams.put("service_id", params.getServiceId());
+                    pathParams.put("openid", params.getOpenId());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
-                            .expand(expandParams)
+                            .expand(pathParams)
                             .toUri();
                     return Get(uri);
                 })
