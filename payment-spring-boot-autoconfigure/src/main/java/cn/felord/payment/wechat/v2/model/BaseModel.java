@@ -178,7 +178,7 @@ public abstract class BaseModel {
 
         String query = map.entrySet()
                 .stream()
-                .map(entry -> entry.getKey().concat(entry.getValue()))
+                .map(entry -> entry.getKey().concat("=").concat(entry.getValue()))
                 .collect(Collectors.joining("&"));
         return query.concat("&key=").concat(this.appSecret);
     }
