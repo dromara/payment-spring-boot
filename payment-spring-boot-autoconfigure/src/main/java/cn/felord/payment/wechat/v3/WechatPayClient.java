@@ -29,6 +29,7 @@ import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
@@ -351,7 +352,7 @@ public class WechatPayClient {
         DefaultResponseErrorHandler errorHandler = new WechatPayResponseErrorHandler();
         restTemplate.setErrorHandler(errorHandler);
         List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
-
+        messageConverters.removeIf(httpMessageConverter -> httpMessageConverter instanceof MappingJackson2XmlHttpMessageConverter);
         messageConverters.removeIf(httpMessageConverter -> httpMessageConverter instanceof AllEncompassingFormHttpMessageConverter);
         messageConverters.add(new ExtensionFormHttpMessageConverter());
         restTemplate.setMessageConverters(messageConverters);

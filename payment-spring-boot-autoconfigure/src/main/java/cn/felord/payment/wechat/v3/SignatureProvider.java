@@ -30,7 +30,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.http.*;
-import org.springframework.util.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.util.AlternativeJdkIdGenerator;
+import org.springframework.util.Assert;
+import org.springframework.util.Base64Utils;
+import org.springframework.util.IdGenerator;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -49,10 +54,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -96,7 +98,7 @@ public class SignatureProvider {
     /**
      * The Rest operations.
      */
-    private final RestOperations restOperations = new RestTemplate();
+    private final RestOperations restOperations;
     /**
      * The Wechat meta container.
      */
@@ -110,6 +112,11 @@ public class SignatureProvider {
     public SignatureProvider(WechatMetaContainer wechatMetaContainer) {
         Provider bouncyCastleProvider = new BouncyCastleProvider();
         Security.addProvider(bouncyCastleProvider);
+        RestTemplate restOperations = new RestTemplate();
+        List<HttpMessageConverter<?>> messageConverters = restOperations.getMessageConverters();
+        messageConverters.removeIf(httpMessageConverter -> httpMessageConverter instanceof MappingJackson2XmlHttpMessageConverter);
+        restOperations.setMessageConverters(messageConverters);
+        this.restOperations = restOperations;
         this.wechatMetaContainer = wechatMetaContainer;
         wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
     }
@@ -177,7 +184,7 @@ public class SignatureProvider {
         Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial);
 
         final String signatureStr = createSign(true, params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
-        Signature signer = Signature.getInstance("SHA256withRSA");
+        Signature signer = Signature.getInstance("SHA256withRSA",BC_PROVIDER);
         signer.initVerify(certificate);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
 
