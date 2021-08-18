@@ -21,8 +21,8 @@ package cn.felord.payment.wechat.v2.model;
 import cn.felord.payment.PayException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -56,6 +56,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * The type Base model.
@@ -74,7 +76,8 @@ public abstract class BaseModel {
         XML_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 // 属性使用 驼峰首字母小写
                 .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        OBJECT_MAPPER.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+        OBJECT_MAPPER
+//                .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     }
@@ -166,13 +169,17 @@ public abstract class BaseModel {
     @SneakyThrows
     private <T> String link(T t) {
         Assert.hasText(appSecret, "wechat pay appSecret is required");
-        String link = OBJECT_MAPPER
-                .writer()
-                .writeValueAsString(t)
-                .replaceAll("\":\"", "=")
-                .replaceAll("\",\"", "&")
-                .replaceAll("\\\\\"", "\"");
-        return link.substring(2, link.length() - 2).concat("&key=").concat(this.appSecret);
+          String json = OBJECT_MAPPER
+                .writeValueAsString(t);
+
+        TreeMap<String, String> map = OBJECT_MAPPER.readValue(json, new TypeReference<TreeMap<String, String>>() {
+        });
+
+        String query = map.entrySet()
+                .stream()
+                .map(entry -> entry.getKey().concat(entry.getValue()))
+                .collect(Collectors.joining("&"));
+        return query.concat("&key=").concat(this.appSecret);
     }
 
 
