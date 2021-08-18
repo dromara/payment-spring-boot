@@ -152,10 +152,11 @@ public abstract class BaseModel {
      */
     @SneakyThrows
     private String hmacSha256(String src) {
-        Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secret_key = new SecretKeySpec(appSecret.getBytes(),"HmacSHA256");
-        sha256_HMAC.init(secret_key);
-        byte[] bytes = sha256_HMAC.doFinal(src.getBytes(StandardCharsets.UTF_8));
+        String algorithm = "HmacSHA256";
+        Mac sha256HMAC = Mac.getInstance(algorithm,"BC");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(appSecret.getBytes(), algorithm);
+        sha256HMAC.init(secretKeySpec);
+        byte[] bytes = sha256HMAC.doFinal(src.getBytes(StandardCharsets.UTF_8));
         return Hex.toHexString(bytes).toUpperCase();
     }
 
