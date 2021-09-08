@@ -242,6 +242,8 @@ public class SignatureProvider {
                     Certificate certificate = certificateFactory.generateCertificate(inputStream);
                     String responseSerialNo = objectNode.get("serial_no").asText();
                     X509WechatCertificateInfo x509WechatCertificateInfo = new X509WechatCertificateInfo();
+                    x509WechatCertificateInfo.setWechatPaySerial(responseSerialNo);
+                    x509WechatCertificateInfo.setTenantId(tenantId);
                     x509WechatCertificateInfo.setX509Certificate((X509Certificate) certificate);
                     CERTIFICATE_MAP.put(responseSerialNo, x509WechatCertificateInfo);
                 } catch (CertificateException e) {
