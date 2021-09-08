@@ -622,7 +622,7 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.11.RELEASE
      */
-    PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/profitsharing/receivers/add");
+    PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/profitsharing/receivers/delete");
     /**
      * The Pattern.
      *
