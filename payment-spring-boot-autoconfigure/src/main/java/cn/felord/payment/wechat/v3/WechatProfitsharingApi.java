@@ -53,7 +53,7 @@ public class WechatProfitsharingApi extends AbstractApi {
                 .function((wechatPayV3Type, params) -> {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate();
+                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
                     final X509Certificate x509Certificate = certificate.getX509Certificate();
                     params.setAppid(v3.getAppId());
                     List<Receiver> receivers = params.getReceivers();
@@ -239,7 +239,7 @@ public class WechatProfitsharingApi extends AbstractApi {
                 .function((wechatPayV3Type, params) -> {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate();
+                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
                     final X509Certificate x509Certificate = certificate.getX509Certificate();
                     params.setAppid(v3.getAppId());
                     String name = params.getName();

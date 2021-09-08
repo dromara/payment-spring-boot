@@ -77,7 +77,7 @@ public class WechatBatchTransferApi extends AbstractApi {
         List<CreateBatchTransferParams.TransferDetailListItem> transferDetailList = createBatchTransferParams.getTransferDetailList();
 
         SignatureProvider signatureProvider = this.client().signatureProvider();
-        X509WechatCertificateInfo certificate = signatureProvider.getCertificate();
+        X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
         final X509Certificate x509Certificate = certificate.getX509Certificate();
         List<CreateBatchTransferParams.TransferDetailListItem> encrypted = transferDetailList.stream()
                 .peek(transferDetailListItem -> {
