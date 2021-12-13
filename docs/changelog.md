@@ -1,3 +1,27 @@
+## 1.0.12.RELEASE
+- 微信支付
+  - fix: 修复多租户配置下，平台证书刷新错误的问题([#49](https://github.com/NotFound403/payment-spring-boot/issues/49)) 
+  - fix: 分账API描述符错误([#48](https://github.com/NotFound403/payment-spring-boot/issues/48)) 。
+  - refactor: 避免受jackson类库xml模块的影响
+  - refactor: V2签名优化
+## 1.0.11.RELEASE
+
+- 微信支付
+  
+  - feat: bcprov-jdk15to18算法库从1.66 升级到 1.67
+  - feat: 微信支付 《支付通知API》新增优惠功能（promotion_detail）字段
+  - feat: 微信支付基础支付《申请退款API》、《查询退款API》新增字段 from（退款出资账户及金额）
+  - feat: 现在支持V3分账功能，目前只支持直连商户分账`WechatProfitsharingApi`和服务商分账`WechatPartnerProfitsharingApi`
+  - feat: 完善V3批量转账到零钱API，增加实现：转账明细电子回单受理API、查询转账明细电子回单受理结果API、查询账户实时余额API、查询账户日终余额API、商户银行来账查询API
+  - refactor: 微信支付分分账标记默认改为不分账
+  - refactor: 平台证书刷新逻辑优化 ([#I3NGSB](https://gitee.com/felord/payment-spring-boot/issues/I3NGSB)) 
+  - refactor: 交易账单和资金账单现在能够正常的下载文件了，可以根据参数自动选择下载为gzip或者txt文件
+  - fix: 批量转账到零钱:微信明细单号查询明细单API,商家明细单号查询明细单API 参数错误
+  - fix: 修复查询代金券参数的错误
+
+- 支付宝
+  - feat: 支付宝增加字段classpathUsed来标识是否使用类路径，默认true。证书路径可依此来决定是使用绝对路径还是类路径
+
 ## 1.0.10.RELEASE
 
 - 微信支付
