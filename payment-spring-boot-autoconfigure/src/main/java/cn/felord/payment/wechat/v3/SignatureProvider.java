@@ -30,7 +30,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.http.*;
-import org.springframework.util.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.util.AlternativeJdkIdGenerator;
+import org.springframework.util.Assert;
+import org.springframework.util.Base64Utils;
+import org.springframework.util.IdGenerator;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -49,10 +54,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -86,7 +88,7 @@ public class SignatureProvider {
     /**
      * 微信平台证书容器  key = 序列号  value = 证书对象
      */
-    private static final Map<String, Certificate> CERTIFICATE_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, X509WechatCertificateInfo> CERTIFICATE_MAP = new ConcurrentHashMap<>();
     /**
      * 加密算法提供方 - BouncyCastle
      */
@@ -96,7 +98,7 @@ public class SignatureProvider {
     /**
      * The Rest operations.
      */
-    private final RestOperations restOperations = new RestTemplate();
+    private final RestOperations restOperations;
     /**
      * The Wechat meta container.
      */
@@ -110,6 +112,11 @@ public class SignatureProvider {
     public SignatureProvider(WechatMetaContainer wechatMetaContainer) {
         Provider bouncyCastleProvider = new BouncyCastleProvider();
         Security.addProvider(bouncyCastleProvider);
+        RestTemplate restOperations = new RestTemplate();
+        List<HttpMessageConverter<?>> messageConverters = restOperations.getMessageConverters();
+        messageConverters.removeIf(httpMessageConverter -> httpMessageConverter instanceof MappingJackson2XmlHttpMessageConverter);
+        restOperations.setMessageConverters(messageConverters);
+        this.restOperations = restOperations;
         this.wechatMetaContainer = wechatMetaContainer;
         wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
     }
@@ -174,10 +181,10 @@ public class SignatureProvider {
         if (CERTIFICATE_MAP.isEmpty() || !CERTIFICATE_MAP.containsKey(wechatpaySerial)) {
             wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
         }
-        Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial);
+        Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial).getX509Certificate();
 
         final String signatureStr = createSign(true, params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
-        Signature signer = Signature.getInstance("SHA256withRSA");
+        Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initVerify(certificate);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
 
@@ -234,7 +241,11 @@ public class SignatureProvider {
                 try {
                     Certificate certificate = certificateFactory.generateCertificate(inputStream);
                     String responseSerialNo = objectNode.get("serial_no").asText();
-                    CERTIFICATE_MAP.put(responseSerialNo, certificate);
+                    X509WechatCertificateInfo x509WechatCertificateInfo = new X509WechatCertificateInfo();
+                    x509WechatCertificateInfo.setWechatPaySerial(responseSerialNo);
+                    x509WechatCertificateInfo.setTenantId(tenantId);
+                    x509WechatCertificateInfo.setX509Certificate((X509Certificate) certificate);
+                    CERTIFICATE_MAP.put(responseSerialNo, x509WechatCertificateInfo);
                 } catch (CertificateException e) {
                     throw new PayException("An error occurred while generating the wechat v3 certificate, reason : " + e.getMessage());
                 }
@@ -307,21 +318,23 @@ public class SignatureProvider {
     /**
      * Get certificate x 509 wechat certificate info.
      *
+     * @param tenantId the tenant id
      * @return the x 509 wechat certificate info
      */
-    public X509WechatCertificateInfo getCertificate() {
+    public X509WechatCertificateInfo getCertificate(String tenantId) {
         for (String serial : CERTIFICATE_MAP.keySet()) {
-            X509Certificate x509Cert = (X509Certificate) CERTIFICATE_MAP.get(serial);
-            try {
-                x509Cert.checkValidity();
-                X509WechatCertificateInfo x509WechatCertificateInfo = new X509WechatCertificateInfo();
-                x509WechatCertificateInfo.setWechatPaySerial(serial);
-                x509WechatCertificateInfo.setX509Certificate(x509Cert);
-                return x509WechatCertificateInfo;
-            } catch (Exception e) {
-                log.warn("the wechat certificate is invalid , {}", e.getMessage());
-                // Async?
-                wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
+            X509WechatCertificateInfo wechatCertificateInfo = CERTIFICATE_MAP.get(serial);
+            X509Certificate x509Cert = wechatCertificateInfo.getX509Certificate();
+            if (wechatCertificateInfo.getTenantId().equals(tenantId)){
+                try {
+                    x509Cert.checkValidity();
+
+                    return wechatCertificateInfo;
+                } catch (Exception e) {
+                    log.warn("the wechat certificate is invalid , {}", e.getMessage());
+                    // Async?
+                    wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
+                }
             }
         }
         throw new PayException("failed to obtain wechat pay x509Certificate ");

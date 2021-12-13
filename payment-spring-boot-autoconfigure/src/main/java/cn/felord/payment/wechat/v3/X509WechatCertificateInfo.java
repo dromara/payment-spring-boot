@@ -34,6 +34,10 @@ public class X509WechatCertificateInfo {
      */
     private String wechatPaySerial;
     /**
+     * tenantId
+     */
+    private String tenantId;
+    /**
      * X509Certificate
      */
     private X509Certificate x509Certificate;

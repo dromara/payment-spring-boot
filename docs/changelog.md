@@ -1,3 +1,10 @@
+## 1.0.12.RELEASE
+- 微信支付
+  - fix: 修复多租户配置下，平台证书刷新错误的问题([#49](https://github.com/NotFound403/payment-spring-boot/issues/49)) 
+  - fix: 分账API描述符错误([#48](https://github.com/NotFound403/payment-spring-boot/issues/48)) 。
+  - refactor: 避免受jackson类库xml模块的影响
+  - refactor: V2签名优化
+  
 ## 1.0.11.RELEASE
 
 - 微信支付
@@ -13,7 +20,7 @@
   - fix: 修复查询代金券参数的错误
 - 支付宝
   - feat: 支付宝增加字段`classpathUsed`来标识是否使用类路径，默认`true`。证书路径可依此来决定是使用绝对路径还是类路径
-  
+
 ## 1.0.10.RELEASE
 
 - 微信支付
