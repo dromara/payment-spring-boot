@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ package cn.felord.payment.wechat;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
-import java.io.IOException;
-
 /**
  * @author felord.cn
  * @since 1.0.0.RELEASE
@@ -30,7 +28,7 @@ import java.io.IOException;
 public class WechatPayResponseErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
-    public boolean hasError(ClientHttpResponse response) throws IOException {
+    public boolean hasError(ClientHttpResponse response) {
         return false;
     }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -165,7 +165,7 @@ public class WechatPayCallback {
     /**
      * 微信支付分确认订单、支付成功回调通知.
      * <p>
-     * 该链接是通过商户 <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/payscore/chapter3_1.shtml">创建支付分订单</a> 提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
+     * 该链接是通过商户 <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/payscore/chapter3_1.shtml">创建支付分订单</a> 提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： {@code https://pay.weixin.qq.com/wxpay/pay.action}
      *
      * @param params           the params
      * @param payScoreConsumer the pay score consumer
@@ -197,7 +197,7 @@ public class WechatPayCallback {
      * <p>
      * 微信支付分通过授权/解除授权服务通知接口将用户过授权/解除授权服务消息通知给商户
      * <p>
-     * 普通授权模式是通过[商户入驻配置申请表]提交service_notify_url设置，预授权模式是通过[商户预授权]提交的notify_url设置，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
+     * 普通授权模式是通过[商户入驻配置申请表]提交service_notify_url设置，预授权模式是通过[商户预授权]提交的notify_url设置，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： {@code https://pay.weixin.qq.com/wxpay/pay.action}
      *
      * @param params              the params
      * @param consumeDataConsumer the consume data consumer
@@ -228,7 +228,7 @@ public class WechatPayCallback {
      * <p>
      * 用户领取优惠卡后或者用户守约状态发生变更后或扣费状态变化后，微信会把对应信息发送给商户。
      * <p>
-     * 该链接是通过商户<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/discount-card/chapter3_1.shtml">预受理领卡请求</a>中提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
+     * 该链接是通过商户<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/discount-card/chapter3_1.shtml">预受理领卡请求</a>中提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： {@code https://pay.weixin.qq.com/wxpay/pay.action}
      *
      * @param params               the params
      * @param discountCardConsumer the discount card consumer
@@ -264,7 +264,7 @@ public class WechatPayCallback {
      * <p>
      * 领券完成后，微信会把相关支付结果和用户信息发送给商户，商户需要接收处理，并按照文档规范返回应答。出于安全的考虑，我们对支付结果数据进行了加密，商户需要先对通知数据进行解密，才能得到支付结果数据。
      * <p>
-     * 该链接是通过商户<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/busifavor/chapter3_7.shtml">设置商家券事件通知地址API</a>中提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
+     * 该链接是通过商户<a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/busifavor/chapter3_7.shtml">设置商家券事件通知地址API</a>中提交notify_url参数，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： {@code https://pay.weixin.qq.com/wxpay/pay.action}
      *
      * @param params              the params
      * @param consumeDataConsumer the consume data consumer
