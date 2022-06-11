@@ -444,6 +444,12 @@ public enum WechatPayV3Type {
      * @since 1.0.4.RELEASES
      */
     MARKETING_BUSI_FAVOR_DEACTIVATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/deactivate"),
+    /**
+     * 营销补差付款API.
+     *
+     * @since 1.0.13.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_SUBSIDY(HttpMethod.POST, "%s/v3/marketing/busifavor/subsidy/pay-receipts"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * 发起批量转账API.
