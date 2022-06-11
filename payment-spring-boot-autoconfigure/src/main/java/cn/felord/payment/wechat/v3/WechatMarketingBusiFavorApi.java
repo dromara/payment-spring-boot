@@ -459,5 +459,29 @@ public class WechatMarketingBusiFavorApi extends AbstractApi {
                 .request();
         return wechatResponseEntity;
     }
+    /**
+     * 查询营销补差付款单详情API
+     * <p>
+     * 查询商家券营销补差付款单详情
+     *
+     * @param subsidyReceiptId the subsidyReceiptId
+     * @return the wechat response entity
+     * @since 1.0.13.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> queryMakeup(String subsidyReceiptId){
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.MARKETING_BUSI_FAVOR_SUBSIDY_QUERY, subsidyReceiptId)
+                .function((type, receiptId) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(receiptId)
+                            .toUri();
+                    return Get(uri);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
 
 }

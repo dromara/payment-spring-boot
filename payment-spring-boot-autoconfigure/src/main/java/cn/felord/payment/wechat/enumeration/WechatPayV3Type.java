@@ -450,6 +450,12 @@ public enum WechatPayV3Type {
      * @since 1.0.13.RELEASES
      */
     MARKETING_BUSI_FAVOR_SUBSIDY(HttpMethod.POST, "%s/v3/marketing/busifavor/subsidy/pay-receipts"),
+    /**
+     * 查询营销补差付款单详情API.
+     *
+     * @since 1.0.13.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_SUBSIDY_QUERY(HttpMethod.POST, "%s/v3/marketing/busifavor/subsidy/pay-receipts/{subsidy_receipt_id}"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * 发起批量转账API.
