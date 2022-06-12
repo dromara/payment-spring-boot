@@ -242,6 +242,12 @@ public enum WechatPayV3Type {
      * @since 1.0.2.RELEASE
      */
     PAY_SCORE_SYNC_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/sync"),
+    /**
+     * 商户申请获取对账单API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_MERCHANT_BILL(HttpMethod.GET, "%s/v3/payscore/merchant-bill"),
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2022 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,21 +15,20 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.profitsharing;
+package cn.felord.payment.wechat.v3.model.payscore;
 
-import cn.felord.payment.wechat.enumeration.TarType;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 /**
- * 直连商户-申请分账账单API参数
+ * 直连商户-商户申请获取对账单API参数
  *
  * @author felord.cn
  * @since 1.0.13.RELEASE
  */
 @Data
-public class ProfitsharingBillParams {
+public class PayScoreBillParams {
 
     /**
      * 账单日期，必传。
@@ -38,10 +37,8 @@ public class ProfitsharingBillParams {
      */
     private LocalDate billDate;
     /**
-     * 压缩类型，不填默认值为数据流
-     *
-     * @see TarType
+     * 支付分服务ID，必传。
      */
-    private TarType tarType;
+    private String serviceId;
 
 }

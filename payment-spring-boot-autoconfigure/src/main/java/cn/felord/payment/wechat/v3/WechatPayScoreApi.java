@@ -19,6 +19,7 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.WechatPayProperties;
+import cn.felord.payment.wechat.enumeration.TarType;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.payscore.*;
@@ -29,6 +30,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -463,6 +466,38 @@ public class WechatPayScoreApi extends AbstractApi {
                     return Post(uri, orderParams);
                 })
                 .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 商户申请获取对账单API
+     * <p>
+     * 商户可以调用此接口获取对账单文件的下载链接，并在有效期内请求下载链接可以下载对账单文件。详细参考文档 <a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter6_1_29.shtml">商户申请获取对账单API</a>
+     * <p>
+     * 返回的下载链接可调用{@link #downloadBillResponse(String, String)}下载文件，文件需要解密。
+     *
+     * @param billParams the bill params
+     * @return the wechat response entity
+     * @since 1.0.13.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> downloadMerchantBills(PayScoreBillParams billParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PAY_SCORE_MERCHANT_BILL, billParams)
+                .function(((wechatPayV3Type, params) -> {
+                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    LocalDate billDate = params.getBillDate();
+                    queryParams.add("bill_date", billDate.format(DateTimeFormatter.ISO_DATE));
+                    queryParams.add("tar_type", TarType.GZIP.name());
+                    queryParams.add("encryption_algorithm", "AEAD_AES_256_GCM");
+                    queryParams.add("service_id",billParams.getServiceId());
+
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParams(queryParams)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })).consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
     }
