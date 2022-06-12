@@ -53,7 +53,7 @@ public class WechatPayScoreApi extends AbstractApi {
     }
 
     /**
-     * 微信支付分-查询用户授权状态API.
+     * 微信支付分-查询用户授权状态API（旧版接口）.
      * <p>
      * 免确认订单起始接口，【免确认订单模式】是高级接口权限，参见：<a href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/payscore/chapter2_5.shtml">业务流程说明</a>
      * <p>

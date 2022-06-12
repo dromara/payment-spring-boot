@@ -195,7 +195,7 @@ public enum WechatPayV3Type {
      */
     PAY_SCORE_TERMINATE_PERMISSIONS_OPENID(HttpMethod.POST, "%s/v3/payscore/permissions/openid/{openid}/terminate"),
     /**
-     * 查询用户授权状态API.
+     * 查询用户授权状态API（旧版接口）.
      *
      * @since 1.0.2.RELEASE
      */
@@ -248,8 +248,30 @@ public enum WechatPayV3Type {
      * @since 1.0.13.RELEASE
      */
     PAY_SCORE_MERCHANT_BILL(HttpMethod.GET, "%s/v3/payscore/merchant-bill"),
-
-
+    /**
+     * 查询车牌服务开通信息API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_FIND(HttpMethod.GET, "%s/v3/vehicle/parking/services/find"),
+    /**
+     * 创建停车入场API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_PARKINGS(HttpMethod.POST, "%s/v3/vehicle/parking/parkings"),
+    /**
+     * 扣费受理API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_TRANSACTIONS_PARKINGS(HttpMethod.POST, "%s/v3/vehicle/transactions/parking"),
+    /**
+     * 查询订单API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_TRANSACTIONS_OUTTRADENO(HttpMethod.GET, "%s/v3/vehicle/transactions/out-trade-no/{out_trade_no}"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**

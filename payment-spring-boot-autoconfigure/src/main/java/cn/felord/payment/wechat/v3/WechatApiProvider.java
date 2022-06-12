@@ -101,6 +101,17 @@ public class WechatApiProvider {
     }
 
     /**
+     * 微信支付分停车服务.
+     *
+     * @param tenantId the tenant id
+     * @return the wechat pay score parking api
+     * @since 1.0.13.RELEASE
+     */
+    public WechatPayScoreParkingApi payScoreParkingApi(String tenantId) {
+        return new WechatPayScoreParkingApi(wechatPayClient, tenantId);
+    }
+
+    /**
      * 微信支付先享卡.
      *
      * @param tenantId the tenant id

@@ -18,7 +18,12 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.v3.model.*;
+import cn.felord.payment.wechat.v3.model.CallbackParams;
+import cn.felord.payment.wechat.v3.model.CouponConsumeData;
+import cn.felord.payment.wechat.v3.model.ProfitSharingConsumeData;
+import cn.felord.payment.wechat.v3.model.RefundConsumeData;
+import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
+import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.busifavor.BusiFavorReceiveConsumeData;
 import cn.felord.payment.wechat.v3.model.combine.CombineTransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardAcceptedConsumeData;
@@ -29,6 +34,8 @@ import cn.felord.payment.wechat.v3.model.payscore.PayScoreConsumer;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserConfirmConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
+import cn.felord.payment.wechat.v3.model.payscore.parking.ParkingCallback;
+import cn.felord.payment.wechat.v3.model.payscore.parking.TransParkingCallback;
 import cn.felord.payment.wechat.v3.model.profitsharing.ProfitsharingConsumeData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -101,7 +108,7 @@ public class WechatPayCallback {
      */
     @SneakyThrows
     public Map<String, String> profitSharingCallback(ResponseSignVerifyParams params, Consumer<ProfitSharingConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.TRANSACTION);
+        String data = this.callback(params, EventType.TRANSACTION_SUCCESS);
         ProfitSharingConsumeData consumeData = MAPPER.readValue(data, ProfitSharingConsumeData.class);
         consumeDataConsumer.accept(consumeData);
         return response();
@@ -138,7 +145,7 @@ public class WechatPayCallback {
      */
     @SneakyThrows
     public Map<String, String> transactionCallback(ResponseSignVerifyParams params, Consumer<TransactionConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.TRANSACTION);
+        String data = this.callback(params, EventType.TRANSACTION_SUCCESS);
         TransactionConsumeData consumeData = MAPPER.readValue(data, TransactionConsumeData.class);
         consumeDataConsumer.accept(consumeData);
         return response();
@@ -156,7 +163,7 @@ public class WechatPayCallback {
      */
     @SneakyThrows
     public Map<String, String> combineTransactionCallback(ResponseSignVerifyParams params, Consumer<CombineTransactionConsumeData> consumeDataConsumer) {
-        String data = this.callback(params, EventType.TRANSACTION);
+        String data = this.callback(params, EventType.TRANSACTION_SUCCESS);
         CombineTransactionConsumeData consumeData = MAPPER.readValue(data, CombineTransactionConsumeData.class);
         consumeDataConsumer.accept(consumeData);
         return response();
@@ -185,6 +192,73 @@ public class WechatPayCallback {
             String data = this.decrypt(callbackParams);
             PayScoreUserPaidConsumeData paidConsumeData = MAPPER.readValue(data, PayScoreUserPaidConsumeData.class);
             payScoreConsumer.getPaidConsumeDataConsumer().accept(paidConsumeData);
+        } else {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
+        return response();
+    }
+
+    /**
+     * 支付分停车入场状态变更通知.
+     * <p>
+     * 从用户进入开通微信支付分停车服务的停车场（用户入场通知接口），到用户离场期间（扣款接口），
+     * 这个时间段内如果停车入场状态变为可用或者不可用，微信会把相关状态变更情况（可用/不可用）异步发送给商户，
+     * 回调url为调用用户入场通知接口时填写的notify_url字段。
+     * 商户在收到停车入场状态变更通知后，需进行接收处理并返回应答。
+     *
+     * @param params                  the params
+     * @param parkingCallbackConsumer the parking callback consumer
+     * @return the map
+     * @since 1.0.13.RELEASE
+     */
+    @SneakyThrows
+    public Map<String, String> payscoreParkingCallback(ResponseSignVerifyParams params, Consumer<ParkingCallback> parkingCallbackConsumer) {
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
+        if (Objects.equals(eventType, EventType.PAYSCORE_PARKING_ENTRANCE_STATE_CHANGE.event)) {
+            String data = this.decrypt(callbackParams);
+            ParkingCallback parkingCallback = MAPPER.readValue(data, ParkingCallback.class);
+            parkingCallbackConsumer.accept(parkingCallback);
+        } else {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
+        return response();
+    }
+
+    /**
+     * 支付分停车订单支付结果通知
+     * <p>
+     * 商户请求微信支付分停车服务扣费受理接口，会完成订单受理。
+     * 订单实际支付完成后，微信支付会把订单支付结果信息发送给商户，商户需要接收处理，并返回应答。
+     * 同时，如果由于用户余额不足等原因，微信支付会进行垫资，用户对该垫资单进行了还款以后，微信支付会把该笔订单还款信息通知到商户。
+     * <p>
+     * 注意：
+     * <ul>
+     *     <li>同样的通知可能会多次发送给商户系统。商户系统必须能够正确处理重复的通知。
+     *     推荐的做法是，当商户系统收到通知进行处理时，先检查对应业务数据的状态，并判断该通知是否已经处理。
+     *     如果未处理，则再进行处理；如果已处理，则直接返回结果成功。
+     *     在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重入造成的数据混乱。</li>
+     *     <li>如果在所有通知频率后没有收到微信侧回调,商户应调用查询订单接口确认订单状态。</li>
+     * </ul>
+     * 特别提醒：商户系统对于支付成功通知的内容一定要做签名验证，并校验通知的信息是否与商户侧的信息一致，防止数据泄露导致出现“假通知”，造成资金损失。
+     * @param params                  the params
+     * @param transParkingCallbackConsumer the transParkingCallbackConsumer
+     * @return the map
+     * @since 1.0.13.RELEASE
+     */
+    @SneakyThrows
+    public Map<String, String> payscoreTransParkingCallback(ResponseSignVerifyParams params, Consumer<TransParkingCallback> transParkingCallbackConsumer) {
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
+        if (Objects.equals(eventType, EventType.TRANSACTION_SUCCESS.event) ||
+                Objects.equals(eventType, EventType.TRANSACTION_FAIL.event) ||
+                Objects.equals(eventType, EventType.TRANSACTION_PAY_BACK.event)
+        ) {
+            String data = this.decrypt(callbackParams);
+            TransParkingCallback transParkingCallback = MAPPER.readValue(data, TransParkingCallback.class);
+            transParkingCallbackConsumer.accept(transParkingCallback);
         } else {
             log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
             throw new PayException(" wechat pay event type is not matched");
@@ -322,7 +396,7 @@ public class WechatPayCallback {
      */
     @SneakyThrows
     public Map<String, String> profitsharingCallback(ResponseSignVerifyParams params, Consumer<ProfitsharingConsumeData> profitsharingConsumeDataConsumer) {
-        String callback = this.callback(params, EventType.TRANSACTION);
+        String callback = this.callback(params, EventType.TRANSACTION_SUCCESS);
         ProfitsharingConsumeData consumeData = MAPPER.readValue(callback, ProfitsharingConsumeData.class);
         profitsharingConsumeDataConsumer.accept(consumeData);
         return response();
@@ -426,6 +500,12 @@ public class WechatPayCallback {
          * @since 1.0.2.RELEASE
          */
         PAYSCORE_USER_CLOSE("PAYSCORE.USER_CLOSE_SERVICE"),
+        /**
+         * 停车入场状态变更通知事件.
+         *
+         * @since 1.0.13.RELEASE
+         */
+        PAYSCORE_PARKING_ENTRANCE_STATE_CHANGE("VEHICLE.ENTRANCE_STATE_CHANGE"),
 
         /**
          * 用户领取微信先享卡事件.
@@ -467,11 +547,19 @@ public class WechatPayCallback {
         COUPON_SEND("COUPON.SEND"),
 
         /**
-         * 支付成功、分账、分账回退事件.
+         * 支付成功、支付分停车支付成功、分账、分账回退事件.
          *
          * @since 1.0.0.RELEASE
          */
-        TRANSACTION("TRANSACTION.SUCCESS"),
+        TRANSACTION_SUCCESS("TRANSACTION.SUCCESS"),
+        /**
+         * 支付分停车支付失败通知
+         */
+        TRANSACTION_FAIL("TRANSACTION.FAIL"),
+        /**
+         * 支付分停车还款通知
+         */
+        TRANSACTION_PAY_BACK("TRANSACTION.PAY_BACK"),
 
         /**
          * 退款成功事件.
