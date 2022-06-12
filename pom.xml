@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot</artifactId>
-    <version>1.0.12.RELEASE</version>
+    <version>1.0.13.RELEASE</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -72,7 +72,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-boot.version>2.4.2</spring-boot.version>
-        <aliy-pay-sdk.version>4.10.167.ALL</aliy-pay-sdk.version>
+        <alipay-sdk.version.version>4.31.7.ALL</alipay-sdk.version.version>
         <oss-starter.version>1.0.0.RELEASE</oss-starter.version>
         <lombok.verison>1.18.12</lombok.verison>
         <jackson.version>2.9.10</jackson.version>
@@ -107,7 +107,7 @@
             <dependency>
                 <groupId>com.alipay.sdk</groupId>
                 <artifactId>alipay-sdk-java</artifactId>
-                <version>${aliy-pay-sdk.version}</version>
+                <version>${alipay-sdk.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
