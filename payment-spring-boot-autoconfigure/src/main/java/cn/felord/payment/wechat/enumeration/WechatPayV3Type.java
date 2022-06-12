@@ -455,7 +455,7 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.13.RELEASES
      */
-    MARKETING_BUSI_FAVOR_SUBSIDY_QUERY(HttpMethod.POST, "%s/v3/marketing/busifavor/subsidy/pay-receipts/{subsidy_receipt_id}"),
+    MARKETING_BUSI_FAVOR_SUBSIDY_QUERY(HttpMethod.GET, "%s/v3/marketing/busifavor/subsidy/pay-receipts/{subsidy_receipt_id}"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * 发起批量转账API.
@@ -634,7 +634,13 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.11.RELEASE
      */
-    PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/profitsharing/receivers/delete");
+    PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/profitsharing/receivers/delete"),
+    /**
+     * 申请分账账单API.
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PROFITSHARING_BILLS(HttpMethod.GET, "%s/v3/profitsharing/bills");
     /**
      * The Pattern.
      *
