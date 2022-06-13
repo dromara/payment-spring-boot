@@ -1,3 +1,34 @@
+## 1.0.13.RELEASE
+### 微信支付
+
+#### 商家券
+
+- feat: 商家券增加营销补差付款API
+- feat: 商家券增加查询营销补差付款单详情API
+
+#### 微信分账
+
+- feat: 新增申请分账账单API
+
+#### 微信支付分
+
+- feat: 新增商户申请获取支付分对账单API
+- feat: 实现支付分停车服务API
+  - 新增查询车牌服务开通信息API
+  - 新增创建停车入场API
+  - 新增扣费受理API
+  - 新增查询订单API
+  - 新增停车入场状态变更通知API
+  - 新增订单支付结果通知API
+
+## 修复
+
+- fix: NPE without notifyUrl（[#59](https://github.com/NotFound403/payment-spring-boot/issues/59)）
+
+## 依赖升级
+
+- 升级**Spring Boot** `2.4.2`到`2.7.0`
+- 升级**alipay-sdk-java** `4.10.167.ALL`到`4.31.7.ALL`
 ## 1.0.12.RELEASE
 - refector: 变更依赖管理方式，交由spring-boot-dependencies管理依赖([#40](https://github.com/NotFound403/payment-spring-boot/pull/40))
 - 微信支付

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2021 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -149,7 +149,7 @@ public class WechatMarketingBusiFavorApi extends AbstractApi {
                     queryParams.add("stock_id", userBusiFavorQueryParams.getStockId());
 
                     Optional.ofNullable(userBusiFavorQueryParams.getCouponState())
-                            .ifPresent(state-> queryParams.add("coupon_state", state.name()));
+                            .ifPresent(state -> queryParams.add("coupon_state", state.name()));
 
                     queryParams.add("creator_merchant", userBusiFavorQueryParams.getCreatorMerchant());
                     queryParams.add("belong_merchant", userBusiFavorQueryParams.getBelongMerchant());
@@ -436,4 +436,52 @@ public class WechatMarketingBusiFavorApi extends AbstractApi {
                 .request();
         return wechatResponseEntity;
     }
+
+    /**
+     * 营销补差付款API
+     * <p>
+     * 该API主要用于商户营销补贴场景，支持基于单张券进行不同商户账户间的资金补差，从而提升财务结算、资金利用效率。<a href="https://pay.weixin.qq.com/wiki/doc/apiv3/download/%E5%95%86%E5%AE%B6%E5%88%B8%E8%A1%A5%E5%B7%AE%E4%BA%A7%E5%93%81%E6%93%8D%E4%BD%9C%E6%96%87%E6%A1%A3.pdf">具体可参考操作文档</a>
+     *
+     * @param params the params
+     * @return the wechat response entity
+     * @since 1.0.13.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> payMakeup(BusiFavorSubsidyParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.MARKETING_BUSI_FAVOR_SUBSIDY, params)
+                .function((type, makeUpParams) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .toUri();
+                    return Post(uri, makeUpParams);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+    /**
+     * 查询营销补差付款单详情API
+     * <p>
+     * 查询商家券营销补差付款单详情
+     *
+     * @param subsidyReceiptId the subsidyReceiptId
+     * @return the wechat response entity
+     * @since 1.0.13.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> queryMakeup(String subsidyReceiptId){
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.MARKETING_BUSI_FAVOR_SUBSIDY_QUERY, subsidyReceiptId)
+                .function((type, receiptId) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(receiptId)
+                            .toUri();
+                    return Get(uri);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+
 }

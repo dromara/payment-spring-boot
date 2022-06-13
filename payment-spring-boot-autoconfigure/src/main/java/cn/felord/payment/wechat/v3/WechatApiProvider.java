@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -98,6 +98,17 @@ public class WechatApiProvider {
      */
     public WechatPayScoreApi payScoreApi(String tenantId) {
         return new WechatPayScoreApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 微信支付分停车服务.
+     *
+     * @param tenantId the tenant id
+     * @return the wechat pay score parking api
+     * @since 1.0.13.RELEASE
+     */
+    public WechatPayScoreParkingApi payScoreParkingApi(String tenantId) {
+        return new WechatPayScoreParkingApi(wechatPayClient, tenantId);
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.converter.smile.MappingJackson2SmileHttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
@@ -128,10 +127,6 @@ final class ExtensionFormHttpMessageConverter extends FormHttpMessageConverter {
             this.partConverters.add(new GsonHttpMessageConverter());
         } else if (JSONB_PRESENT) {
             this.partConverters.add(new JsonbHttpMessageConverter());
-        }
-
-        if (JACKSON_2_XML_PRESENT) {
-            this.partConverters.add(new MappingJackson2XmlHttpMessageConverter());
         }
 
         if (JACKSON_2_SMILE_PRESENT) {

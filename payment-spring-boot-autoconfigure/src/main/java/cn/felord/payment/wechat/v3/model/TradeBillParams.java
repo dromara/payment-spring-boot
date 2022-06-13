@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2021 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class TradeBillParams {
     /**
      * 账单日期，必传。
      * <p>
-     * 格式YYYY-MM-DD，仅支持三个月内的账单下载申请。
+     * 格式yyyy-MM-DD，仅支持三个月内的账单下载申请。
      */
     private LocalDate billDate;
     /**

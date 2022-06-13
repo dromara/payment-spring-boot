@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -195,7 +195,7 @@ public enum WechatPayV3Type {
      */
     PAY_SCORE_TERMINATE_PERMISSIONS_OPENID(HttpMethod.POST, "%s/v3/payscore/permissions/openid/{openid}/terminate"),
     /**
-     * 查询用户授权状态API.
+     * 查询用户授权状态API（旧版接口）.
      *
      * @since 1.0.2.RELEASE
      */
@@ -242,8 +242,36 @@ public enum WechatPayV3Type {
      * @since 1.0.2.RELEASE
      */
     PAY_SCORE_SYNC_USER_SERVICE_ORDER(HttpMethod.POST, "%s/v3/payscore/serviceorder/{out_order_no}/sync"),
-
-
+    /**
+     * 商户申请获取对账单API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_MERCHANT_BILL(HttpMethod.GET, "%s/v3/payscore/merchant-bill"),
+    /**
+     * 查询车牌服务开通信息API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_FIND(HttpMethod.GET, "%s/v3/vehicle/parking/services/find"),
+    /**
+     * 创建停车入场API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_PARKINGS(HttpMethod.POST, "%s/v3/vehicle/parking/parkings"),
+    /**
+     * 扣费受理API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_TRANSACTIONS_PARKINGS(HttpMethod.POST, "%s/v3/vehicle/transactions/parking"),
+    /**
+     * 查询订单API
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PAY_SCORE_PARKING_TRANSACTIONS_OUTTRADENO(HttpMethod.GET, "%s/v3/vehicle/transactions/out-trade-no/{out_trade_no}"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
@@ -444,6 +472,18 @@ public enum WechatPayV3Type {
      * @since 1.0.4.RELEASES
      */
     MARKETING_BUSI_FAVOR_DEACTIVATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/deactivate"),
+    /**
+     * 营销补差付款API.
+     *
+     * @since 1.0.13.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_SUBSIDY(HttpMethod.POST, "%s/v3/marketing/busifavor/subsidy/pay-receipts"),
+    /**
+     * 查询营销补差付款单详情API.
+     *
+     * @since 1.0.13.RELEASES
+     */
+    MARKETING_BUSI_FAVOR_SUBSIDY_QUERY(HttpMethod.GET, "%s/v3/marketing/busifavor/subsidy/pay-receipts/{subsidy_receipt_id}"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * 发起批量转账API.
@@ -622,7 +662,13 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.11.RELEASE
      */
-    PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/profitsharing/receivers/delete");
+    PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/profitsharing/receivers/delete"),
+    /**
+     * 申请分账账单API.
+     *
+     * @since 1.0.13.RELEASE
+     */
+    PROFITSHARING_BILLS(HttpMethod.GET, "%s/v3/profitsharing/bills");
     /**
      * The Pattern.
      *

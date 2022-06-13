@@ -1,18 +1,40 @@
+/*
+ *  Copyright 2019-2022 felord.cn
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *  Website:
+ *       https://felord.cn
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.WechatPayProperties;
+import cn.felord.payment.wechat.enumeration.TarType;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.profitsharing.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -282,4 +304,38 @@ public class WechatProfitsharingApi extends AbstractApi {
                 .request();
         return wechatResponseEntity;
     }
+
+    /**
+     * 申请分账账单API
+     * <p>
+     * 微信支付按天提供分账账单文件，商户可以通过该接口获取账单文件的下载地址。详细参考文档 <a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter8_1_11.shtml">申请分账账单API</a>
+     * <p>
+     * 返回的下载链接可调用{@link #downloadBillResponse(String, String)}下载文件
+     *
+     * @param billParams the bill params
+     * @return the wechat response entity
+     * @since 1.0.13.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> downloadMerchantBills(ProfitsharingBillParams billParams){
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PROFITSHARING_BILLS,billParams)
+                .function(((wechatPayV3Type, params) -> {
+                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    LocalDate billDate = params.getBillDate();
+                    queryParams.add("bill_date", billDate.format(DateTimeFormatter.ISO_DATE));
+                    TarType tarType = params.getTarType();
+                    if (Objects.nonNull(tarType)) {
+                        queryParams.add("tar_type", tarType.name());
+                    }
+
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParams(queryParams)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })).consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
 }

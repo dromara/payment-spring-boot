@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019-2020 felord.cn
+ *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.RequestEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -281,7 +282,10 @@ public class WechatDirectPayApi extends AbstractApi {
                             .build()
                             .toUri();
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
-                    params.setNotifyUrl(v3.getDomain().concat(params.getNotifyUrl()));
+                    String notifyUrl = params.getNotifyUrl();
+                    if (StringUtils.hasText(notifyUrl)) {
+                        params.setNotifyUrl(v3.getDomain().concat(notifyUrl));
+                    }
                     return Post(uri, params);
                 }))
                 .consumer(wechatResponseEntity::convert)

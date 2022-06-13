@@ -11,7 +11,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.12.RELEASE</version>
+    <version>1.0.13.RELEASE</version>
 </dependency>
 ```
 
@@ -29,9 +29,25 @@
 更多参考[changelog](https://notfound403.github.io/payment-spring-boot/#/changelog)
 
 ## 核心API结构
-![](https://asset.felord.cn/blog/20210112211759.png)
+![](https://asset.felord.cn/blog/20220613092244.png)
 
-> 随着版本迭代会增加
+- `WechatPartnerProfitsharingApi`  微信支付服务商V3分账
+- `WechatPayCallback`  微信支付V3回调通知工具封装
+- `WechatAllocationApi` 微信支付V2分账（未来会移除）
+- `WechatMarketingFavorApi` 微信支付代金券V3
+- `WechatCombinePayApi` 微信支付合单支付V3
+- `WechatPayScoreApi` 微信支付分V3
+- `WechatPayRedpackApi` 微信支付V2现金红包
+- `WechatDiscountCardApi` 微信支付V3先享卡
+- `WechatProfitsharingApi` 微信支付直连商户V3分账
+- `WechatPartnerPayApi` 微信支付服务商模式V3普通支付
+- `WechatMarketingBusiFavorApi` 微信支付V3商家券
+- `WechatPayTransfersApi` 微信支付V2企业付款到零钱，目前不包括到银行卡
+- `WechatDirectPayApi` 微信支付直连模式V3普通支付
+- `WechatPayScoreParkingApi` 微信支付分V3停车服务
+- `WechatBatchTransferApi` 微信支付V3批量转账到零钱 
+
+> 随着版本迭代功能会增加。
 
 ## 开源协议
 **Apache 2.0**
