@@ -19,14 +19,18 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.enumeration.*;
+import cn.felord.payment.wechat.enumeration.FundFlowAccountType;
+import cn.felord.payment.wechat.enumeration.TarType;
+import cn.felord.payment.wechat.enumeration.TradeBillType;
+import cn.felord.payment.wechat.enumeration.WeChatServer;
+import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.FundFlowBillParams;
 import cn.felord.payment.wechat.v3.model.TradeBillParams;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.core.io.Resource;
@@ -90,7 +94,8 @@ public abstract class AbstractApi {
      * @param mapper the mapper
      */
     private void applyObjectMapper(ObjectMapper mapper) {
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE
+                )
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 // empty string error
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
