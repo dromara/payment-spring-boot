@@ -128,6 +128,14 @@ public class TransactionConsumeData {
          * 用户在直连商户appid下的唯一标识。
          */
         private String openid;
+        /**
+         * 用户在服务商appid下的唯一标识。
+         */
+        private String spOpenid;
+        /**
+         * 用户在子商户appid下的唯一标识。
+         */
+        private String subOpenid;
     }
 
     /**
