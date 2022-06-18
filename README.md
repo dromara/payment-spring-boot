@@ -11,7 +11,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.13.RELEASE</version>
+    <version>1.0.14.RELEASE</version>
 </dependency>
 ```
 
@@ -46,6 +46,8 @@
 - `WechatDirectPayApi` 微信支付直连模式V3普通支付
 - `WechatPayScoreParkingApi` 微信支付分V3停车服务
 - `WechatBatchTransferApi` 微信支付V3批量转账到零钱 
+- `WechatPartnerSpecialMchApi` 微信支付V3服务商商户进件 
+- `WechatBatchTransferApi` 微信支付V3媒体上传 
 
 > 随着版本迭代功能会增加。
 
