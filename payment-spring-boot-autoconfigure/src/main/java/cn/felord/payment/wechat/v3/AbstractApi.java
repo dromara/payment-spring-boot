@@ -158,7 +158,8 @@ public abstract class AbstractApi {
      */
     protected RequestEntity<?> Post(URI uri, Object params) {
         try {
-            return RequestEntity.post(uri).header("Pay-TenantId", tenantId)
+            return RequestEntity.post(uri)
+                    .header("Pay-TenantId", tenantId)
                     .body(mapper.writeValueAsString(params));
         } catch (JsonProcessingException e) {
             throw new PayException("wechat app pay json failed");
@@ -191,7 +192,8 @@ public abstract class AbstractApi {
      * @return the request entity
      */
     protected RequestEntity<?> Get(URI uri) {
-        return RequestEntity.get(uri).header("Pay-TenantId", tenantId)
+        return RequestEntity.get(uri)
+                .header("Pay-TenantId", tenantId)
                 .build();
     }
 
@@ -210,7 +212,7 @@ public abstract class AbstractApi {
     }
 
     /**
-     * 构建Post请求对象.
+     * 构建Patch请求对象.
      *
      * @param uri    the uri
      * @param params the params
@@ -218,7 +220,27 @@ public abstract class AbstractApi {
      */
     protected RequestEntity<?> Patch(URI uri, Object params) {
         try {
-            return RequestEntity.patch(uri).header("Pay-TenantId", tenantId)
+            return RequestEntity.patch(uri)
+                    .header("Pay-TenantId", tenantId)
+                    .body(mapper.writeValueAsString(params));
+        } catch (JsonProcessingException e) {
+            throw new PayException("wechat app pay json failed");
+        }
+    }
+
+    /**
+     * 构建Patch请求对象.
+     *
+     * @param uri         the uri
+     * @param params      the params
+     * @param httpHeaders the http headers
+     * @return the request entity
+     */
+    protected RequestEntity<?> Patch(URI uri, Object params, HttpHeaders httpHeaders) {
+        try {
+            return RequestEntity.patch(uri)
+                    .header("Pay-TenantId", tenantId)
+                    .headers(httpHeaders)
                     .body(mapper.writeValueAsString(params));
         } catch (JsonProcessingException e) {
             throw new PayException("wechat app pay json failed");
@@ -230,7 +252,7 @@ public abstract class AbstractApi {
      *
      * @param link the link
      * @return 对账单内容 ，有可能为空字符 “”
-     * @see AbstractApi#billResource(String) AbstractApi#billResource(String)AbstractApi#billResource(String)AbstractApi#billResource(String)
+     * @see AbstractApi#billResource(String) AbstractApi#billResource(String)AbstractApi#billResource(String)AbstractApi#billResource(String)AbstractApi#billResource(String)AbstractApi#billResource(String)
      */
     protected String billCsvDownload(String link) {
         return this.client().withType(WechatPayV3Type.FILE_DOWNLOAD, link)
@@ -349,7 +371,7 @@ public abstract class AbstractApi {
     /**
      * 调用{@code /v3/billdownload/file}直接下载为文件.
      *
-     * @param downloadUrl  格式为 {@code https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx}
+     * @param downloadUrl 格式为 {@code https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx}
      * @param filename    文件名称包含扩展名
      * @return the response entity
      */

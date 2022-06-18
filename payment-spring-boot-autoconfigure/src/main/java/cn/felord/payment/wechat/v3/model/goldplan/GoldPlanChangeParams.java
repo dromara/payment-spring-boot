@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2022 felord.cn
+ *  Copyright 2019-2021 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,17 +15,34 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.specmch;
+package cn.felord.payment.wechat.v3.model.goldplan;
 
-import java.util.List;
+import lombok.Data;
 
 /**
+ * 点金计划管理和商家小票管理API参数
+ *
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-public class AdditionInfo {
-    private String legalPersonCommitment;
-    private String legalPersonVideo;
-    private List<String> businessAdditionPics;
-    private String 	businessAdditionMsg;
+@Data
+public class GoldPlanChangeParams {
+    private String subMchid;
+    private OperationType operationType;
+
+
+    /**
+     * The enum Operation type.
+     */
+    public enum OperationType{
+        /**
+         * 表示开通
+         */
+        OPEN,
+        /**
+         * 表示关闭
+         */
+        CLOSE
+    }
+
 }

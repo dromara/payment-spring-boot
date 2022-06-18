@@ -230,8 +230,28 @@ public class WechatApiProvider {
      * @param tenantId the tenant id
      * @return wechat partner special mch api
      */
-    public WechatPartnerSpecialMchApi partnerSpecialMchApi(String tenantId){
+    public WechatPartnerSpecialMchApi partnerSpecialMchApi(String tenantId) {
         return new WechatPartnerSpecialMchApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商或者直连商户-经营能力-支付即服务
+     *
+     * @param tenantId the tenant id
+     * @return wechat smart guide api
+     */
+    public WechatSmartGuideApi smartGuideApi(String tenantId) {
+        return new WechatSmartGuideApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商-经营能力-点金计划
+     *
+     * @param tenantId the tenant id
+     * @return the wechat gold plan api
+     */
+    public WechatGoldPlanApi goldPlanApi(String tenantId) {
+        return new WechatGoldPlanApi(wechatPayClient, tenantId);
     }
 
     /**
@@ -240,7 +260,7 @@ public class WechatApiProvider {
      * @param tenantId the tenant id
      * @return the wechat media api
      */
-    public WechatMediaApi mediaApi(String tenantId){
+    public WechatMediaApi mediaApi(String tenantId) {
         return new WechatMediaApi(wechatPayClient, tenantId);
     }
 

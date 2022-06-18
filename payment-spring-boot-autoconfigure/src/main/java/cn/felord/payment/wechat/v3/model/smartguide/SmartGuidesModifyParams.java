@@ -15,17 +15,22 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.specmch;
+package cn.felord.payment.wechat.v3.model.smartguide;
 
-import java.util.List;
+import lombok.Data;
 
 /**
+ * 服务人员信息更新API参数
+ *
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-public class AdditionInfo {
-    private String legalPersonCommitment;
-    private String legalPersonVideo;
-    private List<String> businessAdditionPics;
-    private String 	businessAdditionMsg;
+@Data
+public class SmartGuidesModifyParams {
+    private String guideId;
+    private String name;
+    private String mobile;
+    private String qrCode;
+    private String avatar;
+    private String groupQrcode;
 }

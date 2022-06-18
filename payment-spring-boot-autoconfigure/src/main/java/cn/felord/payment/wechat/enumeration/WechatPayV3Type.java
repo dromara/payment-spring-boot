@@ -710,7 +710,64 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.14.RELEASE
      */
-    SPEC_MCH_SUB_SETTLEMENT(HttpMethod.GET, "%s/v3/apply4sub/sub_merchants/{sub_mchid}/settlement");
+    SPEC_MCH_SUB_SETTLEMENT(HttpMethod.GET, "%s/v3/apply4sub/sub_merchants/{sub_mchid}/settlement"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 经营能力-支付即服务-服务人员注册API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES(HttpMethod.POST, "%s/v3/smartguide/guides"),
+    /**
+     * 经营能力-支付即服务-服务人员分配API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES_ASSIGN(HttpMethod.POST, "%s/v3/smartguide/guides/{guide_id}/assign"),
+    /**
+     * 经营能力-支付即服务-服务人员查询API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES_GET(HttpMethod.GET, "%s/v3/smartguide/guides"),
+    /**
+     * 经营能力-支付即服务-服务人员查询API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES_MODIFY(HttpMethod.PATCH, "%s/v3/smartguide/guides/{guide_id}"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 经营能力-点金计划-点金计划管理API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_CHANGE(HttpMethod.POST, "%s/v3/goldplan/merchants/changegoldplanstatus"),
+    /**
+     * 经营能力-点金计划-商家小票管理API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_CHANGE_CUSTOM(HttpMethod.POST, "%s/v3/goldplan/merchants/changecustompagestatus"),
+    /**
+     * 经营能力-点金计划-同业过滤标签管理API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_FILTER(HttpMethod.POST, "%s/v3/goldplan/merchants/set-advertising-industry-filter"),
+    /**
+     * 经营能力-点金计划-开通广告展示API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_ADV_OPEN(HttpMethod.POST, "%s/v3/goldplan/merchants/open-advertising-show"),
+    /**
+     * 经营能力-点金计划-关闭广告展示API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_ADV_CLOSE(HttpMethod.POST, "%s/v3/goldplan/merchants/close-advertising-show"),
+    ;
 
 
     /**
