@@ -668,7 +668,40 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.13.RELEASE
      */
-    PROFITSHARING_BILLS(HttpMethod.GET, "%s/v3/profitsharing/bills");
+    PROFITSHARING_BILLS(HttpMethod.GET, "%s/v3/profitsharing/bills"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 服务商-商户进件-特约商户进件-提交申请单API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_APPLY_PARTNER(HttpMethod.POST, "%s/v3/applyment4sub/applyment/"),
+    /**
+     * 服务商-商户进件-特约商户进件-通过业务申请编号查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_APPLY_QUERY_BUSINESS_CODE(HttpMethod.GET, "%s/v3/applyment4sub/applyment/business_code/{business_code}"),
+    /**
+     * 服务商-商户进件-特约商户进件-通过申请单号查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_APPLY_QUERY_APPLYMENT_ID(HttpMethod.GET, "%s/v3/applyment4sub/applyment/applyment_id/{applyment_id}"),
+    /**
+     * 服务商-商户进件-特约商户进件-修改结算账号API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_SUB_MODIFY(HttpMethod.POST, "%s/v3/apply4sub/sub_merchants/{sub_mchid}/modify-settlement"),
+    /**
+     * 服务商-商户进件-特约商户进件-查询结算账户API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_SUB_SETTLEMENT(HttpMethod.GET, "%s/v3/apply4sub/sub_merchants/{sub_mchid}/settlement");
+
+
     /**
      * The Pattern.
      *

@@ -223,4 +223,15 @@ public class WechatApiProvider {
     public WechatPartnerProfitsharingApi partnerProfitsharingApi(String tenantId) {
         return new WechatPartnerProfitsharingApi(wechatPayClient, tenantId);
     }
+
+    /**
+     * 微信V3服务商-商户进件-特约商户进件
+     *
+     * @param tenantId the tenant id
+     * @return wechat partner special mch api
+     */
+    public WechatPartnerSpecialMchApi partnerSpecialMchApi(String tenantId){
+        return new WechatPartnerSpecialMchApi(wechatPayClient, tenantId);
+    }
+
 }
