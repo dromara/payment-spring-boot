@@ -30,7 +30,7 @@
     </developers>
 
     <scm>
-        <tag>payment-spring-boot-1.0.13.RELEASE</tag>
+        <tag>payment-spring-boot-1.0.14.RELEASE</tag>
         <url>https://github.com/NotFound403/payment-spring-boot</url>
         <connection>scm:git:https://github.com/NotFound403/payment-spring-boot.git</connection>
         <developerConnection>scm:git:https://github.com/NotFound403/payment-spring-boot.git</developerConnection>

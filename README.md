@@ -47,7 +47,7 @@
 - `WechatPayScoreParkingApi` 微信支付分V3停车服务
 - `WechatBatchTransferApi` 微信支付V3批量转账到零钱 
 - `WechatPartnerSpecialMchApi` 微信支付V3服务商商户进件 
-- `WechatBatchTransferApi` 微信支付V3媒体上传 
+- `WechatMediaApi` 微信支付V3媒体上传 
 
 > 随着版本迭代功能会增加。
 
