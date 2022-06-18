@@ -234,4 +234,14 @@ public class WechatApiProvider {
         return new WechatPartnerSpecialMchApi(wechatPayClient, tenantId);
     }
 
+    /**
+     * 其它能力-媒体上传
+     *
+     * @param tenantId the tenant id
+     * @return the wechat media api
+     */
+    public WechatMediaApi mediaApi(String tenantId){
+        return new WechatMediaApi(wechatPayClient, tenantId);
+    }
+
 }

@@ -54,7 +54,18 @@ public enum WechatPayV3Type {
      * @since 1.0.3.RELEASE
      */
     FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/bill/fundflowbill"),
-
+    /**
+     * 图片上传API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MERCHANT_MEDIA_IMG(HttpMethod.POST, "%s/v3/merchant/media/upload"),
+    /**
+     * 视频上传API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MERCHANT_MEDIA_VIDEO(HttpMethod.POST, "%s/v3/merchant/media/video_upload"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**

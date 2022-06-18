@@ -96,6 +96,7 @@ public class WechatPayClient {
          * The V3 pay type.
          */
         private final WechatPayV3Type wechatPayV3Type;
+
         /**
          * The Rest operations.
          */
@@ -216,7 +217,9 @@ public class WechatPayClient {
             HttpHeaders headers = requestEntity.getHeaders();
 
             String body = requestEntity.hasBody() ? Objects.requireNonNull(requestEntity.getBody()).toString() : "";
-            if (WechatPayV3Type.MARKETING_IMAGE_UPLOAD.pattern().contains(canonicalUrl)) {
+            if (WechatPayV3Type.MARKETING_IMAGE_UPLOAD.pattern().contains(canonicalUrl) ||
+                    WechatPayV3Type.MERCHANT_MEDIA_IMG.pattern().contains(canonicalUrl) ||
+                    WechatPayV3Type.MERCHANT_MEDIA_VIDEO.pattern().contains(canonicalUrl)) {
                 body = Objects.requireNonNull(headers.get("Meta-Info")).get(0);
             }
 
