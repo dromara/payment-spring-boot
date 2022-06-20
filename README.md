@@ -48,6 +48,9 @@
 - `WechatBatchTransferApi` 微信支付V3批量转账到零钱 
 - `WechatPartnerSpecialMchApi` 微信支付V3服务商商户进件 
 - `WechatMediaApi` 微信支付V3媒体上传 
+- `WechatEcommerceApi` 电商收付通 
+- `WechatSmartGuideApi` 服务商或者直连商户-经营能力-支付即服务 
+- `WechatGoldPlanApi` 服务商-经营能力-点金计划
 
 > 随着版本迭代功能会增加。
 

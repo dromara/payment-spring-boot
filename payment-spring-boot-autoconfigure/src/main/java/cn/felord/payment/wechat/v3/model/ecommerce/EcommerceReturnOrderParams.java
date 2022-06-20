@@ -15,34 +15,30 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.goldplan;
+package cn.felord.payment.wechat.v3.model.ecommerce;
 
 import lombok.Data;
 
 /**
- * 点金计划管理和商家小票管理API参数
- *
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
 @Data
-public class GoldPlanChangeParams {
-    private String subMchid;
-    private OperationType operationType;
-
-
+public class EcommerceReturnOrderParams {
     /**
-     * The enum Operation type.
+     * 子商户号，选填
      */
-    public enum OperationType{
-        /**
-         * 表示开通
-         */
-        OPEN,
-        /**
-         * 表示关闭
-         */
-        CLOSE
-    }
-
+    private String subMchid;
+    /**
+     * 微信分账单号，同{@link #outOrderNo} 二选一
+     */
+    private String orderId;
+    /**
+     * 商户分账单号，同{@link #orderId} 二选一
+     */
+    private String outOrderNo;
+    /**
+     * 商户回退单号，必填
+     */
+    private String outReturnNo;
 }

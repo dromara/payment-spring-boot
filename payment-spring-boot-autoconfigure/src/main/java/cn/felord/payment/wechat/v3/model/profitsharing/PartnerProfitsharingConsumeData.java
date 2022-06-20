@@ -18,7 +18,6 @@
  */
 package cn.felord.payment.wechat.v3.model.profitsharing;
 
-import cn.felord.payment.wechat.v2.model.allocation.Receiver;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -39,7 +38,7 @@ public class PartnerProfitsharingConsumeData {
      * <p>
      * 服务商模式分账发起商户
      */
-    private String mchid;
+    private String spMchid;
     /**
      * 子商户号
      * <p>
@@ -71,7 +70,7 @@ public class PartnerProfitsharingConsumeData {
      * <p>
      * 分账接收方对象
      */
-    private List<Receiver> receivers;
+    private List<Receiver> receiver;
 
     /**
      * 成功时间.

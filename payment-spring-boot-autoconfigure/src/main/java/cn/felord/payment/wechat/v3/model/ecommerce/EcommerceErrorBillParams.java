@@ -1,4 +1,5 @@
 /*
+ *
  *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,35 +15,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package cn.felord.payment.wechat.v3.model.ecommerce;
 
-package cn.felord.payment.wechat.v3.model.goldplan;
-
+import cn.felord.payment.wechat.enumeration.TarType;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 /**
- * 点金计划管理和商家小票管理API参数
+ * 按日下载提现异常文件API
  *
  * @author felord.cn
- * @since 1.0.14.RELEASE
+ * @since 1.0.3.RELEASE
  */
 @Data
-public class GoldPlanChangeParams {
-    private String subMchid;
-    private OperationType operationType;
-
-
+public class EcommerceErrorBillParams {
     /**
-     * The enum Operation type.
+     * 账单日期，必传。
+     * <p>
+     * 格式yyyy-MM-DD，仅支持三个月内的账单下载申请。
      */
-    public enum OperationType{
-        /**
-         * 表示开通
-         */
-        OPEN,
-        /**
-         * 表示关闭
-         */
-        CLOSE
-    }
-
+    private LocalDate billDate;
+    /**
+     * 压缩类型，不填默认值为数据流
+     *
+     * @see TarType
+     */
+    private TarType tarType;
 }

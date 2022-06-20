@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +38,10 @@ import java.util.List;
  *
  * @author felord.cn
  * @since 1.0.10.RELEASE
+ * @deprecated since 1.0.14.RELEASE 直连使用{@link cn.felord.payment.wechat.v3.WechatProfitsharingApi}、服务商使用{@link cn.felord.payment.wechat.v3.WechatPartnerProfitsharingApi}
  */
 @Slf4j
+@Deprecated
 public class WechatAllocationApi {
     /**
      * The constant MAPPER.
@@ -47,7 +49,7 @@ public class WechatAllocationApi {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     static {
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)

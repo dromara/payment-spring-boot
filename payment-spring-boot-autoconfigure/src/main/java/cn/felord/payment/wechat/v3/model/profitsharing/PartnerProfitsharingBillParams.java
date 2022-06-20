@@ -15,34 +15,36 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.goldplan;
+package cn.felord.payment.wechat.v3.model.profitsharing;
 
+import cn.felord.payment.wechat.enumeration.TarType;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 /**
- * 点金计划管理和商家小票管理API参数
+ * 服务商-申请分账账单API参数
  *
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
 @Data
-public class GoldPlanChangeParams {
-    private String subMchid;
-    private OperationType operationType;
-
-
+public class PartnerProfitsharingBillParams {
     /**
-     * The enum Operation type.
+     * 子商户号，非必传。
      */
-    public enum OperationType{
-        /**
-         * 表示开通
-         */
-        OPEN,
-        /**
-         * 表示关闭
-         */
-        CLOSE
-    }
+    private String subMchid;
+    /**
+     * 账单日期，必传。
+     * <p>
+     * 格式yyyy-MM-DD，仅支持三个月内的账单下载申请。
+     */
+    private LocalDate billDate;
+    /**
+     * 压缩类型，不填默认值为数据流
+     *
+     * @see TarType
+     */
+    private TarType tarType;
 
 }

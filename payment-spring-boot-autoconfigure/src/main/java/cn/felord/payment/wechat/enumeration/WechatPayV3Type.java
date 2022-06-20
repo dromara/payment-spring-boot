@@ -767,8 +767,195 @@ public enum WechatPayV3Type {
      * @since 1.0.14.RELEASE
      */
     GOLD_PLAN_ADV_CLOSE(HttpMethod.POST, "%s/v3/goldplan/merchants/close-advertising-show"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 行业方案-电商收付通-商户进件-二级商户进件申请API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_APPLYMENT(HttpMethod.POST, "%s/v3/ecommerce/applyments/"),
+    /**
+     * 行业方案-电商收付通-商户进件-查询申请状态-通过申请单ID查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_APPLYMENT_ID(HttpMethod.GET, "%s/v3/ecommerce/applyments/{applyment_id}"),
+    /**
+     * 行业方案-电商收付通-商户进件-查询申请状态-通过业务申请编号查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_APPLYMENT_OUT_REQUEST_NO(HttpMethod.GET, "%s/v3/ecommerce/applyments/out-request-no/{out_request_no}"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 行业方案-电商收付通-分账-请求分账API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_ORDERS(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/orders"),
+    /**
+     * 行业方案-电商收付通-分账-查询分账结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RESULT(HttpMethod.GET, "%s/v3/ecommerce/profitsharing/orders"),
+    /**
+     * 行业方案-电商收付通-分账-请求分账回退API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RETURN_ORDERS(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/returnorders"),
+    /**
+     * 行业方案-电商收付通-分账-查询分账回退结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RETURN_ORDERS_RESULT(HttpMethod.GET, "%s/v3/ecommerce/profitsharing/returnorders"),
+    /**
+     * 行业方案-电商收付通-分账-完结分账API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_FINISH_ORDER(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/finish-order"),
+    /**
+     * 行业方案-电商收付通-分账-查询订单剩余待分金额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_ORDER_AMOUNTS(HttpMethod.GET, "%s/v3/ecommerce/profitsharing/orders/{transaction_id}/amounts"),
+    /**
+     * 行业方案-电商收付通-分账-添加分账接收方API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RECEIVERS_ADD(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/receivers/add"),
+    /**
+     * 行业方案-电商收付通-分账-添加分账接收方API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/receivers/delete"),
+    /**
+     * 行业方案-电商收付通-补差-请求补差API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_SUBSIDIES_CREATE(HttpMethod.POST, "%s/v3/ecommerce/subsidies/create"),
+    /**
+     * 行业方案-电商收付通-补差-请求补差回退API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_SUBSIDIES_RETURN(HttpMethod.POST, "%s/v3/ecommerce/subsidies/return"),
+    /**
+     * 行业方案-电商收付通-补差-取消补差API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_SUBSIDIES_CANCEL(HttpMethod.POST, "%s/v3/ecommerce/subsidies/cancel"),
+    /**
+     * 行业方案-电商收付通-退款-申请退款API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_APPLY(HttpMethod.POST, "%s/v3/ecommerce/refunds/apply"),
+    /**
+     * 行业方案-电商收付通-退款-查询退款API-通过微信支付退款单号查询退款.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_ID(HttpMethod.GET, "%s/v3/ecommerce/refunds/id/{refund_id}"),
+    /**
+     * 行业方案-电商收付通-退款-查询退款API-通过商户退款单号查询退款.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_OUT_REFUND_NO(HttpMethod.GET, "%s/v3/ecommerce/refunds/out-refund-no/{out_refund_no}"),
+    /**
+     * 行业方案-电商收付通-退款-垫付退款回补API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_RETURN_ADVANCE(HttpMethod.POST, "%s/v3/ecommerce/refunds/{refund_id}/return-advance"),
+    /**
+     * 行业方案-电商收付通-退款-查询垫付回补结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_RETURN_ADVANCE_RESULT(HttpMethod.GET, "%s/v3/ecommerce/refunds/{refund_id}/return-advance"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询二级商户账户实时余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_REAL_TIME(HttpMethod.GET, "%s/v3/ecommerce/fund/balance/{sub_mchid}"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询二级商户账户日终余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_END_DAY(HttpMethod.GET, "%s/v3/ecommerce/fund/enddaybalance/{sub_mchid}"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询电商平台账户实时余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_TYPE_REAL_TIME(HttpMethod.GET, "%s/v3/merchant/fund/balance/{account_type}"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询电商平台账户日终余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_TYPE_END_DAY(HttpMethod.GET, "%s/v3/merchant/fund/dayendbalance/{account_type}"),
+    /**
+     * 行业方案-电商收付通-商户提现-二级商户预约提现.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW(HttpMethod.POST, "%s/v3/ecommerce/fund/withdraw"),
+    /**
+     * 行业方案-电商收付通-商户提现-二级商户查询预约提现状态API-微信支付预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_ID(HttpMethod.GET, "%s/v3/ecommerce/fund/withdraw/{withdraw_id}"),
+    /**
+     * 行业方案-电商收付通-商户提现-二级商户查询预约提现状态API-商户预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_OUT_REQUEST_NO(HttpMethod.GET, "%s/v3/ecommerce/fund/withdraw/out-request-no/{out_request_no}"),
+    /**
+     * 行业方案-电商收付通-商户提现-电商平台预约提现API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_MERCHANT_WITHDRAW(HttpMethod.POST, "%s/v3/merchant/fund/withdraw"),
+    /**
+     * 行业方案-电商收付通-商户提现-电商平台查询预约提现状态API-微信支付预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_MERCHANT_WITHDRAW_ID(HttpMethod.GET, "%s/v3/merchant/fund/withdraw/withdraw-id/{withdraw_id}"),
+    /**
+     * 行业方案-电商收付通-商户提现-电商平台查询预约提现状态API-商户预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_MERCHANT_OUT_REQUEST_NO(HttpMethod.GET, "%s/v3/merchant/fund/withdraw/out-request-no/{out_request_no}"),
+    /**
+     * 行业方案-电商收付通-商户提现-按日下载提现异常文件API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_ERROR_BILL(HttpMethod.GET, "%s/v3/merchant/fund/withdraw/bill-type/{bill_type}"),
+    /**
+     * 行业方案-电商收付通-下载账单-申请二级商户资金账单API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/ecommerce/bill/fundflowbill")
     ;
-
 
     /**
      * The Pattern.

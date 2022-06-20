@@ -15,34 +15,48 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.goldplan;
+package cn.felord.payment.wechat.v3.model.ecommerce;
 
+import cn.felord.payment.wechat.enumeration.ReceiverType;
 import lombok.Data;
 
 /**
- * 点金计划管理和商家小票管理API参数
+ * The type Ecommerce receiver.
  *
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
 @Data
-public class GoldPlanChangeParams {
-    private String subMchid;
-    private OperationType operationType;
-
+public class EcommerceReceiver {
+    private String appid;
+    private ReceiverType type;
+    private String account;
+    private String name;
+    private String encryptedName;
+    private RelationType relationType;
 
     /**
-     * The enum Operation type.
+     * The enum Relation type.
      */
-    public enum OperationType{
+    public enum RelationType {
         /**
-         * 表示开通
+         * 供应商
          */
-        OPEN,
+        SUPPLIER,
         /**
-         * 表示关闭
+         * 分销商
          */
-        CLOSE
-    }
-
+        DISTRIBUTOR,
+        /**
+         * 服务商
+         */
+        SERVICE_PROVIDER,
+        /**
+         * 平台
+         */
+        PLATFORM,
+        /**
+         * 其它
+         */
+        OTHERS,    }
 }

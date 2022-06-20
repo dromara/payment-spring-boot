@@ -20,6 +20,7 @@ package cn.felord.payment.wechat.v3;
 import cn.felord.payment.PayException;
 import cn.felord.payment.wechat.v3.model.CallbackParams;
 import cn.felord.payment.wechat.v3.model.CouponConsumeData;
+import cn.felord.payment.wechat.v3.model.PartnerRefundConsumeData;
 import cn.felord.payment.wechat.v3.model.ProfitSharingConsumeData;
 import cn.felord.payment.wechat.v3.model.RefundConsumeData;
 import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
@@ -36,12 +37,13 @@ import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPaidConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.PayScoreUserPermissionConsumeData;
 import cn.felord.payment.wechat.v3.model.payscore.parking.ParkingCallback;
 import cn.felord.payment.wechat.v3.model.payscore.parking.TransParkingCallback;
+import cn.felord.payment.wechat.v3.model.profitsharing.PartnerProfitsharingConsumeData;
 import cn.felord.payment.wechat.v3.model.profitsharing.ProfitsharingConsumeData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +80,7 @@ public class WechatPayCallback {
     private final String tenantId;
 
     static {
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
@@ -243,7 +245,8 @@ public class WechatPayCallback {
      *     <li>如果在所有通知频率后没有收到微信侧回调,商户应调用查询订单接口确认订单状态。</li>
      * </ul>
      * 特别提醒：商户系统对于支付成功通知的内容一定要做签名验证，并校验通知的信息是否与商户侧的信息一致，防止数据泄露导致出现“假通知”，造成资金损失。
-     * @param params                  the params
+     *
+     * @param params                       the params
      * @param transParkingCallbackConsumer the transParkingCallbackConsumer
      * @return the map
      * @since 1.0.13.RELEASE
@@ -388,7 +391,35 @@ public class WechatPayCallback {
     }
 
     /**
-     * 微信支付分账V3动账通知
+     * 服务商退款结果通知API，电商收付通复用
+     * <p>
+     * 退款状态改变后，微信会把相关退款结果发送给商户。
+     *
+     * @param params              the params
+     * @param consumeDataConsumer the consume data consumer
+     * @return map map
+     */
+    @SneakyThrows
+    public Map<String, String> partnerRefundCallback(ResponseSignVerifyParams params, Consumer<PartnerRefundConsumeData> consumeDataConsumer) {
+        CallbackParams callbackParams = resolve(params);
+        String eventType = callbackParams.getEventType();
+
+        if (!(Objects.equals(eventType, EventType.REFUND_CLOSED.event) ||
+                Objects.equals(eventType, EventType.REFUND_ABNORMAL.event) ||
+                Objects.equals(eventType, EventType.REFUND_SUCCESS.event))) {
+            log.error("wechat pay event type is not matched, callbackParams {}", callbackParams);
+            throw new PayException(" wechat pay event type is not matched");
+        }
+        String data = this.decrypt(callbackParams);
+        PartnerRefundConsumeData consumeData = MAPPER.readValue(data, PartnerRefundConsumeData.class);
+
+        consumeDataConsumer.accept(consumeData);
+        return response();
+    }
+
+
+    /**
+     * 直连商户-微信支付分账V3动账通知
      *
      * @param params                           the params
      * @param profitsharingConsumeDataConsumer the profitsharing consume data consumer
@@ -398,6 +429,22 @@ public class WechatPayCallback {
     public Map<String, String> profitsharingCallback(ResponseSignVerifyParams params, Consumer<ProfitsharingConsumeData> profitsharingConsumeDataConsumer) {
         String callback = this.callback(params, EventType.TRANSACTION_SUCCESS);
         ProfitsharingConsumeData consumeData = MAPPER.readValue(callback, ProfitsharingConsumeData.class);
+        profitsharingConsumeDataConsumer.accept(consumeData);
+        return response();
+    }
+
+    /**
+     * 服务商-微信支付分账V3动账通知（电商收付通复用）
+     *
+     * @param params                           the params
+     * @param profitsharingConsumeDataConsumer the profitsharing consume data consumer
+     * @return map map
+     * @since 1.0.14.RELEASE
+     */
+    @SneakyThrows
+    public Map<String, String> partnerProfitsharingCallback(ResponseSignVerifyParams params, Consumer<PartnerProfitsharingConsumeData> profitsharingConsumeDataConsumer) {
+        String callback = this.callback(params, EventType.TRANSACTION_SUCCESS);
+        PartnerProfitsharingConsumeData consumeData = MAPPER.readValue(callback, PartnerProfitsharingConsumeData.class);
         profitsharingConsumeDataConsumer.accept(consumeData);
         return response();
     }

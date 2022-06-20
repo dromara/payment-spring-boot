@@ -19,6 +19,8 @@ package cn.felord.payment.wechat.v3.model.specmch;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 /**
  * @author felord.cn
  * @since 1.0.14.RELEASE
@@ -30,6 +32,6 @@ public class IdDocInfo {
    private String idDocName;
    private String idDocNumber;
    private String idDocAddress;
-   private String docPeriodBegin;
-   private String docPeriodEnd;
+   private LocalDate docPeriodBegin;
+   private LocalDate docPeriodEnd;
 }

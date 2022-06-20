@@ -15,49 +15,58 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3;
+package cn.felord.payment.wechat.v3.ecommerce;
 
+import cn.felord.payment.wechat.enumeration.FundFlowAccountType;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
-import cn.felord.payment.wechat.v3.model.goldplan.GoldPlanChangeParams;
-import cn.felord.payment.wechat.v3.model.goldplan.GoldPlanAdvertisingParams;
+import cn.felord.payment.wechat.v3.AbstractApi;
+import cn.felord.payment.wechat.v3.WechatPayClient;
+import cn.felord.payment.wechat.v3.WechatResponseEntity;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceFundEndDay;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceFundSubMch;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Collections;
+import java.time.format.DateTimeFormatter;
 
 /**
- * 经营能力-点金计划
+ * 电商收付通余额查询
  *
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-public class WechatGoldPlanApi extends AbstractApi {
+class BalanceApi extends AbstractApi {
     /**
      * Instantiates a new Abstract api.
      *
      * @param wechatPayClient the wechat pay client
      * @param tenantId        the tenant id
      */
-    public WechatGoldPlanApi(WechatPayClient wechatPayClient, String tenantId) {
+    BalanceApi(WechatPayClient wechatPayClient, String tenantId) {
         super(wechatPayClient, tenantId);
     }
 
     /**
-     * 点金计划管理API
+     * 查询二级商户账户实时余额API
      *
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> change(GoldPlanChangeParams params) {
+    public WechatResponseEntity<ObjectNode> queryBySubMchid(EcommerceFundSubMch params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.GOLD_PLAN_CHANGE, params)
-                .function((wechatPayV3Type, goldPlanChangeParams) -> {
-                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+        this.client().withType(WechatPayV3Type.ECOMMERCE_FUND_BALANCE_REAL_TIME, params)
+                .function((type, fundSubMch) -> {
+                    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA));
+                    if (params.getAccountType() != null) {
+                        builder.queryParam("account_type", fundSubMch.getAccountType().name());
+                    }
+                    URI uri = builder
                             .build()
+                            .expand(fundSubMch.getSubMchid())
                             .toUri();
-                    return Post(uri, goldPlanChangeParams);
+                    return Get(uri);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -65,19 +74,21 @@ public class WechatGoldPlanApi extends AbstractApi {
     }
 
     /**
-     * 商家小票管理API
+     * 查询二级商户账户日终余额API
      *
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> changeCustom(GoldPlanChangeParams params) {
+    public WechatResponseEntity<ObjectNode> queryAtEndDay(EcommerceFundEndDay params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.GOLD_PLAN_CHANGE_CUSTOM, params)
-                .function((wechatPayV3Type, goldPlanChangeParams) -> {
-                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+        this.client().withType(WechatPayV3Type.ECOMMERCE_FUND_BALANCE_END_DAY, params)
+                .function((type, fundEndDay) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .queryParam("account_type", fundEndDay.getDate().format(DateTimeFormatter.ISO_DATE))
                             .build()
+                            .expand(fundEndDay.getSubMchid())
                             .toUri();
-                    return Post(uri, goldPlanChangeParams);
+                    return Get(uri);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -85,19 +96,20 @@ public class WechatGoldPlanApi extends AbstractApi {
     }
 
     /**
-     * 同业过滤标签管理API
+     * 查询电商平台账户实时余额API
      *
-     * @param params the params
+     * @param type the type
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> filter(GoldPlanAdvertisingParams params) {
+    public WechatResponseEntity<ObjectNode> queryBalanceAtRealTime(FundFlowAccountType type) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.GOLD_PLAN_CHANGE_CUSTOM, params)
-                .function((wechatPayV3Type, goldPlanChangeParams) -> {
+        this.client().withType(WechatPayV3Type.ECOMMERCE_FUND_BALANCE_TYPE_REAL_TIME, type)
+                .function((wechatPayV3Type, accountType) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
+                            .expand(accountType.name())
                             .toUri();
-                    return Post(uri, goldPlanChangeParams);
+                    return Get(uri);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -105,39 +117,20 @@ public class WechatGoldPlanApi extends AbstractApi {
     }
 
     /**
-     * 开通广告展示API
+     * 查询电商平台账户实时余额API
      *
-     * @param params the params
+     * @param type the type
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> openAdv(GoldPlanAdvertisingParams params) {
+    public WechatResponseEntity<ObjectNode> queryBalanceAtEndDay(FundFlowAccountType type) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.GOLD_PLAN_ADV_OPEN, params)
-                .function((wechatPayV3Type, goldPlanChangeParams) -> {
+        this.client().withType(WechatPayV3Type.ECOMMERCE_FUND_BALANCE_TYPE_END_DAY, type)
+                .function((wechatPayV3Type, accountType) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
+                            .expand(accountType.name())
                             .toUri();
-                    return Post(uri, goldPlanChangeParams);
-                })
-                .consumer(wechatResponseEntity::convert)
-                .request();
-        return wechatResponseEntity;
-    }
-
-    /**
-     * 关闭广告展示API
-     *
-     * @param subMchid the sub mchid
-     * @return the wechat response entity
-     */
-    public WechatResponseEntity<ObjectNode> closeAdv(String subMchid) {
-        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.GOLD_PLAN_ADV_CLOSE, subMchid)
-                .function((wechatPayV3Type, id) -> {
-                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
-                            .build()
-                            .toUri();
-                    return Post(uri, Collections.singletonMap("sub_mchid",id));
+                    return Get(uri);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();

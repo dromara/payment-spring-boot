@@ -22,6 +22,7 @@ import cn.felord.payment.wechat.v2.WechatAllocationApi;
 import cn.felord.payment.wechat.v2.WechatPayRedpackApi;
 import cn.felord.payment.wechat.v2.WechatPayTransfersApi;
 import cn.felord.payment.wechat.v2.WechatV2Client;
+import cn.felord.payment.wechat.v3.ecommerce.WechatEcommerceApi;
 
 /**
  * 微信支付工具.
@@ -195,7 +196,9 @@ public class WechatApiProvider {
      * @param tenantId the tenant id
      * @return wechat allocation api
      * @since 1.0.10.RELEASE
+     * @deprecated since 1.0.14.RELEASE 直连使用{@link WechatApiProvider#profitsharingApi(String)}、服务商使用{@link WechatApiProvider#partnerProfitsharingApi(String)}
      */
+    @Deprecated
     public WechatAllocationApi allocationApi(String tenantId) {
         WechatMetaBean wechatMeta = wechatPayClient.signatureProvider()
                 .wechatMetaContainer()
@@ -229,6 +232,7 @@ public class WechatApiProvider {
      *
      * @param tenantId the tenant id
      * @return wechat partner special mch api
+     * @since 1.0.14.RELEASE
      */
     public WechatPartnerSpecialMchApi partnerSpecialMchApi(String tenantId) {
         return new WechatPartnerSpecialMchApi(wechatPayClient, tenantId);
@@ -239,6 +243,7 @@ public class WechatApiProvider {
      *
      * @param tenantId the tenant id
      * @return wechat smart guide api
+     * @since 1.0.14.RELEASE
      */
     public WechatSmartGuideApi smartGuideApi(String tenantId) {
         return new WechatSmartGuideApi(wechatPayClient, tenantId);
@@ -249,9 +254,21 @@ public class WechatApiProvider {
      *
      * @param tenantId the tenant id
      * @return the wechat gold plan api
+     * @since 1.0.14.RELEASE
      */
     public WechatGoldPlanApi goldPlanApi(String tenantId) {
         return new WechatGoldPlanApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商-行业方案-电商收付通
+     *
+     * @param tenantId the tenant id
+     * @return the wechat ecommerce api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatEcommerceApi ecommerceApi(String tenantId) {
+        return new WechatEcommerceApi(wechatPayClient, tenantId);
     }
 
     /**
@@ -259,6 +276,7 @@ public class WechatApiProvider {
      *
      * @param tenantId the tenant id
      * @return the wechat media api
+     * @since 1.0.14.RELEASE
      */
     public WechatMediaApi mediaApi(String tenantId) {
         return new WechatMediaApi(wechatPayClient, tenantId);
