@@ -115,6 +115,15 @@ public class WechatEcommerceApi {
     }
 
     /**
+     * 跨境付款
+     *
+     * @return the oversea api
+     */
+    public FundOverseaApi overseaApi() {
+        return new FundOverseaApi(this.wechatPayClient, this.tenantId);
+    }
+
+    /**
      * 下载账单
      *
      * @return the withdraw api
@@ -122,4 +131,5 @@ public class WechatEcommerceApi {
     public DownloadApi download() {
         return new DownloadApi(this.wechatPayClient, this.tenantId);
     }
+
 }

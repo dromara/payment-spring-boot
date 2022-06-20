@@ -954,8 +954,44 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.14.RELEASE
      */
-    ECOMMERCE_FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/ecommerce/bill/fundflowbill")
-    ;
+    ECOMMERCE_FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/ecommerce/bill/fundflowbill"),
+    /**
+     * 行业方案-电商收付通-跨境付款-查询订单剩余可出境余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_BALANCE(HttpMethod.GET, "%s/v3/funds-to-oversea/transactions/{transaction_id}/available_abroad_amounts"),
+    /**
+     * 行业方案-电商收付通-跨境付款-申请资金出境API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_ORDERS(HttpMethod.POST, "%s/v3/funds-to-oversea/orders"),
+    /**
+     * 行业方案-电商收付通-跨境付款-查询出境结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_ORDERS_RESULT(HttpMethod.GET, "%s/v3/funds-to-oversea/orders/{out_order_id}"),
+    /**
+     * 行业方案-电商收付通-跨境付款-获取购付汇账单文件下载链接API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_BILLS(HttpMethod.GET, "%s/v3/funds-to-oversea/bill-download-url"),
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 智慧商圈-商圈积分同步API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MALL_SCORE_SYNC(HttpMethod.POST, "%s/v3/businesscircle/points/notify"),
+    /**
+     * 智慧商圈-商圈积分同步API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MALL_SCORE_RESULT(HttpMethod.GET, "%s/v3/businesscircle/user-authorizations/{openid}");
 
     /**
      * The Pattern.

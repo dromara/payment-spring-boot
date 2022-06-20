@@ -52,7 +52,7 @@ import java.util.List;
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-class ProfitsharingApi extends AbstractApi {
+public class ProfitsharingApi extends AbstractApi {
     /**
      * Instantiates a new Abstract api.
      *

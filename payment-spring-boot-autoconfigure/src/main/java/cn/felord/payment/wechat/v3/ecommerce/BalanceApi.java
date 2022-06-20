@@ -37,7 +37,7 @@ import java.time.format.DateTimeFormatter;
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-class BalanceApi extends AbstractApi {
+public class BalanceApi extends AbstractApi {
     /**
      * Instantiates a new Abstract api.
      *

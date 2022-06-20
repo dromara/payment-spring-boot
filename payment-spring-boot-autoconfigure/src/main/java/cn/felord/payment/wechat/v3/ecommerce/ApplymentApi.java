@@ -25,7 +25,7 @@ import cn.felord.payment.wechat.v3.WechatPartnerSpecialMchApi;
 import cn.felord.payment.wechat.v3.WechatPayClient;
 import cn.felord.payment.wechat.v3.WechatResponseEntity;
 import cn.felord.payment.wechat.v3.X509WechatCertificateInfo;
-import cn.felord.payment.wechat.v3.model.ecommerce.AccountInfo;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceAccountInfo;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceApplymentParams;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceContactInfo;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceIdCardInfo;
@@ -45,7 +45,7 @@ import java.security.cert.X509Certificate;
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-class ApplymentApi extends AbstractApi {
+public class ApplymentApi extends AbstractApi {
 
     private final WechatPartnerSpecialMchApi wechatPartnerSpecialMchApi;
 
@@ -178,7 +178,7 @@ class ApplymentApi extends AbstractApi {
                 docInfo.setIdDocNumber(signatureProvider.encryptRequestMessage(docInfo.getIdDocNumber(), x509Certificate));
             }
         }
-        AccountInfo accountInfo = applymentParams.getAccountInfo();
+        EcommerceAccountInfo accountInfo = applymentParams.getAccountInfo();
         if (accountInfo != null) {
             accountInfo.setAccountName(signatureProvider.encryptRequestMessage(accountInfo.getAccountName(), x509Certificate));
             accountInfo.setAccountNumber(signatureProvider.encryptRequestMessage(accountInfo.getAccountNumber(), x509Certificate));

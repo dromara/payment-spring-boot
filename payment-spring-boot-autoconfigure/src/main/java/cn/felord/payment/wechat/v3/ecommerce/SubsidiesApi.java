@@ -36,7 +36,7 @@ import java.net.URI;
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-class SubsidiesApi extends AbstractApi {
+public class SubsidiesApi extends AbstractApi {
     /**
      * Instantiates a new Abstract api.
      *

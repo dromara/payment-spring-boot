@@ -272,6 +272,28 @@ public class WechatApiProvider {
     }
 
     /**
+     * 服务商智慧商圈
+     *
+     * @param tenantId the tenant id
+     * @return the wechat business circle api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatPartnerBusinessCircleApi partnerBusinessCircleApi(String tenantId) {
+        return new WechatPartnerBusinessCircleApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 直连商户智慧商圈
+     *
+     * @param tenantId the tenant id
+     * @return the wechat business circle api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatBusinessCircleApi businessCircleApi(String tenantId) {
+        return new WechatBusinessCircleApi(wechatPayClient, tenantId);
+    }
+
+    /**
      * 其它能力-媒体上传
      *
      * @param tenantId the tenant id

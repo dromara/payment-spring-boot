@@ -53,7 +53,7 @@ public class WithDrawApi extends AbstractApi {
      * @param wechatPayClient the wechat pay client
      * @param tenantId        the tenant id
      */
-    public WithDrawApi(WechatPayClient wechatPayClient, String tenantId) {
+    WithDrawApi(WechatPayClient wechatPayClient, String tenantId) {
         super(wechatPayClient, tenantId);
     }
 

@@ -18,13 +18,9 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
-import cn.felord.payment.wechat.v3.model.CallbackParams;
-import cn.felord.payment.wechat.v3.model.CouponConsumeData;
-import cn.felord.payment.wechat.v3.model.PartnerRefundConsumeData;
-import cn.felord.payment.wechat.v3.model.ProfitSharingConsumeData;
-import cn.felord.payment.wechat.v3.model.RefundConsumeData;
-import cn.felord.payment.wechat.v3.model.ResponseSignVerifyParams;
-import cn.felord.payment.wechat.v3.model.TransactionConsumeData;
+import cn.felord.payment.wechat.v3.model.*;
+import cn.felord.payment.wechat.v3.model.busicircle.MallRefundConsumeData;
+import cn.felord.payment.wechat.v3.model.busicircle.MallTransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.busifavor.BusiFavorReceiveConsumeData;
 import cn.felord.payment.wechat.v3.model.combine.CombineTransactionConsumeData;
 import cn.felord.payment.wechat.v3.model.discountcard.DiscountCardAcceptedConsumeData;
@@ -450,6 +446,39 @@ public class WechatPayCallback {
     }
 
     /**
+     * 服务商、直连商户 智慧商圈支付回调
+     * <p>
+     * 无需开发者判断，只有扣款成功微信才会回调此接口
+     *
+     * @param params              the params
+     * @param consumeDataConsumer the consume data consumer
+     * @return the map
+     * @since 1.0.14.RELEASE
+     */
+    @SneakyThrows
+    public Map<String, String> mallTransactionCallback(ResponseSignVerifyParams params, Consumer<MallTransactionConsumeData> consumeDataConsumer) {
+        String data = this.callback(params, EventType.MALL_TRANSACTION_SUCCESS);
+        MallTransactionConsumeData consumeData = MAPPER.readValue(data, MallTransactionConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
+        return response();
+    }
+
+    /**
+     * 服务商、直连商户 智慧商圈退款回调
+     *
+     * @param params              the params
+     * @param consumeDataConsumer the consume data consumer
+     * @return the map
+     * @since 1.0.14.RELEASE
+     */
+    @SneakyThrows
+    public Map<String, String> mallRefundCallback(ResponseSignVerifyParams params, Consumer<MallRefundConsumeData> consumeDataConsumer) {
+        String data = this.callback(params, EventType.MALL_REFUND_SUCCESS);
+        MallRefundConsumeData consumeData = MAPPER.readValue(data, MallRefundConsumeData.class);
+        consumeDataConsumer.accept(consumeData);
+        return response();
+    }
+    /**
      * Callback.
      *
      * @param params    the params
@@ -600,6 +629,12 @@ public class WechatPayCallback {
          */
         TRANSACTION_SUCCESS("TRANSACTION.SUCCESS"),
         /**
+         * 智慧商圈支付
+         *
+         * @since 1.0.14.RELEASE
+         */
+        MALL_TRANSACTION_SUCCESS("MALL_TRANSACTION.SUCCESS"),
+        /**
          * 支付分停车支付失败通知
          */
         TRANSACTION_FAIL("TRANSACTION.FAIL"),
@@ -614,6 +649,12 @@ public class WechatPayCallback {
          * @since 1.0.6.RELEASE
          */
         REFUND_SUCCESS("REFUND.SUCCESS"),
+        /**
+         * 智慧商圈退款成功事件.
+         *
+         * @since 1.0.14.RELEASE
+         */
+        MALL_REFUND_SUCCESS("MALL_REFUND.SUCCESS"),
 
         /**
          * 退款异常事件.

@@ -46,7 +46,7 @@ import java.util.Optional;
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-class DownloadApi extends AbstractApi {
+public class DownloadApi extends AbstractApi {
     private final WechatPartnerProfitsharingApi wechatPartnerProfitsharingApi;
 
     /**

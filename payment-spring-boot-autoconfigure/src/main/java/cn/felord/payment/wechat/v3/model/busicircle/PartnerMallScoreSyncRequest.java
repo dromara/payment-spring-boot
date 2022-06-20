@@ -15,23 +15,17 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.ecommerce;
+package cn.felord.payment.wechat.v3.model.busicircle;
 
-import cn.felord.payment.wechat.v3.model.specmch.AccountCertInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
- *
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AccountInfo{
-	private String bankAccountType;
-	private String accountBank;
-	private String accountName;
-	private String bankAddressCode;
-	private String bankBranchId;
-	private String bankName;
-	private String accountNumber;
-	private AccountCertInfo accountCertInfo;
+public class PartnerMallScoreSyncRequest extends MallScoreSyncRequest{
+    private String subMchid;
 }

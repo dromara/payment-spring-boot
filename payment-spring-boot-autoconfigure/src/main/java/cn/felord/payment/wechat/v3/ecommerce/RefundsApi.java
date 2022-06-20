@@ -38,7 +38,7 @@ import java.util.Collections;
  * @author felord.cn
  * @since 1.0.14.RELEASE
  */
-class RefundsApi extends AbstractApi {
+public class RefundsApi extends AbstractApi {
     /**
      * Instantiates a new Abstract api.
      *

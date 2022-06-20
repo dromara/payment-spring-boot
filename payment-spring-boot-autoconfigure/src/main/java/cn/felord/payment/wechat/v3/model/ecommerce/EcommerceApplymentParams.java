@@ -41,7 +41,7 @@ public class EcommerceApplymentParams{
 	private Boolean owner;
 	private UboInfo uboInfo;
 	private Boolean needAccountInfo;
-	private AccountInfo accountInfo;
+	private EcommerceAccountInfo accountInfo;
 	private EcommerceContactInfo contactInfo;
 	private SalesSceneInfo salesSceneInfo;
 	private EcommerceSettlementInfo settlementInfo;
