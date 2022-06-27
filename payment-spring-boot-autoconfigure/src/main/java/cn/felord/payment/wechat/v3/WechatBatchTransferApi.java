@@ -196,8 +196,8 @@ public class WechatBatchTransferApi extends AbstractApi {
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_MCH, queryBatchTransferDetailParams)
                 .function((type, params) -> {
                     Map<String, String> pathParams = new HashMap<>(2);
-                    pathParams.put("batch_id", params.getBatchIdOrOutBatchNo());
-                    pathParams.put("detail_id", params.getDetailIdOrOutDetailNo());
+                    pathParams.put("out_batch_no", params.getBatchIdOrOutBatchNo());
+                    pathParams.put("out_detail_no", params.getDetailIdOrOutDetailNo());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()

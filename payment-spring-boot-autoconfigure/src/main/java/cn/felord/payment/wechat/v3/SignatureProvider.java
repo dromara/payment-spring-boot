@@ -171,7 +171,7 @@ public class SignatureProvider {
     public String doRequestSign(PrivateKey privateKey, String... orderedComponents) {
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initSign(privateKey);
-        final String signatureStr = createSign(true, orderedComponents);
+        final String signatureStr = createSign(orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
         return Base64Utils.encodeToString(signer.sign());
     }
@@ -191,7 +191,7 @@ public class SignatureProvider {
         }
         Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial).getX509Certificate();
 
-        final String signatureStr = createSign(true, params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
+        final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initVerify(certificate);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
@@ -397,11 +397,9 @@ public class SignatureProvider {
      * @param components the components
      * @return string string
      */
-    private static String createSign(boolean newLine, String... components) {
-
-        String suffix = newLine ? "\n" : "";
+    private static String createSign(String... components) {
         return Arrays.stream(components)
-                .collect(Collectors.joining("\n", "", suffix));
+                .collect(Collectors.joining("\n", "", "\n"));
     }
 
 }
