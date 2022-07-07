@@ -23,6 +23,7 @@ import cn.felord.payment.wechat.v3.model.specmch.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -196,13 +197,19 @@ public class WechatPartnerSpecialMchApi extends AbstractApi {
         if (idCardInfo != null) {
             idCardInfo.setIdCardName(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardName(), x509Certificate));
             idCardInfo.setIdCardNumber(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardNumber(), x509Certificate));
-            idCardInfo.setIdCardAddress(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardAddress(), x509Certificate));
+            String idCardAddress = idCardInfo.getIdCardAddress();
+            if (StringUtils.hasText(idCardAddress)){
+                idCardInfo.setIdCardAddress(signatureProvider.encryptRequestMessage(idCardAddress, x509Certificate));
+            }
         }
         IdDocInfo idDocInfo = identityInfo.getIdDocInfo();
         if (idDocInfo != null) {
             idDocInfo.setIdDocName(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocName(), x509Certificate));
             idDocInfo.setIdDocNumber(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocNumber(), x509Certificate));
-            idDocInfo.setIdDocAddress(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocAddress(), x509Certificate));
+            String idDocAddress = idDocInfo.getIdDocAddress();
+            if (StringUtils.hasText(idDocAddress)){
+                idDocInfo.setIdDocAddress(signatureProvider.encryptRequestMessage(idDocAddress, x509Certificate));
+            }
         }
         List<UboInfoListItem> uboInfoList = subjectInfo.getUboInfoList();
         if (!CollectionUtils.isEmpty(uboInfoList)) {
