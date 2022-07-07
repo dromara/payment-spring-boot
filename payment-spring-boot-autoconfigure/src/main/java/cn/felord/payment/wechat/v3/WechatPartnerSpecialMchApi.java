@@ -19,11 +19,7 @@ package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
-import cn.felord.payment.wechat.v3.model.specmch.ApplymentParams;
-import cn.felord.payment.wechat.v3.model.specmch.BankAccountInfo;
-import cn.felord.payment.wechat.v3.model.specmch.ContactInfo;
-import cn.felord.payment.wechat.v3.model.specmch.SubMchModifyParams;
-import cn.felord.payment.wechat.v3.model.specmch.UboInfoListItem;
+import cn.felord.payment.wechat.v3.model.specmch.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
@@ -193,7 +189,22 @@ public class WechatPartnerSpecialMchApi extends AbstractApi {
         contactInfo.setMobilePhone(signatureProvider.encryptRequestMessage(contactInfo.getMobilePhone(), x509Certificate));
         contactInfo.setContactEmail(signatureProvider.encryptRequestMessage(contactInfo.getContactEmail(), x509Certificate));
 
-        List<UboInfoListItem> uboInfoList = applymentParams.getSubjectInfo().getUboInfoList();
+        SubjectInfo subjectInfo = applymentParams.getSubjectInfo();
+        IdentityInfo identityInfo = subjectInfo.getIdentityInfo();
+
+        IdCardInfo idCardInfo = identityInfo.getIdCardInfo();
+        if (idCardInfo != null) {
+            idCardInfo.setIdCardName(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardName(), x509Certificate));
+            idCardInfo.setIdCardNumber(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardNumber(), x509Certificate));
+            idCardInfo.setIdCardAddress(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardAddress(), x509Certificate));
+        }
+        IdDocInfo idDocInfo = identityInfo.getIdDocInfo();
+        if (idDocInfo != null) {
+            idDocInfo.setIdDocName(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocName(), x509Certificate));
+            idDocInfo.setIdDocNumber(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocNumber(), x509Certificate));
+            idDocInfo.setIdDocAddress(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocAddress(), x509Certificate));
+        }
+        List<UboInfoListItem> uboInfoList = subjectInfo.getUboInfoList();
         if (!CollectionUtils.isEmpty(uboInfoList)) {
             uboInfoList.forEach(uboInfoListItem -> {
                 uboInfoListItem.setUboIdDocName(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocName(), x509Certificate));

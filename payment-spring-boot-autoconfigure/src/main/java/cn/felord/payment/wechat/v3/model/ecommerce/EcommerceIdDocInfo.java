@@ -30,5 +30,5 @@ public class EcommerceIdDocInfo {
     private String idDocName;
     private String idDocNumber;
     private String idDocCopy;
-    private LocalDate docPeriodEnd;
+    private String docPeriodEnd;
 }

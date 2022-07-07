@@ -43,7 +43,7 @@ public class UboInfo {
         private String idCardName;
         private String idCardNumber;
         private LocalDate idCardPeriodBegin;
-        private LocalDate idCardPeriodEnd;
+        private String idCardPeriodEnd;
     }
 
     /**
@@ -55,6 +55,6 @@ public class UboInfo {
         private String idDocName;
         private String idDocNumber;
         private LocalDate idDocPeriodBegin;
-        private LocalDate idDocPeriodEnd;
+        private String idDocPeriodEnd;
     }
 }

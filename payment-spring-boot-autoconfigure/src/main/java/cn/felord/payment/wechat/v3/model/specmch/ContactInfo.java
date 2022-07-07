@@ -15,7 +15,7 @@ public class ContactInfo{
 	private String contactIdDocCopy;
 	private String contactIdDocCopyBack;
 	private LocalDate contactPeriodBegin;
-	private LocalDate contactPeriodEnd;
+	private String contactPeriodEnd;
 	private String businessAuthorizationLetter;
 	private String openid;
 	private String mobilePhone;

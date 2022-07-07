@@ -12,5 +12,5 @@ public class IdCardInfo{
 	private String idCardNumber;
 	private String idCardAddress;
 	private LocalDate cardPeriodBegin;
-	private LocalDate cardPeriodEnd;
+	private String cardPeriodEnd;
 }

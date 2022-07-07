@@ -12,5 +12,5 @@ public class BusinessLicenseInfo{
 	private String legalPerson;
 	private String licenseAddress;
 	private LocalDate periodBegin;
-	private LocalDate periodEnd;
+	private String periodEnd;
 }

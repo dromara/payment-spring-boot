@@ -33,5 +33,5 @@ public class IdDocInfo {
    private String idDocNumber;
    private String idDocAddress;
    private LocalDate docPeriodBegin;
-   private LocalDate docPeriodEnd;
+   private String docPeriodEnd;
 }
