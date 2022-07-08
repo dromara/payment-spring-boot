@@ -34,6 +34,7 @@ import cn.felord.payment.wechat.v3.model.ecommerce.UboInfo;
 import cn.felord.payment.wechat.v3.model.specmch.SubMchModifyParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpHeaders;
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -68,21 +69,16 @@ public class ApplymentApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> apply(EcommerceApplymentParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_APPLYMENT, params)
-                .function((wechatPayV3Type, applymentParams) -> {
-                    SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-                    EcommerceApplymentParams applyRequestParams = this.convert(applymentParams, signatureProvider, x509Certificate);
-                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
-                            .build()
-                            .toUri();
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
-                    return Post(uri, applyRequestParams, httpHeaders);
-                })
-                .consumer(wechatResponseEntity::convert)
-                .request();
+        this.client().withType(WechatPayV3Type.ECOMMERCE_APPLYMENT, params).function((wechatPayV3Type, applymentParams) -> {
+            SignatureProvider signatureProvider = this.client().signatureProvider();
+            X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
+            final X509Certificate x509Certificate = certificate.getX509Certificate();
+            EcommerceApplymentParams applyRequestParams = this.convert(applymentParams, signatureProvider, x509Certificate);
+            URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA)).build().toUri();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+            return Post(uri, applyRequestParams, httpHeaders);
+        }).consumer(wechatResponseEntity::convert).request();
         return wechatResponseEntity;
     }
 
@@ -94,16 +90,10 @@ public class ApplymentApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> queryByApplymentId(String applymentId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_APPLYMENT_ID, applymentId)
-                .function((type, id) -> {
-                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
-                            .build()
-                            .expand(id)
-                            .toUri();
-                    return Get(uri);
-                })
-                .consumer(wechatResponseEntity::convert)
-                .request();
+        this.client().withType(WechatPayV3Type.ECOMMERCE_APPLYMENT_ID, applymentId).function((type, id) -> {
+            URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA)).build().expand(id).toUri();
+            return Get(uri);
+        }).consumer(wechatResponseEntity::convert).request();
         return wechatResponseEntity;
     }
 
@@ -116,16 +106,10 @@ public class ApplymentApi extends AbstractApi {
     public WechatResponseEntity<ObjectNode> queryByBusinessCode(String outRequestNo) {
 
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_APPLYMENT_OUT_REQUEST_NO, outRequestNo)
-                .function((type, id) -> {
-                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
-                            .build()
-                            .expand(id)
-                            .toUri();
-                    return Get(uri);
-                })
-                .consumer(wechatResponseEntity::convert)
-                .request();
+        this.client().withType(WechatPayV3Type.ECOMMERCE_APPLYMENT_OUT_REQUEST_NO, outRequestNo).function((type, id) -> {
+            URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA)).build().expand(id).toUri();
+            return Get(uri);
+        }).consumer(wechatResponseEntity::convert).request();
         return wechatResponseEntity;
     }
 
@@ -159,11 +143,19 @@ public class ApplymentApi extends AbstractApi {
         if (idCardInfo != null) {
             idCardInfo.setIdCardName(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardName(), x509Certificate));
             idCardInfo.setIdCardNumber(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardNumber(), x509Certificate));
+            String idCardAddress = idCardInfo.getIdCardAddress();
+            if (StringUtils.hasText(idCardAddress)) {
+                idCardInfo.setIdCardAddress(signatureProvider.encryptRequestMessage(idCardAddress, x509Certificate));
+            }
         }
         EcommerceIdDocInfo idDocInfo = applymentParams.getIdDocInfo();
         if (idDocInfo != null) {
             idDocInfo.setIdDocName(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocName(), x509Certificate));
             idDocInfo.setIdDocNumber(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocNumber(), x509Certificate));
+            String idDocAddress = idDocInfo.getIdDocAddress();
+            if (StringUtils.hasText(idDocAddress)) {
+                idDocInfo.setIdDocAddress(signatureProvider.encryptRequestMessage(idDocAddress, x509Certificate));
+            }
         }
         UboInfo uboInfo = applymentParams.getUboInfo();
         if (uboInfo != null) {

@@ -27,8 +27,11 @@ import java.time.LocalDate;
  */
 @Data
 public class EcommerceIdDocInfo {
+    private String idDocCopy;
+    private String idDocCopyBack;
     private String idDocName;
     private String idDocNumber;
-    private String idDocCopy;
+    private String idDocAddress;
+    private LocalDate docPeriodBegin;
     private String docPeriodEnd;
 }

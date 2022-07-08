@@ -31,5 +31,7 @@ public class EcommerceIdCardInfo {
     private String idCardNational;
     private String idCardName;
     private String idCardNumber;
-    private LocalDate idCardValidTime;
+    private String idCardAddress;
+    private LocalDate idCardValidTimeBegin;
+    private String idCardValidTime;
 }
