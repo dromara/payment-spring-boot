@@ -991,7 +991,44 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.14.RELEASE
      */
-    MALL_SCORE_RESULT(HttpMethod.GET, "%s/v3/businesscircle/user-authorizations/{openid}");
+    MALL_SCORE_RESULT(HttpMethod.GET, "%s/v3/businesscircle/user-authorizations/{openid}"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 获取对私银行卡号开户银行API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_SEARCH(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/search-banks-by-bank-account"),
+    /**
+     * 查询支持个人业务的银行列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_PERSONAL(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/personal-banking"),
+    /**
+     * 查询支持对公业务的银行列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_CORPORATE(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/corporate-banking"),
+    /**
+     * 查询省份列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_PROVINCES(HttpMethod.GET, "%s/v3/capital/capitallhh/areas/provinces"),
+    /**
+     * 查询城市列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_CITIES(HttpMethod.GET, "%s/v3/capital/capitallhh/areas/provinces/{province_code}/cities"),
+    /**
+     * 查询支行列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_BRANCHES(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/{bank_alias_code}/branches");
 
     /**
      * The Pattern.

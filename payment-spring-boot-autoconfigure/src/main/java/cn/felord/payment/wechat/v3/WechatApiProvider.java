@@ -304,4 +304,15 @@ public class WechatApiProvider {
         return new WechatMediaApi(wechatPayClient, tenantId);
     }
 
+    /**
+     * 其它能力-银行组件（服务商）
+     *
+     * @param tenantId the tenant id
+     * @return the wechat media api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatCapitalApi capitalApi(String tenantId) {
+        return new WechatCapitalApi(wechatPayClient, tenantId);
+    }
+
 }
