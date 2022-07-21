@@ -18,7 +18,6 @@
  */
 package cn.felord.payment.wechat.v3;
 
-import cn.felord.payment.wechat.v2.WechatAllocationApi;
 import cn.felord.payment.wechat.v2.WechatPayRedpackApi;
 import cn.felord.payment.wechat.v2.WechatPayTransfersApi;
 import cn.felord.payment.wechat.v2.WechatV2Client;
@@ -188,23 +187,6 @@ public class WechatApiProvider {
                 .getWechatMeta(tenantId);
         WechatV2Client wechatV2Client = new WechatV2Client(wechatMeta);
         return new WechatPayTransfersApi(wechatV2Client);
-    }
-
-    /**
-     * 微信支付分账，基于V2
-     *
-     * @param tenantId the tenant id
-     * @return wechat allocation api
-     * @since 1.0.10.RELEASE
-     * @deprecated since 1.0.14.RELEASE 直连使用{@link WechatApiProvider#profitsharingApi(String)}、服务商使用{@link WechatApiProvider#partnerProfitsharingApi(String)}
-     */
-    @Deprecated
-    public WechatAllocationApi allocationApi(String tenantId) {
-        WechatMetaBean wechatMeta = wechatPayClient.signatureProvider()
-                .wechatMetaContainer()
-                .getWechatMeta(tenantId);
-        WechatV2Client wechatV2Client = new WechatV2Client(wechatMeta);
-        return new WechatAllocationApi(wechatV2Client);
     }
 
     /**
