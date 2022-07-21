@@ -21,6 +21,8 @@ package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.PayException;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 import java.security.*;
 import java.security.cert.X509Certificate;
@@ -30,7 +32,7 @@ import java.security.cert.X509Certificate;
  *
  * @author felord.cn
  * @since 1.0.0.RELEASE
- **/
+ */
 public class KeyPairFactory {
 
     private static final KeyStore PKCS12_KEY_STORE;
@@ -47,13 +49,13 @@ public class KeyPairFactory {
     /**
      * 获取公私钥.
      *
-     * @param keyPath  the key path
+     * @param resource the resource
      * @param keyAlias the key alias
      * @param keyPass  password
      * @return the key pair
      */
-    public WechatMetaBean initWechatMetaBean(String keyPath, String keyAlias, String keyPass) {
-        ClassPathResource resource = new ClassPathResource(keyPath);
+    public WechatMetaBean initWechatMetaBean(Resource resource, String keyAlias, String keyPass) {
+
         char[] pem = keyPass.toCharArray();
         try {
             PKCS12_KEY_STORE.load(resource.getInputStream(), pem);

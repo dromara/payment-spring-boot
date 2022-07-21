@@ -37,6 +37,8 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.MD5Digest;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -97,6 +99,8 @@ public abstract class BaseModel {
     @JsonIgnore
     private String certPath;
     @JsonIgnore
+    private String certAbsolutePath;
+    @JsonIgnore
     private String signType;
 
     public BaseModel appSecret(String appSecret) {
@@ -109,6 +113,10 @@ public abstract class BaseModel {
         return this;
     }
 
+    public BaseModel certAbsolutePath(String certAbsolutePath) {
+        this.certAbsolutePath = certAbsolutePath;
+        return this;
+    }
 
     public BaseModel signType(String signType) {
         this.signType = signType;
@@ -211,8 +219,9 @@ public abstract class BaseModel {
     private RestTemplate getRestTemplateClientAuthentication(String mchId)
             throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException,
             KeyStoreException, KeyManagementException {
-        ClassPathResource resource = new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
 
+        Resource resource = certAbsolutePath != null ? new FileSystemResource(certAbsolutePath) :
+                new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
         char[] pem = mchId.toCharArray();
 
         KeyStore store = KeyStore.getInstance("PKCS12");
