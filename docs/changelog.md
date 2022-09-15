@@ -1,3 +1,21 @@
+## 1.0.14.RELEASE
+### 微信支付
+- fix: 批量转账到零钱查询BUG [#I5E2X7](https://gitee.com/felord/payment-spring-boot/issues/I5E2X7)
+- feat: 移除了被标记过期的API，包括基于微信支付V2版本的分账实现，使用相关接口的同学需要针对性的进行迁移
+- feat: 增加证书绝对路径实现
+  - 配置项增加`certAbsolutePath`字段用来定义证书的绝对路径，优先级高于`certPath`，当这两个路径都不配置时采用classpath路径`wechat/apiclient_cert.p12`
+#### 服务商
+- feat: 实现服务商商户进件-特约商户进件相关API
+- feat: 实现点金计划，适用于服务商
+- feat: 实现行业方案-电商收付通
+- feat: 实现行业方案-智慧商圈
+  feat: 实现其它能力-银行组件（服务商）
+- enhance: 服务商分账新增下载账单接口
+- enhance: 新增服务商退款回调接口
+#### 通用能力
+- feat: 实现其它能力-图片、视频上传
+- feat: 支付即服务，适用于服务商和直连商户
+
 ## 1.0.13.RELEASE
 ### 微信支付
 
