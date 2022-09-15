@@ -29,7 +29,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.util.AlternativeJdkIdGenerator;
@@ -54,7 +58,11 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -163,7 +171,7 @@ public class SignatureProvider {
     public String doRequestSign(PrivateKey privateKey, String... orderedComponents) {
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initSign(privateKey);
-        final String signatureStr = createSign(true, orderedComponents);
+        final String signatureStr = createSign(orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
         return Base64Utils.encodeToString(signer.sign());
     }
@@ -183,7 +191,7 @@ public class SignatureProvider {
         }
         Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial).getX509Certificate();
 
-        final String signatureStr = createSign(true, params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
+        final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
         signer.initVerify(certificate);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
@@ -316,6 +324,29 @@ public class SignatureProvider {
     }
 
     /**
+     * 对响应的敏感字段进行解密
+     *
+     * @param message  the message
+     * @param tenantId the tenant id
+     * @return encrypt message
+     * @since 1.0.14.RELEASE
+     */
+    public String decryptResponseMessage(String message, String tenantId) {
+        try {
+            WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
+            PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BC_PROVIDER);
+            cipher.init(Cipher.DECRYPT_MODE,privateKey);
+            byte[] data = Base64Utils.decodeFromString(message);
+            byte[] cipherData = cipher.doFinal(data);
+            return new String(cipherData,StandardCharsets.UTF_8);
+
+        } catch (Exception e) {
+            throw new PayException(e);
+        }
+    }
+
+    /**
      * Get certificate x 509 wechat certificate info.
      *
      * @param tenantId the tenant id
@@ -366,11 +397,9 @@ public class SignatureProvider {
      * @param components the components
      * @return string string
      */
-    private static String createSign(boolean newLine, String... components) {
-
-        String suffix = newLine ? "\n" : "";
+    private static String createSign(String... components) {
         return Arrays.stream(components)
-                .collect(Collectors.joining("\n", "", suffix));
+                .collect(Collectors.joining("\n", "", "\n"));
     }
 
 }

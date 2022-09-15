@@ -18,10 +18,10 @@
  */
 package cn.felord.payment.wechat.v3;
 
-import cn.felord.payment.wechat.v2.WechatAllocationApi;
 import cn.felord.payment.wechat.v2.WechatPayRedpackApi;
 import cn.felord.payment.wechat.v2.WechatPayTransfersApi;
 import cn.felord.payment.wechat.v2.WechatV2Client;
+import cn.felord.payment.wechat.v3.ecommerce.WechatEcommerceApi;
 
 /**
  * 微信支付工具.
@@ -190,21 +190,6 @@ public class WechatApiProvider {
     }
 
     /**
-     * 微信支付分账，基于V2
-     *
-     * @param tenantId the tenant id
-     * @return wechat allocation api
-     * @since 1.0.10.RELEASE
-     */
-    public WechatAllocationApi allocationApi(String tenantId) {
-        WechatMetaBean wechatMeta = wechatPayClient.signatureProvider()
-                .wechatMetaContainer()
-                .getWechatMeta(tenantId);
-        WechatV2Client wechatV2Client = new WechatV2Client(wechatMeta);
-        return new WechatAllocationApi(wechatV2Client);
-    }
-
-    /**
      * 直连商户微信支付分账，基于V3
      *
      * @param tenantId the tenant id
@@ -223,4 +208,93 @@ public class WechatApiProvider {
     public WechatPartnerProfitsharingApi partnerProfitsharingApi(String tenantId) {
         return new WechatPartnerProfitsharingApi(wechatPayClient, tenantId);
     }
+
+    /**
+     * 微信V3服务商-商户进件-特约商户进件
+     *
+     * @param tenantId the tenant id
+     * @return wechat partner special mch api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatPartnerSpecialMchApi partnerSpecialMchApi(String tenantId) {
+        return new WechatPartnerSpecialMchApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商或者直连商户-经营能力-支付即服务
+     *
+     * @param tenantId the tenant id
+     * @return wechat smart guide api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatSmartGuideApi smartGuideApi(String tenantId) {
+        return new WechatSmartGuideApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商-经营能力-点金计划
+     *
+     * @param tenantId the tenant id
+     * @return the wechat gold plan api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatGoldPlanApi goldPlanApi(String tenantId) {
+        return new WechatGoldPlanApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商-行业方案-电商收付通
+     *
+     * @param tenantId the tenant id
+     * @return the wechat ecommerce api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatEcommerceApi ecommerceApi(String tenantId) {
+        return new WechatEcommerceApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 服务商智慧商圈
+     *
+     * @param tenantId the tenant id
+     * @return the wechat business circle api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatPartnerBusinessCircleApi partnerBusinessCircleApi(String tenantId) {
+        return new WechatPartnerBusinessCircleApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 直连商户智慧商圈
+     *
+     * @param tenantId the tenant id
+     * @return the wechat business circle api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatBusinessCircleApi businessCircleApi(String tenantId) {
+        return new WechatBusinessCircleApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 其它能力-媒体上传
+     *
+     * @param tenantId the tenant id
+     * @return the wechat media api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatMediaApi mediaApi(String tenantId) {
+        return new WechatMediaApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 其它能力-银行组件（服务商）
+     *
+     * @param tenantId the tenant id
+     * @return the wechat media api
+     * @since 1.0.14.RELEASE
+     */
+    public WechatCapitalApi capitalApi(String tenantId) {
+        return new WechatCapitalApi(wechatPayClient, tenantId);
+    }
+
 }

@@ -54,7 +54,18 @@ public enum WechatPayV3Type {
      * @since 1.0.3.RELEASE
      */
     FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/bill/fundflowbill"),
-
+    /**
+     * 图片上传API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MERCHANT_MEDIA_IMG(HttpMethod.POST, "%s/v3/merchant/media/upload"),
+    /**
+     * 视频上传API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MERCHANT_MEDIA_VIDEO(HttpMethod.POST, "%s/v3/merchant/media/video_upload"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
@@ -668,7 +679,357 @@ public enum WechatPayV3Type {
      *
      * @since 1.0.13.RELEASE
      */
-    PROFITSHARING_BILLS(HttpMethod.GET, "%s/v3/profitsharing/bills");
+    PROFITSHARING_BILLS(HttpMethod.GET, "%s/v3/profitsharing/bills"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 服务商-商户进件-特约商户进件-提交申请单API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_APPLY_PARTNER(HttpMethod.POST, "%s/v3/applyment4sub/applyment/"),
+    /**
+     * 服务商-商户进件-特约商户进件-通过业务申请编号查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_APPLY_QUERY_BUSINESS_CODE(HttpMethod.GET, "%s/v3/applyment4sub/applyment/business_code/{business_code}"),
+    /**
+     * 服务商-商户进件-特约商户进件-通过申请单号查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_APPLY_QUERY_APPLYMENT_ID(HttpMethod.GET, "%s/v3/applyment4sub/applyment/applyment_id/{applyment_id}"),
+    /**
+     * 服务商-商户进件-特约商户进件-修改结算账号API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_SUB_MODIFY(HttpMethod.POST, "%s/v3/apply4sub/sub_merchants/{sub_mchid}/modify-settlement"),
+    /**
+     * 服务商-商户进件-特约商户进件-查询结算账户API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SPEC_MCH_SUB_SETTLEMENT(HttpMethod.GET, "%s/v3/apply4sub/sub_merchants/{sub_mchid}/settlement"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 经营能力-支付即服务-服务人员注册API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES(HttpMethod.POST, "%s/v3/smartguide/guides"),
+    /**
+     * 经营能力-支付即服务-服务人员分配API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES_ASSIGN(HttpMethod.POST, "%s/v3/smartguide/guides/{guide_id}/assign"),
+    /**
+     * 经营能力-支付即服务-服务人员查询API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES_GET(HttpMethod.GET, "%s/v3/smartguide/guides"),
+    /**
+     * 经营能力-支付即服务-服务人员查询API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    SMART_GUIDES_MODIFY(HttpMethod.PATCH, "%s/v3/smartguide/guides/{guide_id}"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 经营能力-点金计划-点金计划管理API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_CHANGE(HttpMethod.POST, "%s/v3/goldplan/merchants/changegoldplanstatus"),
+    /**
+     * 经营能力-点金计划-商家小票管理API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_CHANGE_CUSTOM(HttpMethod.POST, "%s/v3/goldplan/merchants/changecustompagestatus"),
+    /**
+     * 经营能力-点金计划-同业过滤标签管理API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_FILTER(HttpMethod.POST, "%s/v3/goldplan/merchants/set-advertising-industry-filter"),
+    /**
+     * 经营能力-点金计划-开通广告展示API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_ADV_OPEN(HttpMethod.POST, "%s/v3/goldplan/merchants/open-advertising-show"),
+    /**
+     * 经营能力-点金计划-关闭广告展示API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    GOLD_PLAN_ADV_CLOSE(HttpMethod.POST, "%s/v3/goldplan/merchants/close-advertising-show"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 行业方案-电商收付通-商户进件-二级商户进件申请API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_APPLYMENT(HttpMethod.POST, "%s/v3/ecommerce/applyments/"),
+    /**
+     * 行业方案-电商收付通-商户进件-查询申请状态-通过申请单ID查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_APPLYMENT_ID(HttpMethod.GET, "%s/v3/ecommerce/applyments/{applyment_id}"),
+    /**
+     * 行业方案-电商收付通-商户进件-查询申请状态-通过业务申请编号查询申请状态API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_APPLYMENT_OUT_REQUEST_NO(HttpMethod.GET, "%s/v3/ecommerce/applyments/out-request-no/{out_request_no}"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 行业方案-电商收付通-分账-请求分账API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_ORDERS(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/orders"),
+    /**
+     * 行业方案-电商收付通-分账-查询分账结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RESULT(HttpMethod.GET, "%s/v3/ecommerce/profitsharing/orders"),
+    /**
+     * 行业方案-电商收付通-分账-请求分账回退API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RETURN_ORDERS(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/returnorders"),
+    /**
+     * 行业方案-电商收付通-分账-查询分账回退结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RETURN_ORDERS_RESULT(HttpMethod.GET, "%s/v3/ecommerce/profitsharing/returnorders"),
+    /**
+     * 行业方案-电商收付通-分账-完结分账API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_FINISH_ORDER(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/finish-order"),
+    /**
+     * 行业方案-电商收付通-分账-查询订单剩余待分金额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_ORDER_AMOUNTS(HttpMethod.GET, "%s/v3/ecommerce/profitsharing/orders/{transaction_id}/amounts"),
+    /**
+     * 行业方案-电商收付通-分账-添加分账接收方API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RECEIVERS_ADD(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/receivers/add"),
+    /**
+     * 行业方案-电商收付通-分账-添加分账接收方API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/receivers/delete"),
+    /**
+     * 行业方案-电商收付通-补差-请求补差API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_SUBSIDIES_CREATE(HttpMethod.POST, "%s/v3/ecommerce/subsidies/create"),
+    /**
+     * 行业方案-电商收付通-补差-请求补差回退API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_SUBSIDIES_RETURN(HttpMethod.POST, "%s/v3/ecommerce/subsidies/return"),
+    /**
+     * 行业方案-电商收付通-补差-取消补差API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_SUBSIDIES_CANCEL(HttpMethod.POST, "%s/v3/ecommerce/subsidies/cancel"),
+    /**
+     * 行业方案-电商收付通-退款-申请退款API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_APPLY(HttpMethod.POST, "%s/v3/ecommerce/refunds/apply"),
+    /**
+     * 行业方案-电商收付通-退款-查询退款API-通过微信支付退款单号查询退款.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_ID(HttpMethod.GET, "%s/v3/ecommerce/refunds/id/{refund_id}"),
+    /**
+     * 行业方案-电商收付通-退款-查询退款API-通过商户退款单号查询退款.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_OUT_REFUND_NO(HttpMethod.GET, "%s/v3/ecommerce/refunds/out-refund-no/{out_refund_no}"),
+    /**
+     * 行业方案-电商收付通-退款-垫付退款回补API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_RETURN_ADVANCE(HttpMethod.POST, "%s/v3/ecommerce/refunds/{refund_id}/return-advance"),
+    /**
+     * 行业方案-电商收付通-退款-查询垫付回补结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_REFUNDS_RETURN_ADVANCE_RESULT(HttpMethod.GET, "%s/v3/ecommerce/refunds/{refund_id}/return-advance"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询二级商户账户实时余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_REAL_TIME(HttpMethod.GET, "%s/v3/ecommerce/fund/balance/{sub_mchid}"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询二级商户账户日终余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_END_DAY(HttpMethod.GET, "%s/v3/ecommerce/fund/enddaybalance/{sub_mchid}"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询电商平台账户实时余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_TYPE_REAL_TIME(HttpMethod.GET, "%s/v3/merchant/fund/balance/{account_type}"),
+    /**
+     * 行业方案-电商收付通-余额查询-查询电商平台账户日终余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_BALANCE_TYPE_END_DAY(HttpMethod.GET, "%s/v3/merchant/fund/dayendbalance/{account_type}"),
+    /**
+     * 行业方案-电商收付通-商户提现-二级商户预约提现.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW(HttpMethod.POST, "%s/v3/ecommerce/fund/withdraw"),
+    /**
+     * 行业方案-电商收付通-商户提现-二级商户查询预约提现状态API-微信支付预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_ID(HttpMethod.GET, "%s/v3/ecommerce/fund/withdraw/{withdraw_id}"),
+    /**
+     * 行业方案-电商收付通-商户提现-二级商户查询预约提现状态API-商户预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_OUT_REQUEST_NO(HttpMethod.GET, "%s/v3/ecommerce/fund/withdraw/out-request-no/{out_request_no}"),
+    /**
+     * 行业方案-电商收付通-商户提现-电商平台预约提现API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_MERCHANT_WITHDRAW(HttpMethod.POST, "%s/v3/merchant/fund/withdraw"),
+    /**
+     * 行业方案-电商收付通-商户提现-电商平台查询预约提现状态API-微信支付预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_MERCHANT_WITHDRAW_ID(HttpMethod.GET, "%s/v3/merchant/fund/withdraw/withdraw-id/{withdraw_id}"),
+    /**
+     * 行业方案-电商收付通-商户提现-电商平台查询预约提现状态API-商户预约提现单号查询.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_MERCHANT_OUT_REQUEST_NO(HttpMethod.GET, "%s/v3/merchant/fund/withdraw/out-request-no/{out_request_no}"),
+    /**
+     * 行业方案-电商收付通-商户提现-按日下载提现异常文件API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_WITHDRAW_ERROR_BILL(HttpMethod.GET, "%s/v3/merchant/fund/withdraw/bill-type/{bill_type}"),
+    /**
+     * 行业方案-电商收付通-下载账单-申请二级商户资金账单API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_FLOW_BILL(HttpMethod.GET, "%s/v3/ecommerce/bill/fundflowbill"),
+    /**
+     * 行业方案-电商收付通-跨境付款-查询订单剩余可出境余额API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_BALANCE(HttpMethod.GET, "%s/v3/funds-to-oversea/transactions/{transaction_id}/available_abroad_amounts"),
+    /**
+     * 行业方案-电商收付通-跨境付款-申请资金出境API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_ORDERS(HttpMethod.POST, "%s/v3/funds-to-oversea/orders"),
+    /**
+     * 行业方案-电商收付通-跨境付款-查询出境结果API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_ORDERS_RESULT(HttpMethod.GET, "%s/v3/funds-to-oversea/orders/{out_order_id}"),
+    /**
+     * 行业方案-电商收付通-跨境付款-获取购付汇账单文件下载链接API.
+     *
+     * @since 1.0.14.RELEASE
+     */
+    ECOMMERCE_FUND_OVERSEA_BILLS(HttpMethod.GET, "%s/v3/funds-to-oversea/bill-download-url"),
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 智慧商圈-商圈积分同步API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MALL_SCORE_SYNC(HttpMethod.POST, "%s/v3/businesscircle/points/notify"),
+    /**
+     * 智慧商圈-商圈积分同步API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    MALL_SCORE_RESULT(HttpMethod.GET, "%s/v3/businesscircle/user-authorizations/{openid}"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 获取对私银行卡号开户银行API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_SEARCH(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/search-banks-by-bank-account"),
+    /**
+     * 查询支持个人业务的银行列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_PERSONAL(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/personal-banking"),
+    /**
+     * 查询支持对公业务的银行列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_CORPORATE(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/corporate-banking"),
+    /**
+     * 查询省份列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_PROVINCES(HttpMethod.GET, "%s/v3/capital/capitallhh/areas/provinces"),
+    /**
+     * 查询城市列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_CITIES(HttpMethod.GET, "%s/v3/capital/capitallhh/areas/provinces/{province_code}/cities"),
+    /**
+     * 查询支行列表API
+     *
+     * @since 1.0.14.RELEASE
+     */
+    CAPITAL_BRANCHES(HttpMethod.GET, "%s/v3/capital/capitallhh/banks/{bank_alias_code}/branches");
+
     /**
      * The Pattern.
      *

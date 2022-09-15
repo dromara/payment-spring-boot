@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -37,6 +37,8 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.MD5Digest;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -79,11 +81,11 @@ public abstract class BaseModel {
         // 忽略null
         XML_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 // 属性使用 驼峰首字母小写
-                .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+                .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         OBJECT_MAPPER
 //                .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+                .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     }
 
 
@@ -97,6 +99,8 @@ public abstract class BaseModel {
     @JsonIgnore
     private String certPath;
     @JsonIgnore
+    private String certAbsolutePath;
+    @JsonIgnore
     private String signType;
 
     public BaseModel appSecret(String appSecret) {
@@ -109,6 +113,10 @@ public abstract class BaseModel {
         return this;
     }
 
+    public BaseModel certAbsolutePath(String certAbsolutePath) {
+        this.certAbsolutePath = certAbsolutePath;
+        return this;
+    }
 
     public BaseModel signType(String signType) {
         this.signType = signType;
@@ -211,8 +219,9 @@ public abstract class BaseModel {
     private RestTemplate getRestTemplateClientAuthentication(String mchId)
             throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException,
             KeyStoreException, KeyManagementException {
-        ClassPathResource resource = new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
 
+        Resource resource = certAbsolutePath != null ? new FileSystemResource(certAbsolutePath) :
+                new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
         char[] pem = mchId.toCharArray();
 
         KeyStore store = KeyStore.getInstance("PKCS12");

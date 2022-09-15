@@ -11,11 +11,12 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.13.RELEASE</version>
+    <version>1.0.14.RELEASE</version>
 </dependency>
 ```
 
-## 功能
+## 目前已经实现所有服务商和直连商户接口
+
 - 实现微信支付多商户
 - 集成支付宝SDK、快速接入Spring Boot
 - 实现微信支付V3 基础支付
@@ -46,6 +47,11 @@
 - `WechatDirectPayApi` 微信支付直连模式V3普通支付
 - `WechatPayScoreParkingApi` 微信支付分V3停车服务
 - `WechatBatchTransferApi` 微信支付V3批量转账到零钱 
+- `WechatPartnerSpecialMchApi` 微信支付V3服务商商户进件 
+- `WechatMediaApi` 微信支付V3媒体上传 
+- `WechatEcommerceApi` 电商收付通 
+- `WechatSmartGuideApi` 服务商或者直连商户-经营能力-支付即服务 
+- `WechatGoldPlanApi` 服务商-经营能力-点金计划
 
 > 随着版本迭代功能会增加。
 

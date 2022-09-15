@@ -18,7 +18,6 @@
  */
 package cn.felord.payment.wechat.v3.model.profitsharing;
 
-import cn.felord.payment.wechat.v2.model.allocation.Receiver;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 

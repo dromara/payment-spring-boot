@@ -71,6 +71,10 @@ public class WechatPayProperties {
          */
         private String certPath;
         /**
+         * wechat pay absolute certificate Path
+         */
+        private String certAbsolutePath;
+        /**
          * your pay server domain
          */
         private String domain;

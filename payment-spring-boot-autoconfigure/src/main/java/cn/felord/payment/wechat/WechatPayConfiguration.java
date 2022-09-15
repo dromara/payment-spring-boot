@@ -25,6 +25,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 import java.util.Map;
 
@@ -59,8 +62,11 @@ public class WechatPayConfiguration {
         v3Map.keySet().forEach(tenantId -> {
             WechatPayProperties.V3 v3 = v3Map.get(tenantId);
             String certPath = v3.getCertPath();
+            String certAbsolutePath = v3.getCertAbsolutePath();
             String mchId = v3.getMchId();
-            WechatMetaBean wechatMetaBean = keyPairFactory.initWechatMetaBean(certPath, CERT_ALIAS, mchId);
+            Resource resource = certAbsolutePath != null ? new FileSystemResource(certAbsolutePath) :
+                    new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
+            WechatMetaBean wechatMetaBean = keyPairFactory.initWechatMetaBean(resource, CERT_ALIAS, mchId);
             wechatMetaBean.setV3(v3);
             wechatMetaBean.setTenantId(tenantId);
             container.addWechatMeta(tenantId, wechatMetaBean);

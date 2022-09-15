@@ -22,7 +22,9 @@ import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.profitsharing.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -316,7 +318,7 @@ public class WechatProfitsharingApi extends AbstractApi {
      * @return the wechat response entity
      * @since 1.0.13.RELEASE
      */
-    public WechatResponseEntity<ObjectNode> downloadMerchantBills(ProfitsharingBillParams billParams){
+    public ResponseEntity<Resource> downloadMerchantBills(ProfitsharingBillParams billParams){
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.PROFITSHARING_BILLS,billParams)
                 .function(((wechatPayV3Type, params) -> {
@@ -335,7 +337,13 @@ public class WechatProfitsharingApi extends AbstractApi {
                     return Get(uri);
                 })).consumer(wechatResponseEntity::convert)
                 .request();
-        return wechatResponseEntity;
+        String downloadUrl = Objects.requireNonNull(wechatResponseEntity.getBody())
+                .get("download_url")
+                .asText();
+
+        String ext = Objects.equals(TarType.GZIP, billParams.getTarType()) ? ".gzip" : ".txt";
+        String filename = "profitsharingbill-" + billParams.getBillDate().toString() + ext;
+        return this.downloadBillResponse(downloadUrl, filename);
     }
 
 }

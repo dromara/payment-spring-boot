@@ -17,11 +17,15 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.WechatPayProperties;
+import cn.felord.payment.wechat.enumeration.ReceiverType;
+import cn.felord.payment.wechat.enumeration.TarType;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.profitsharing.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -30,7 +34,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -117,9 +124,8 @@ public class WechatPartnerProfitsharingApi extends AbstractApi {
         this.client().withType(WechatPayV3Type.PROFITSHARING_ORDERS_RESULT, queryOrderParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    queryParams.add("sub_mchid", params.getSubMchid());
                     queryParams.add("transaction_id", params.getTransactionId());
-                    Optional.ofNullable(params.getSubMchid())
-                            .ifPresent(mchId -> queryParams.add("sub_mchid", params.getSubMchid()));
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .queryParams(queryParams)
                             .build()
@@ -291,9 +297,9 @@ public class WechatPartnerProfitsharingApi extends AbstractApi {
                     X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
                     final X509Certificate x509Certificate = certificate.getX509Certificate();
                     params.setAppid(v3.getAppId());
-                    String name = params.getName();
-                    if (StringUtils.hasText(name)) {
-                        String encryptedName = signatureProvider.encryptRequestMessage(name, x509Certificate);
+
+                    if (ReceiverType.MERCHANT_ID.equals(params.getType())) {
+                        String encryptedName = signatureProvider.encryptRequestMessage(params.getName(), x509Certificate);
                         params.setName(encryptedName);
                     }
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
@@ -330,5 +336,43 @@ public class WechatPartnerProfitsharingApi extends AbstractApi {
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
+    }
+
+    /**
+     * 申请分账账单API
+     *
+     * @param billParams the bill params
+     * @return the response entity
+     */
+    public ResponseEntity<Resource> downloadMerchantBills(PartnerProfitsharingBillParams billParams){
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PROFITSHARING_BILLS,billParams)
+                .function(((wechatPayV3Type, params) -> {
+                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    String subMchid = params.getSubMchid();
+                    if (subMchid !=null){
+                        queryParams.add("sub_mchid",subMchid);
+                    }
+                    LocalDate billDate = params.getBillDate();
+                    queryParams.add("bill_date", billDate.format(DateTimeFormatter.ISO_DATE));
+                    TarType tarType = params.getTarType();
+                    if (Objects.nonNull(tarType)) {
+                        queryParams.add("tar_type", tarType.name());
+                    }
+
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParams(queryParams)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })).consumer(wechatResponseEntity::convert)
+                .request();
+        String downloadUrl = Objects.requireNonNull(wechatResponseEntity.getBody())
+                .get("download_url")
+                .asText();
+
+        String ext = Objects.equals(TarType.GZIP, billParams.getTarType()) ? ".gzip" : ".txt";
+        String filename = "profitsharingbill-" + billParams.getBillDate().toString() + ext;
+        return this.downloadBillResponse(downloadUrl, filename);
     }
 }
