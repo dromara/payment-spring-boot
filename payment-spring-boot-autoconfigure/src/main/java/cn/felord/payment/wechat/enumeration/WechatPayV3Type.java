@@ -601,6 +601,12 @@ public enum WechatPayV3Type {
     MWEB_PARTNER(HttpMethod.POST, "%s/v3/pay/partner/transactions/h5"),
 
     /**
+     * 服务商退款
+     * @since 1.0.15
+     */
+    REFUND_PARTNER(HttpMethod.POST, "%s/v3/refund/domestic/refunds"),
+
+    /**
      * 关闭订单.
      *
      * @since 1.0.0.RELEASE
