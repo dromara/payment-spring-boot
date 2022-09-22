@@ -223,7 +223,7 @@ public class WechatPartnerPayApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> refund(RefundParams refundParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.REFUND_PARTNER, refundParams)
+        this.client().withType(WechatPayV3Type.REFUND, refundParams)
                 .function(((type, params) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()
