@@ -460,7 +460,7 @@ public enum WechatPayV3Type {
      */
     MARKETING_BUSI_FAVOR_DISASSOCIATE(HttpMethod.POST, "%s/v3/marketing/busifavor/coupons/disassociate"),
     /**
-     * 取消关联订单信息API.
+     * 修改批次预算API.
      *
      * @since 1.0.4.RELEASES
      */
