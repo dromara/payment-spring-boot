@@ -19,7 +19,7 @@ package cn.felord.payment.wechat.v3.model.busifavor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 /**
  * 商家券核销规则-券可核销时间-无规律的有效时间段
  *
@@ -33,10 +33,10 @@ public class IrregularyAvaliableTimeItem{
 	 * 开始时间
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-	private OffsetDateTime beginTime;
+	private LocalDateTime beginTime;
 	/**
 	 * 结束时间
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-	private OffsetDateTime endTime;
+	private LocalDateTime endTime;
 }
