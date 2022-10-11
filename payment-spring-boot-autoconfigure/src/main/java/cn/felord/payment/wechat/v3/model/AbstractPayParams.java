@@ -17,7 +17,10 @@
 
 package cn.felord.payment.wechat.v3.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * @author felord.cn
@@ -37,9 +40,10 @@ public abstract class AbstractPayParams {
      */
     private String outTradeNo;
     /**
-     * 订单失效时间 YYYY-MM-DDTHH:mm:ss+TIMEZONE
+     * 订单失效时间 rfc 3339 YYYY-MM-DDTHH:mm:ss+TIMEZONE
      */
-    private String timeExpire;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
+    private LocalDateTime timeExpire;
     /**
      * 附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用
      */

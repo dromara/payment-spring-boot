@@ -18,9 +18,10 @@
 package cn.felord.payment.wechat.v3.model.payscore.parking;
 
 import cn.felord.payment.wechat.enumeration.PlateColor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 /**
  * 创建停车入场API参数
@@ -57,7 +58,8 @@ public class ParkingParams {
      * <p>
      * 格式为yyyy-MM-DDTHH:mm:ss+TIMEZONE
      */
-    private OffsetDateTime startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
+    private LocalDateTime startTime;
     /**
      * 停车场名称，必传
      */
