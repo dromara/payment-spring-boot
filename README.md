@@ -1,3 +1,5 @@
+[![Maven Central Repo Deployment](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml/badge.svg)](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml)
+
 # 最好用的微信支付V3 Spring Boot 组件 
 
 为了满足业务中出现app支付、公众号支付、小程序支付等多appid并存的场景，对原有的进行了增强开发出了多租户版本。
