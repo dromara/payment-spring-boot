@@ -32,6 +32,10 @@ public enum SubjectType {
      */
     SUBJECT_TYPE_INDIVIDUAL,
     /**
+     * 小微商户
+     */
+    SUBJECT_TYPE_MICRO,
+    /**
      * 企业
      * <p>
      * 营业执照上的主体类型一般为有限公司、有限责任公司；
