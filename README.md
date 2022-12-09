@@ -16,6 +16,9 @@
     <version>1.0.14.RELEASE</version>
 </dependency>
 ```
+## JDK问题
+
+**推荐使用Open JDK**，原因参见[FBI Warning](https://github.com/NotFound403/payment-spring-boot/issues/5)
 
 ## 目前已经实现所有服务商和直连商户接口
 
