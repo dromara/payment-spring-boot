@@ -7,7 +7,7 @@
 - fix: 商家券-修改批次预算API请求方法应该为Patch [#79](https://github.com/NotFound403/payment-spring-boot/issues/79)
 - enhance: 部分时间格式优化，更好地兼容Java Time API
 - enhance: 微信代金券样式的背景颜色枚举更新 [#84](https://github.com/NotFound403/payment-spring-boot/issues/84)
-- upgrade: Spring Boot 版本升级到2.7.4
+- upgrade: Spring Boot 版本升级到2.7.7
 
 ## 1.0.14.RELEASE
 ### 微信支付
