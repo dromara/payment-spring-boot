@@ -1,3 +1,14 @@
+## 1.0.15.RELEASE
+### 微信支付
+- feat: 增加服务商退款API
+- feat: 微信服务商分账-连锁品牌分账 [#82](https://github.com/NotFound403/payment-spring-boot/issues/82)
+- fix: 多租户证书无法复用的问题，刷新时正确移除证书 [#77](https://github.com/NotFound403/payment-spring-boot/issues/77)
+- fix: 批量转账到零钱API入参NPE问题修复 [#85](https://github.com/NotFound403/payment-spring-boot/issues/85)
+- fix: 商家券-修改批次预算API请求方法应该为Patch [#79](https://github.com/NotFound403/payment-spring-boot/issues/79)
+- enhance: 部分时间格式优化，更好地兼容Java Time API
+- enhance: 微信代金券样式的背景颜色枚举更新 [#84](https://github.com/NotFound403/payment-spring-boot/issues/84)
+- upgrade: Spring Boot 版本升级到2.7.4
+
 ## 1.0.14.RELEASE
 ### 微信支付
 - fix: 批量转账到零钱查询BUG [#I5E2X7](https://gitee.com/felord/payment-spring-boot/issues/I5E2X7)

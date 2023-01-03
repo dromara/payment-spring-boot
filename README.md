@@ -1,3 +1,5 @@
+[![Maven Central Repo Deployment](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml/badge.svg)](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml)
+
 # 最好用的微信支付V3 Spring Boot 组件 
 
 为了满足业务中出现app支付、公众号支付、小程序支付等多appid并存的场景，对原有的进行了增强开发出了多租户版本。
@@ -11,9 +13,16 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.14.RELEASE</version>
+    <version>1.0.15.RELEASE</version>
 </dependency>
 ```
+## JDK问题
+
+**推荐使用Open JDK**，原因参见[FBI Warning](https://github.com/NotFound403/payment-spring-boot/issues/5)
+
+## 文档地址
+- [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
+- [payment-spring-boot Gitee文档](https://felord.gitee.io/payment-spring-boot)
 
 ## 目前已经实现所有服务商和直连商户接口
 
@@ -27,12 +36,13 @@
 - 实现微信支付V3 商家券
 - 实现微信支付V3 批量转账到零钱
 
-更多参考[changelog](https://notfound403.github.io/payment-spring-boot/#/changelog)
+更新日志参考[changelog](https://notfound403.github.io/payment-spring-boot/#/changelog)
 
 ## 核心API结构
 ![](https://asset.felord.cn/blog/20220613092244.png)
 
 - `WechatPartnerProfitsharingApi`  微信支付服务商V3分账
+- `WechatBrandProfitsharingApi` 微信支付服务商V3连锁品牌分账
 - `WechatPayCallback`  微信支付V3回调通知工具封装
 - `WechatAllocationApi` 微信支付V2分账（未来会移除）
 - `WechatMarketingFavorApi` 微信支付代金券V3
@@ -61,10 +71,6 @@
 ## 仓库地址
 - [GitHub](https://github.com/NotFound403/payment-spring-boot)
 - [Gitee](https://gitee.com/felord/payment-spring-boot)
-
-## 文档地址
-- [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
-- [payment-spring-boot Gitee文档](https://felord.gitee.io/payment-spring-boot)
  
 ## QQ交流群
 为了交流解惑，新建QQ群，可通过扫码进入。

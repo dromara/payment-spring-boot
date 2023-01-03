@@ -1,15 +1,12 @@
 package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.WechatPayProperties;
-import cn.felord.payment.wechat.enumeration.ReceiverType;
 import cn.felord.payment.wechat.enumeration.TarType;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
 import cn.felord.payment.wechat.v3.model.ecommerce.BrandReceiver;
 import cn.felord.payment.wechat.v3.model.ecommerce.BrandReceiverDeleteParams;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceFinishOrder;
-import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceReceiver;
-import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceReceiverDeleteParams;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceReturnOrderParams;
 import cn.felord.payment.wechat.v3.model.profitsharing.BrandProfitsharingOrder;
 import cn.felord.payment.wechat.v3.model.profitsharing.PartnerProfitsharingBillParams;
@@ -17,7 +14,6 @@ import cn.felord.payment.wechat.v3.model.profitsharing.PartnerQueryOrderParams;
 import cn.felord.payment.wechat.v3.model.profitsharing.PartnerReturnOrdersParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
