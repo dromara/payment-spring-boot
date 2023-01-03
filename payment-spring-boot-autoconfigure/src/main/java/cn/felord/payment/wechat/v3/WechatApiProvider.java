@@ -210,6 +210,16 @@ public class WechatApiProvider {
     }
 
     /**
+     * 服务商品牌分账
+     *
+     * @param tenantId the tenant id
+     * @return the wechat brand profitsharing api
+     */
+    public WechatBrandProfitsharingApi brandProfitsharingApi(String tenantId) {
+        return new WechatBrandProfitsharingApi(wechatPayClient, tenantId);
+    }
+
+    /**
      * 微信V3服务商-商户进件-特约商户进件
      *
      * @param tenantId the tenant id

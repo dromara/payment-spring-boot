@@ -1,101 +1,66 @@
-/*
- *  Copyright 2019-2022 felord.cn
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *  Website:
- *       https://felord.cn
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
-package cn.felord.payment.wechat.v3.ecommerce;
+package cn.felord.payment.wechat.v3;
 
 import cn.felord.payment.wechat.WechatPayProperties;
 import cn.felord.payment.wechat.enumeration.ReceiverType;
+import cn.felord.payment.wechat.enumeration.TarType;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
-import cn.felord.payment.wechat.v3.AbstractApi;
-import cn.felord.payment.wechat.v3.SignatureProvider;
-import cn.felord.payment.wechat.v3.WechatPayClient;
-import cn.felord.payment.wechat.v3.WechatResponseEntity;
-import cn.felord.payment.wechat.v3.X509WechatCertificateInfo;
+import cn.felord.payment.wechat.v3.model.ecommerce.BrandReceiver;
+import cn.felord.payment.wechat.v3.model.ecommerce.BrandReceiverDeleteParams;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceFinishOrder;
-import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceProfitsharingOrder;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceReceiver;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceReceiverDeleteParams;
 import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceReturnOrderParams;
-import cn.felord.payment.wechat.v3.model.ecommerce.Receiver;
+import cn.felord.payment.wechat.v3.model.profitsharing.BrandProfitsharingOrder;
+import cn.felord.payment.wechat.v3.model.profitsharing.PartnerProfitsharingBillParams;
 import cn.felord.payment.wechat.v3.model.profitsharing.PartnerQueryOrderParams;
 import cn.felord.payment.wechat.v3.model.profitsharing.PartnerReturnOrdersParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.CollectionUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.security.cert.X509Certificate;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
- * 电商收付通分账
+ * 服务商-资金应用-连锁品牌分账
  *
  * @author felord.cn
- * @since 1.0.14.RELEASE
+ * @since 1.0.15
  */
-public class ProfitsharingApi extends AbstractApi {
+public class WechatBrandProfitsharingApi extends AbstractApi {
+
     /**
      * Instantiates a new Abstract api.
      *
      * @param wechatPayClient the wechat pay client
      * @param tenantId        the tenant id
      */
-    ProfitsharingApi(WechatPayClient wechatPayClient, String tenantId) {
+    public WechatBrandProfitsharingApi(WechatPayClient wechatPayClient, String tenantId) {
         super(wechatPayClient, tenantId);
     }
 
     /**
      * 请求分账API
-     * <p>
-     * 微信订单支付成功后，商户发起分账请求，将结算后的资金分到分账接收方
      *
-     * @param profitSharingOrder the profit sharing order
+     * @param brandProfitsharingOrder the brand profitsharing order
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> profitsharingOrders(EcommerceProfitsharingOrder profitSharingOrder) {
+    public WechatResponseEntity<ObjectNode> profitsharingOrders(BrandProfitsharingOrder brandProfitsharingOrder) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_ORDERS, profitSharingOrder)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_ORDERS, brandProfitsharingOrder)
                 .function((wechatPayV3Type, params) -> {
-                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
-                    SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-                    params.setAppid(v3.getAppId());
-                    List<Receiver> receivers = params.getReceivers();
-                    if (!CollectionUtils.isEmpty(receivers)) {
-                        receivers.forEach(receiversItem -> {
-                            String name = receiversItem.getReceiverName();
-                            if (StringUtils.hasText(name)) {
-                                String encryptedName = signatureProvider.encryptRequestMessage(name, x509Certificate);
-                                receiversItem.setReceiverName(encryptedName);
-                            }
-                        });
-                    }
+                    params.setAppid(this.wechatMetaBean().getV3().getAppId());
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
                             .toUri();
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
-                    return Post(uri, params, httpHeaders);
+                    return Post(uri, params);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -117,7 +82,7 @@ public class ProfitsharingApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> queryProfitsharingOrder(PartnerQueryOrderParams queryOrderParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_RESULT, queryOrderParams)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_RESULT, queryOrderParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
                     queryParams.add("sub_mchid", params.getSubMchid());
@@ -144,7 +109,7 @@ public class ProfitsharingApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> returnOrders(PartnerReturnOrdersParams returnOrdersParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_RETURN_ORDERS, returnOrdersParams)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_RETURN_ORDERS, returnOrdersParams)
                 .function((wechatPayV3Type, params) -> {
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
@@ -172,7 +137,7 @@ public class ProfitsharingApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> queryReturnOrders(EcommerceReturnOrderParams queryReturnOrderParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_RETURN_ORDERS_RESULT, queryReturnOrderParams)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_RETURN_ORDERS_RESULT, queryReturnOrderParams)
                 .function((wechatPayV3Type, params) -> {
                     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
                     queryParams.add("sub_mchid", params.getSubMchid());
@@ -206,7 +171,7 @@ public class ProfitsharingApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> finishOrder(EcommerceFinishOrder finishOrder) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_FINISH_ORDER, finishOrder)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_FINISH_ORDER, finishOrder)
                 .function((wechatPayV3Type, params) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
@@ -228,7 +193,28 @@ public class ProfitsharingApi extends AbstractApi {
      */
     public WechatResponseEntity<ObjectNode> queryOrderAmounts(String transactionId) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_ORDER_AMOUNTS, transactionId)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_ORDER_AMOUNTS, transactionId)
+                .function((wechatPayV3Type, id) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(id)
+                            .toUri();
+                    return Get(uri);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 查询最大分账比例API
+     *
+     * @param brandMchid the brandMchid
+     * @return wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> brandConfigs(String brandMchid) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.BRAND_CONFIGS, brandMchid)
                 .function((wechatPayV3Type, id) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
@@ -246,31 +232,19 @@ public class ProfitsharingApi extends AbstractApi {
      * <p>
      * 商户发起添加分账接收方请求，建立分账接收方列表。后续可通过发起分账请求，将分账方商户结算后的资金，分到该分账接收方
      *
-     * @param ecommerceReceiver the ecommerce receiver
+     * @param brandReceiver the brandReceiver
      * @return wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> addReceivers(EcommerceReceiver ecommerceReceiver) {
+    public WechatResponseEntity<ObjectNode> addReceivers(BrandReceiver brandReceiver) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_RECEIVERS_ADD, ecommerceReceiver)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_RECEIVERS_ADD, brandReceiver)
                 .function((wechatPayV3Type, params) -> {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
                     params.setAppid(v3.getAppId());
-                    SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-
-                    String name = params.getName();
-                    if (ReceiverType.PERSONAL_OPENID.equals(params.getType()) && StringUtils.hasText(name)) {
-                        // 个人应该必传
-                        String encryptedName = signatureProvider.encryptRequestMessage(name, x509Certificate);
-                        params.setEncryptedName(encryptedName);
-                    }
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
                             .toUri();
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
-                    return Post(uri, params, httpHeaders);
+                    return Post(uri, params);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();
@@ -285,9 +259,9 @@ public class ProfitsharingApi extends AbstractApi {
      * @param delReceiversParams the del receivers params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> deleteReceivers(EcommerceReceiverDeleteParams delReceiversParams) {
+    public WechatResponseEntity<ObjectNode> deleteReceivers(BrandReceiverDeleteParams delReceiversParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.ECOMMERCE_PROFITSHARING_RECEIVERS_DELETE, delReceiversParams)
+        this.client().withType(WechatPayV3Type.BRAND_PROFITSHARING_RECEIVERS_DELETE, delReceiversParams)
                 .function((wechatPayV3Type, params) -> {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
                     params.setAppid(v3.getAppId());
@@ -299,5 +273,43 @@ public class ProfitsharingApi extends AbstractApi {
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
+    }
+
+    /**
+     * 申请分账账单API
+     *
+     * @param billParams the bill params
+     * @return the response entity
+     */
+    public ResponseEntity<Resource> downloadMerchantBills(PartnerProfitsharingBillParams billParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.PROFITSHARING_BILLS, billParams)
+                .function(((wechatPayV3Type, params) -> {
+                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    String subMchid = params.getSubMchid();
+                    if (subMchid != null) {
+                        queryParams.add("sub_mchid", subMchid);
+                    }
+                    LocalDate billDate = params.getBillDate();
+                    queryParams.add("bill_date", billDate.format(DateTimeFormatter.ISO_DATE));
+                    TarType tarType = params.getTarType();
+                    if (Objects.nonNull(tarType)) {
+                        queryParams.add("tar_type", tarType.name());
+                    }
+
+                    URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
+                            .queryParams(queryParams)
+                            .build()
+                            .toUri();
+                    return Get(uri);
+                })).consumer(wechatResponseEntity::convert)
+                .request();
+        String downloadUrl = Objects.requireNonNull(wechatResponseEntity.getBody())
+                .get("download_url")
+                .asText();
+
+        String ext = Objects.equals(TarType.GZIP, billParams.getTarType()) ? ".gzip" : ".txt";
+        String filename = "profitsharingbill-" + billParams.getBillDate().toString() + ext;
+        return this.downloadBillResponse(downloadUrl, filename);
     }
 }

@@ -680,6 +680,62 @@ public enum WechatPayV3Type {
      * @since 1.0.13.RELEASE
      */
     PROFITSHARING_BILLS(HttpMethod.GET, "%s/v3/profitsharing/bills"),
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 请求品牌分账API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_ORDERS(HttpMethod.POST, "%s/v3/brand/profitsharing/orders"),
+    /**
+     * 查询品牌分账结果API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_RESULT(HttpMethod.GET, "%s/v3/brand/profitsharing/orders"),
+    /**
+     * 请求品牌分账回退API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_RETURN_ORDERS(HttpMethod.POST, "%s/v3/brand/profitsharing/returnorders"),
+    /**
+     * 查询品牌分账回退结果API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_RETURN_ORDERS_RESULT(HttpMethod.GET, "%s/v3/brand/profitsharing/returnorders"),
+    /**
+     * 完结品牌分账API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_FINISH_ORDER(HttpMethod.POST, "%s/v3/brand/profitsharing/finish-order"),
+    /**
+     * 查询订单剩余待分金额API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_ORDER_AMOUNTS(HttpMethod.GET, "%s/v3/brand/profitsharing/orders/{transaction_id}/amounts"),
+    /**
+     * 查询最大分账比例API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_CONFIGS(HttpMethod.GET, "%s/v3/brand/profitsharing/brand-configs/{brand_mchid}"),
+    /**
+     * 添加品牌分账接收方API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_RECEIVERS_ADD(HttpMethod.POST, "%s/v3/brand/profitsharing/receivers/add"),
+    /**
+     * 删除分账接收方API.
+     *
+     * @since 1.0.15.RELEASE
+     */
+    BRAND_PROFITSHARING_RECEIVERS_DELETE(HttpMethod.POST, "%s/v3/brand/profitsharing/receivers/delete"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * 服务商-商户进件-特约商户进件-提交申请单API.
@@ -830,7 +886,7 @@ public enum WechatPayV3Type {
      */
     ECOMMERCE_PROFITSHARING_RECEIVERS_ADD(HttpMethod.POST, "%s/v3/ecommerce/profitsharing/receivers/add"),
     /**
-     * 行业方案-电商收付通-分账-添加分账接收方API.
+     * 行业方案-电商收付通-分账-删除分账接收方API.
      *
      * @since 1.0.14.RELEASE
      */
