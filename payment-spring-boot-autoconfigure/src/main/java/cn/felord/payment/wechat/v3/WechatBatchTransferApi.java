@@ -82,7 +82,7 @@ public class WechatBatchTransferApi extends AbstractApi {
         List<CreateBatchTransferParams.TransferDetailListItem> encrypted = transferDetailList.stream()
                 .peek(transferDetailListItem -> {
                     String userName = transferDetailListItem.getUserName();
-                    if (StringUtils.hasText(userName)){
+                    if (StringUtils.hasText(userName)) {
                         String encryptedUserName = signatureProvider.encryptRequestMessage(userName, x509Certificate);
                         transferDetailListItem.setUserName(encryptedUserName);
                     }
@@ -112,7 +112,20 @@ public class WechatBatchTransferApi extends AbstractApi {
     public WechatResponseEntity<ObjectNode> queryBatchByBatchId(QueryBatchTransferParams queryBatchTransferParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.BATCH_TRANSFER_BATCH_ID, queryBatchTransferParams)
-                .function(this::apply)
+                .function((type, params) -> {
+                    MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                    queryParams.add("need_query_detail", params.getNeedQueryDetail().toString());
+                    queryParams.add("offset", params.getOffset().toString());
+                    queryParams.add("limit", params.getLimit().toString());
+                    queryParams.add("detail_status", params.getDetailStatus().name());
+
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .queryParams(queryParams)
+                            .build()
+                            .expand(params.getCode())
+                            .toUri();
+                    return Get(uri);
+                })
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
@@ -390,20 +403,5 @@ public class WechatBatchTransferApi extends AbstractApi {
                 .consumer(wechatResponseEntity::convert)
                 .request();
         return wechatResponseEntity;
-    }
-
-    private RequestEntity<?> apply(WechatPayV3Type type, QueryBatchTransferParams params) {
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("need_query_detail", params.getNeedQueryDetail().toString());
-        queryParams.add("offset", params.getOffset().toString());
-        queryParams.add("limit", params.getLimit().toString());
-        queryParams.add("detail_status", params.getDetailStatus().name());
-
-        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
-                .queryParams(queryParams)
-                .build()
-                .expand(params.getCode())
-                .toUri();
-        return Get(uri);
     }
 }
