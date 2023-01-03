@@ -21,6 +21,8 @@ import cn.felord.payment.PayException;
 import cn.felord.payment.wechat.WechatPayProperties;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
+import cn.felord.payment.wechat.v3.model.RefundParams;
+import cn.felord.payment.wechat.v3.model.RefundQueryParams;
 import cn.felord.payment.wechat.v3.model.TransactionQueryParams;
 import cn.felord.payment.wechat.v3.model.partner.CloseTransParams;
 import cn.felord.payment.wechat.v3.model.partner.PartnerPayParams;
@@ -211,6 +213,61 @@ public class WechatPartnerPayApi extends AbstractApi {
                 .request();
         return wechatResponseEntity;
     }
+
+    /**
+     * 申请退款API
+     *
+     * @param refundParams the refund params
+     * @return the wechat response entity
+     * @since 1.0.15-SNAPSHOT
+     */
+    public WechatResponseEntity<ObjectNode> refund(RefundParams refundParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.REFUND, refundParams)
+                .function(((type, params) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .toUri();
+                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                    params.setNotifyUrl(v3.getDomain().concat(params.getNotifyUrl()));
+                    return Post(uri, params);
+                }))
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+
+
+    /**
+     * 商户退款订单查询API
+     *
+     * @param params the params
+     * @return the wechat response entity
+     * @since 1.0.15-SNAPSHOT
+     */
+    public WechatResponseEntity<ObjectNode> queryRefundInfo(RefundQueryParams params) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.QUERY_REFUND, params)
+                .function(this::queryRefundFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    private RequestEntity<?> queryRefundFunction(WechatPayV3Type type, RefundQueryParams params) {
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        // queryParams.add("out_refund_no", params.getRefundOrderNo());
+        queryParams.add("sub_mchid", params.getSubMchid());
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .queryParams(queryParams)
+                .build()
+                .expand(params.getRefundOrderNo())
+                .toUri();
+        return Get(uri);
+    }
+
 
     /**
      * 商户订单号查询API

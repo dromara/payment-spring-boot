@@ -360,7 +360,7 @@ public class WechatMarketingBusiFavorApi extends AbstractApi {
                             .expand(budgetParams.getStockId())
                             .toUri();
                     budgetParams.setStockId(null);
-                    return Post(uri, budgetParams);
+                    return Patch(uri, budgetParams);
                 })
                 .consumer(wechatResponseEntity::convert)
                 .request();

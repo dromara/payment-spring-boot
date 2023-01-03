@@ -94,8 +94,7 @@ public abstract class AbstractApi {
      * @param mapper the mapper
      */
     private void applyObjectMapper(ObjectMapper mapper) {
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE
-                )
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 // empty string error
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)

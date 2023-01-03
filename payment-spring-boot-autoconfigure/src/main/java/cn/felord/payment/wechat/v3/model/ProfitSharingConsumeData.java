@@ -39,6 +39,14 @@ public class ProfitSharingConsumeData {
      * 直连模式分账发起和出资商户
      */
     private String mchid;
+    /**
+     * 服务商商户号
+     */
+    private String spMchid;
+    /**
+     * 子商户号
+     */
+    private String subMchid;
 
     /**
      * 微信订单号.

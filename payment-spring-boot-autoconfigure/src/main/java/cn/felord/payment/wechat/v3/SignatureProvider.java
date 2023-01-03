@@ -58,12 +58,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -96,7 +91,7 @@ public class SignatureProvider {
     /**
      * 微信平台证书容器  key = 序列号  value = 证书对象
      */
-    private static final Map<String, X509WechatCertificateInfo> CERTIFICATE_MAP = new ConcurrentHashMap<>();
+    private static final Set<X509WechatCertificateInfo> CERTIFICATE_SET = Collections.synchronizedSet(new HashSet<>());
     /**
      * 加密算法提供方 - BouncyCastle
      */
@@ -186,14 +181,21 @@ public class SignatureProvider {
     public boolean responseSignVerify(ResponseSignVerifyParams params) {
 
         String wechatpaySerial = params.getWechatpaySerial();
-        if (CERTIFICATE_MAP.isEmpty() || !CERTIFICATE_MAP.containsKey(wechatpaySerial)) {
-            wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
-        }
-        Certificate certificate = CERTIFICATE_MAP.get(wechatpaySerial).getX509Certificate();
+        X509WechatCertificateInfo certificate = CERTIFICATE_SET.stream()
+                .filter(cert -> Objects.equals(wechatpaySerial, cert.getWechatPaySerial()))
+                .findAny()
+                .orElseGet(() -> {
+                    wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
+                    return CERTIFICATE_SET.stream()
+                            .filter(cert -> Objects.equals(wechatpaySerial, cert.getWechatPaySerial()))
+                            .findAny()
+                            .orElseThrow(()->new PayException("cannot obtain the certificate"));
+                });
+
 
         final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
         Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
-        signer.initVerify(certificate);
+        signer.initVerify(certificate.getX509Certificate());
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
 
         return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
@@ -235,7 +237,11 @@ public class SignatureProvider {
         }
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
-            CERTIFICATE_MAP.remove(tenantId);
+            CERTIFICATE_SET.forEach( x509WechatCertificateInfo -> {
+                if (Objects.equals(tenantId,x509WechatCertificateInfo.getTenantId())){
+                    CERTIFICATE_SET.remove(x509WechatCertificateInfo);
+                }
+            });
             final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509", BC_PROVIDER);
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
@@ -253,7 +259,7 @@ public class SignatureProvider {
                     x509WechatCertificateInfo.setWechatPaySerial(responseSerialNo);
                     x509WechatCertificateInfo.setTenantId(tenantId);
                     x509WechatCertificateInfo.setX509Certificate((X509Certificate) certificate);
-                    CERTIFICATE_MAP.put(responseSerialNo, x509WechatCertificateInfo);
+                    CERTIFICATE_SET.add( x509WechatCertificateInfo);
                 } catch (CertificateException e) {
                     throw new PayException("An error occurred while generating the wechat v3 certificate, reason : " + e.getMessage());
                 }
@@ -296,7 +302,8 @@ public class SignatureProvider {
                 throw new PayException(e);
             }
             return new String(bytes, StandardCharsets.UTF_8);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchProviderException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
+                 InvalidAlgorithmParameterException | NoSuchProviderException e) {
             throw new PayException(e);
         }
     }
@@ -336,10 +343,10 @@ public class SignatureProvider {
             WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
             PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BC_PROVIDER);
-            cipher.init(Cipher.DECRYPT_MODE,privateKey);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] data = Base64Utils.decodeFromString(message);
             byte[] cipherData = cipher.doFinal(data);
-            return new String(cipherData,StandardCharsets.UTF_8);
+            return new String(cipherData, StandardCharsets.UTF_8);
 
         } catch (Exception e) {
             throw new PayException(e);
@@ -353,22 +360,17 @@ public class SignatureProvider {
      * @return the x 509 wechat certificate info
      */
     public X509WechatCertificateInfo getCertificate(String tenantId) {
-        for (String serial : CERTIFICATE_MAP.keySet()) {
-            X509WechatCertificateInfo wechatCertificateInfo = CERTIFICATE_MAP.get(serial);
-            X509Certificate x509Cert = wechatCertificateInfo.getX509Certificate();
-            if (wechatCertificateInfo.getTenantId().equals(tenantId)){
-                try {
-                    x509Cert.checkValidity();
 
-                    return wechatCertificateInfo;
-                } catch (Exception e) {
-                    log.warn("the wechat certificate is invalid , {}", e.getMessage());
-                    // Async?
+      return CERTIFICATE_SET.stream()
+                .filter(cert -> Objects.equals(tenantId, cert.getTenantId()))
+                .findAny()
+                .orElseGet(() -> {
                     wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
-                }
-            }
-        }
-        throw new PayException("failed to obtain wechat pay x509Certificate ");
+                    return CERTIFICATE_SET.stream()
+                            .filter(cert -> Objects.equals(tenantId, cert.getTenantId()))
+                            .findAny()
+                            .orElseThrow(() -> new PayException("cannot obtain the certificate"));
+                });
     }
 
 

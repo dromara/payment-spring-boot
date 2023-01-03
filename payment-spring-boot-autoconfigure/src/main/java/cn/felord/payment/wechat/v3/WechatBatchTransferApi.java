@@ -82,7 +82,7 @@ public class WechatBatchTransferApi extends AbstractApi {
         List<CreateBatchTransferParams.TransferDetailListItem> encrypted = transferDetailList.stream()
                 .peek(transferDetailListItem -> {
                     String userName = transferDetailListItem.getUserName();
-                    if(StringUtils.hasText(userName)){
+                    if (StringUtils.hasText(userName)) {
                         String encryptedUserName = signatureProvider.encryptRequestMessage(userName, x509Certificate);
                         transferDetailListItem.setUserName(encryptedUserName);
                     }

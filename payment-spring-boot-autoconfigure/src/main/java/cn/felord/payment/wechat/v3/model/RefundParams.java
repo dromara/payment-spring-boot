@@ -30,6 +30,12 @@ import java.util.List;
  */
 @Data
 public class RefundParams {
+
+    /**
+     * 子商户的商户号，由微信支付生成并下发.(服务商退款使用)
+     */
+    private String subMchid;
+
     /**
      * 微信支付订单号，同{@link RefundParams#outTradeNo} 二选一
      */

@@ -14,29 +14,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package cn.felord.payment.wechat.v3.model.busifavor;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+package cn.felord.payment.wechat.v3.model.ecommerce;
+
+import cn.felord.payment.wechat.enumeration.ReceiverType;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 /**
- * 商家券核销规则-券可核销时间-无规律的有效时间段
- *
  * @author felord.cn
- * @since 1.0.4.RELEASE
+ * @since 1.0.15.RELEASE
  */
 @Data
-public class IrregularyAvaliableTimeItem{
-
-	/**
-	 * 开始时间
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-	private LocalDateTime beginTime;
-	/**
-	 * 结束时间
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-	private LocalDateTime endTime;
+public class BrandReceiverDeleteParams {
+    private final String brandMchid;
+    private final ReceiverType type;
+    private final String account;
+    private String appid;
+    private String subAppid;
 }

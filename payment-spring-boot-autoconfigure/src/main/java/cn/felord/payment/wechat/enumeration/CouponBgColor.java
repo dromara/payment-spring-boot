@@ -29,42 +29,41 @@ public enum CouponBgColor {
     /**
      * Color 010 coupon bg color.
      */
-    Color010,
+    COLOR010,
     /**
-     * Color 020 coupon bg color.
+     * COLOR 020 coupon bg color.
      */
-    Color020,
+    COLOR020,
     /**
-     * Color 030 coupon bg color.
+     * COLOR 030 coupon bg color.
      */
-    Color030,
+    COLOR030,
     /**
-     * Color 040 coupon bg color.
+     * COLOR 040 coupon bg color.
      */
-    Color040,
+    COLOR040,
     /**
-     * Color 050 coupon bg color.
+     * COLOR 050 coupon bg color.
      */
-    Color050,
+    COLOR050,
     /**
-     * Color 060 coupon bg color.
+     * COLOR 060 coupon bg color.
      */
-    Color060,
+    COLOR060,
     /**
-     * Color 070 coupon bg color.
+     * COLOR 070 coupon bg color.
      */
-    Color070,
+    COLOR070,
     /**
-     * Color 080 coupon bg color.
+     * COLOR 080 coupon bg color.
      */
-    Color080,
+    COLOR080,
     /**
-     * Color 090 coupon bg color.
+     * COLOR 090 coupon bg color.
      */
-    Color090,
+    COLOR090,
     /**
-     * Color 100 coupon bg color.
+     * COLOR 100 coupon bg color.
      */
-    Color100
-
+    COLOR100
 }

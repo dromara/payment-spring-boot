@@ -20,7 +20,7 @@ package cn.felord.payment.wechat.enumeration;
 /**
  * 超级管理员类型
  *
- * @since
+ * @since 1.0.14.RELEASE
  */
 public enum ContactType {
     /**
@@ -31,7 +31,7 @@ public enum ContactType {
     LEGAL,
     /**
      * 经办人
-     *
+     * <p>
      * 经商户授权办理微信支付业务的人员
      */
     SUPER
