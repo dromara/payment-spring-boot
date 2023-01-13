@@ -59,6 +59,10 @@ public class CreateBatchTransferParams {
      * 转账总笔数,一个转账批次单最多发起三千笔转账。转账总笔数必须与批次内所有明细之和保持一致，否则无法发起转账操作
      */
     private Integer totalNum;
+    /**
+     * 指定该笔转账使用的转账场景ID
+     */
+    private String transferSceneId;
 
     /**
      * 转账明细.
