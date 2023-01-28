@@ -9,5 +9,6 @@ public class ApplymentParams {
 	private SubjectInfo subjectInfo;
 	private BusinessInfo businessInfo;
 	private SettlementInfo settlementInfo;
+	@Deprecated
 	private BankAccountInfo bankAccountInfo;
 }
