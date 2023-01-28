@@ -23,6 +23,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
+ * The type Abstract pay params.
+ *
  * @author felord.cn
  * @since 1.0.8.RELEASE
  */
@@ -68,6 +70,13 @@ public abstract class AbstractPayParams {
      * 支付者  JSAPI/小程序下单 必传
      */
     private Payer payer;
+    /**
+     * 电子发票入口开放标识
+     * <p>
+     * 传入{@code true}时，支付成功消息和支付详情页将出现开票入口。需要在微信支付商户平台或微信公众平台开通电子发票功能，传此字段才可生效。
+     * @since 1.0.16.RELEASE
+     */
+    private Boolean supportFapiao;
     /**
      * 场景信息
      */
