@@ -15,17 +15,22 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.specmch;
-
-import java.util.List;
+package cn.felord.payment.wechat.v3;
 
 /**
+ * 风险合规-消费者投诉2.0
+ *
  * @author felord.cn
- * @since 1.0.14.RELEASE
+ * @since 1.0.16.RELEASE
  */
-public class AdditionInfo {
-    private String legalPersonCommitment;
-    private String legalPersonVideo;
-    private List<String> businessAdditionPics;
-    private String 	businessAdditionMsg;
+public class WechatComplaintsApi extends AbstractApi{
+    /**
+     * Instantiates a new Abstract api.
+     *
+     * @param wechatPayClient the wechat pay client
+     * @param tenantId        the tenant id
+     */
+    public WechatComplaintsApi(WechatPayClient wechatPayClient, String tenantId) {
+        super(wechatPayClient, tenantId);
+    }
 }
