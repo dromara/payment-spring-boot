@@ -64,7 +64,7 @@
 - `WechatSmartGuideApi` 服务商或者直连商户-经营能力-支付即服务
 - `WechatGoldPlanApi` 服务商-经营能力-点金计划
 
-> 随着版本迭代功能会增加。
+> 随着版本迭代功能会增加，可通过API注册表类`WechatPayV3Type`进行API接口检索。
 
 ## 开源协议
 **Apache 2.0**
