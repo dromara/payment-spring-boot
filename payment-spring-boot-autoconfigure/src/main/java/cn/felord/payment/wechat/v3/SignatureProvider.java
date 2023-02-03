@@ -187,7 +187,7 @@ public class SignatureProvider {
                     return CERTIFICATE_SET.stream()
                             .filter(cert -> Objects.equals(wechatpaySerial, cert.getWechatPaySerial()))
                             .findAny()
-                            .orElseThrow(()->new PayException("cannot obtain the certificate"));
+                            .orElseThrow(() -> new PayException("cannot obtain the certificate"));
                 });
 
 
@@ -235,8 +235,8 @@ public class SignatureProvider {
         }
         ArrayNode certificates = bodyObjectNode.withArray("data");
         if (certificates.isArray() && certificates.size() > 0) {
-            CERTIFICATE_SET.forEach( x509WechatCertificateInfo -> {
-                if (Objects.equals(tenantId,x509WechatCertificateInfo.getTenantId())){
+            CERTIFICATE_SET.forEach(x509WechatCertificateInfo -> {
+                if (Objects.equals(tenantId, x509WechatCertificateInfo.getTenantId())) {
                     CERTIFICATE_SET.remove(x509WechatCertificateInfo);
                 }
             });
@@ -257,7 +257,7 @@ public class SignatureProvider {
                     x509WechatCertificateInfo.setWechatPaySerial(responseSerialNo);
                     x509WechatCertificateInfo.setTenantId(tenantId);
                     x509WechatCertificateInfo.setX509Certificate((X509Certificate) certificate);
-                    CERTIFICATE_SET.add( x509WechatCertificateInfo);
+                    CERTIFICATE_SET.add(x509WechatCertificateInfo);
                 } catch (CertificateException e) {
                     throw new PayException("An error occurred while generating the wechat v3 certificate, reason : " + e.getMessage());
                 }
@@ -359,7 +359,7 @@ public class SignatureProvider {
      */
     public X509WechatCertificateInfo getCertificate(String tenantId) {
 
-      return CERTIFICATE_SET.stream()
+        return CERTIFICATE_SET.stream()
                 .filter(cert -> Objects.equals(tenantId, cert.getTenantId()))
                 .findAny()
                 .orElseGet(() -> {

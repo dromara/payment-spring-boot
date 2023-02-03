@@ -18,11 +18,13 @@ package cn.felord.payment.wechat.v3;
 
 
 import cn.felord.payment.PayException;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
-import java.security.*;
+import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 /**
@@ -32,17 +34,20 @@ import java.security.cert.X509Certificate;
  * @since 1.0.0.RELEASE
  */
 public class KeyPairFactory {
-
+    private static final String CERT_ALIAS = "Tenpay Certificate";
     private static final KeyStore PKCS12_KEY_STORE;
 
-       static {
-           try {
-               PKCS12_KEY_STORE = KeyStore.getInstance("PKCS12");
-           } catch (KeyStoreException e) {
-             throw new PayException(" wechat pay keystore initialization failed");
-           }
-       }
+    static {
+        try {
+            PKCS12_KEY_STORE = KeyStore.getInstance("PKCS12");
+        } catch (KeyStoreException e) {
+            throw new PayException(" wechat pay keystore initialization failed");
+        }
+    }
 
+    public WechatMetaBean initWechatMetaBean(Resource resource, String keyPass) {
+        return this.initWechatMetaBean(resource, CERT_ALIAS, keyPass);
+    }
 
     /**
      * 获取公私钥.
