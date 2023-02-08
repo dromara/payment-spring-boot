@@ -495,6 +495,20 @@ public enum WechatPayV3Type {
     MARKETING_BUSI_FAVOR_SUBSIDY_QUERY(HttpMethod.GET, "%s/v3/marketing/busifavor/subsidy/pay-receipts/{subsidy_receipt_id}"),
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
+     * 建立合作关系API.
+     *
+     * @since 1.0.16.RELEASES
+     */
+    MARKETING_PARTNERSHIPS_BUILD(HttpMethod.POST, "%s/v3/marketing/partnerships/build"),
+    /**
+     * 查询合作关系列表API.
+     *
+     * @since 1.0.16.RELEASES
+     */
+    MARKETING_PARTNERSHIPS_GET(HttpMethod.GET, "%s/v3/marketing/partnerships"),
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
      * 发起批量转账API.
      *
      * @since 1.0.6.RELEASES
