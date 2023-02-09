@@ -26,8 +26,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * The type Wechat tenant service configuration.
  *
- * @author xiafang
- * @since 2023 /2/3 12:32
+ * @author felord.cn
+ * @since 1.0.16.RELEASE
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(WechatPayConfiguredCondition.class)

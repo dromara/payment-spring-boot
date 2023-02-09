@@ -29,6 +29,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 从配置文件中加载租户信息,默认实现,可被覆盖
+ *
  * @author xiafang
  * @since 2023/2/3 11:40
  */
@@ -37,7 +39,7 @@ public class InMemoryWechatTenantService implements WechatTenantService {
     private final WechatPayProperties wechatPayProperties;
 
     @Override
-    public Set<WechatMetaBean> getAllTenants() {
+    public Set<WechatMetaBean> loadTenants() {
         Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
         KeyPairFactory keyPairFactory = new KeyPairFactory();
         return v3Map.entrySet()

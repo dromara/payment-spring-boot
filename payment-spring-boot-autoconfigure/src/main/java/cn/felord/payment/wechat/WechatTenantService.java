@@ -22,9 +22,12 @@ import cn.felord.payment.wechat.v3.WechatMetaBean;
 import java.util.Set;
 
 /**
- * @author xiafang
- * @since 2023/2/3 11:37
+ * 加载租户信息服务
+ *
+ * @author felord.cn
+ * @since 1.0.16.RELEASE
  */
+@FunctionalInterface
 public interface WechatTenantService {
-    Set<WechatMetaBean> getAllTenants();
+    Set<WechatMetaBean> loadTenants();
 }
