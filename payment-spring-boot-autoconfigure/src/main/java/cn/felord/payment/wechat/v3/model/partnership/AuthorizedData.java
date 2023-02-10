@@ -15,17 +15,17 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.specmch;
+package cn.felord.payment.wechat.v3.model.partnership;
 
-import java.util.List;
+import cn.felord.payment.wechat.enumeration.BusinessType;
+import lombok.Data;
 
 /**
  * @author felord.cn
- * @since 1.0.14.RELEASE
+ * @since 1.0.16.RELEASE
  */
-public class AdditionInfo {
-    private String legalPersonCommitment;
-    private String legalPersonVideo;
-    private List<String> businessAdditionPics;
-    private String 	businessAdditionMsg;
+@Data
+public class AuthorizedData {
+    private final BusinessType businessType;
+    private final String stockId;
 }

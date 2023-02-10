@@ -1,8 +1,8 @@
 [![Maven Central Repo Deployment](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml/badge.svg)](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml)
 
-# 最好用的微信支付V3 Spring Boot 组件
+# 最全最好用的微信支付V3 Spring Boot 组件
 
-为了满足业务中出现app支付、公众号支付、小程序支付等多appid并存的场景，对原有的进行了增强开发出了多租户版本。
+微信支付V3支付，支持微信优惠券，代金券、商家券、智慧商圈、商家转账到零钱、公众号支付、微信小程序支付、分账、支付分、商家券、合单支付、先享卡、电商收付通等全部微信支付功能API，同时满足多个服务商、多个商户开发需求。一键集成，API友好，上手快，欢迎star。
 
 请给[Payment Spring Boot](https://github.com/NotFound403/payment-spring-boot) **Star**以鼓励，谢谢。
 
@@ -64,7 +64,7 @@
 - `WechatSmartGuideApi` 服务商或者直连商户-经营能力-支付即服务
 - `WechatGoldPlanApi` 服务商-经营能力-点金计划
 
-> 随着版本迭代功能会增加。
+> 随着版本迭代功能会增加，可通过API注册表类`WechatPayV3Type`进行API接口检索。
 
 ## 开源协议
 **Apache 2.0**
