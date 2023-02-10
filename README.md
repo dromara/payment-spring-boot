@@ -3,6 +3,7 @@
 [![](https://img.shields.io/badge/spring%20boot-2.4%2B-brightgreen)](https://github.com/NotFound403/payment-spring-boot)
 [![](https://img.shields.io/maven-central/v/cn.felord/payment-spring-boot.svg?style=flat-square)](https://mvnrepository.com/artifact/cn.felord/payment-spring-boot)
 [![](https://img.shields.io/github/stars/NotFound403/payment-spring-boot?style=social)](https://github.com/NotFound403/payment-spring-boot)
+[![](https://gitee.com/felord/payment-spring-boot/badge/star.svg?theme=white)](https://gitee.com/felord/payment-spring-boot/stargazers)
 [![](https://img.shields.io/badge/%E7%82%B9%E5%87%BB-%E5%BE%AE%E4%BF%A1%E5%92%A8%E8%AF%A2-brightgreen)](https://work.weixin.qq.com/kfid/kfc9d9d759f27f087e1)
 
 如果你感觉这个项目不错，请给**Star**以鼓励，谢谢。
