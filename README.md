@@ -1,11 +1,15 @@
-[![Maven Central Repo Deployment](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml/badge.svg)](https://github.com/NotFound403/payment-spring-boot/actions/workflows/main.yml)
+[![](https://img.shields.io/github/license/NotFound403/payment-spring-boot)](https://github.com/NotFound403/payment-spring-boot/blob/release/LICENSE)
+[![](https://img.shields.io/badge/java-8-red)]()
+[![](https://img.shields.io/badge/spring%20boot-2.4%2B-brightgreen)]()
+[![](https://img.shields.io/maven-central/v/cn.felord/payment-spring-boot.svg?style=flat-square)](https://mvnrepository.com/artifact/cn.felord/payment-spring-boot)
+[![](https://img.shields.io/github/stars/NotFound403/payment-spring-boot?style=social)](https://github.com/NotFound403/payment-spring-boot)
+[![](https://img.shields.io/github/forks/NotFound403/payment-spring-boot?style=social)](https://github.com/NotFound403/payment-spring-boot)
+
+如果你感觉这个项目不错，请给**Star**以鼓励，谢谢。
 
 # 最全最好用的微信支付V3 Spring Boot 组件
 
 微信支付V3支付，支持微信优惠券，代金券、商家券、智慧商圈、商家转账到零钱、公众号支付、微信小程序支付、分账、支付分、商家券、合单支付、先享卡、电商收付通等全部微信支付功能API，同时满足多个服务商、多个商户开发需求。一键集成，API友好，上手快，欢迎star。
-
-请给[Payment Spring Boot](https://github.com/NotFound403/payment-spring-boot) **Star**以鼓励，谢谢。
-
 
 ## Maven 最新中央仓库坐标
 
@@ -13,7 +17,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.15.RELEASE</version>
+    <version>1.0.16.RELEASE</version>
 </dependency>
 ```
 ## JDK问题
