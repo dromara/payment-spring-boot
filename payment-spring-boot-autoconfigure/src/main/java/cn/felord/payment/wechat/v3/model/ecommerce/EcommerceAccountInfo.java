@@ -33,5 +33,6 @@ public class EcommerceAccountInfo {
 	private String bankBranchId;
 	private String bankName;
 	private String accountNumber;
+	@Deprecated
 	private AccountCertInfo accountCertInfo;
 }

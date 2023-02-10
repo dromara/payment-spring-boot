@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +13,17 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat;
 
 
-import cn.felord.payment.wechat.v3.*;
+import cn.felord.payment.wechat.v3.SignatureProvider;
+import cn.felord.payment.wechat.v3.WechatApiProvider;
+import cn.felord.payment.wechat.v3.WechatMetaContainer;
+import cn.felord.payment.wechat.v3.WechatPayClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-
-import java.util.Map;
 
 /**
  * The type Wechat pay configuration.
@@ -38,39 +32,19 @@ import java.util.Map;
  * @since 1.0.0.RELEASE
  */
 @Configuration(proxyBeanMethods = false)
-@Conditional(WechatPayConfiguredCondition.class)
-@EnableConfigurationProperties(WechatPayProperties.class)
 public class WechatPayConfiguration {
-    /**
-     * The constant CERT_ALIAS.
-     */
-    private static final String CERT_ALIAS = "Tenpay Certificate";
 
     /**
      * 微信支付公私钥 以及序列号等元数据.
      *
-     * @param wechatPayProperties the wechat pay properties
+     * @param wechatTenantService the wechat tenant service
      * @return the wechat cert bean
      */
     @Bean
     @ConditionalOnMissingBean
-    WechatMetaContainer wechatMetaContainer(WechatPayProperties wechatPayProperties) {
-
-        Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
+    WechatMetaContainer wechatMetaContainer(WechatTenantService wechatTenantService) {
         WechatMetaContainer container = new WechatMetaContainer();
-        KeyPairFactory keyPairFactory = new KeyPairFactory();
-        v3Map.keySet().forEach(tenantId -> {
-            WechatPayProperties.V3 v3 = v3Map.get(tenantId);
-            String certPath = v3.getCertPath();
-            String certAbsolutePath = v3.getCertAbsolutePath();
-            String mchId = v3.getMchId();
-            Resource resource = certAbsolutePath != null ? new FileSystemResource(certAbsolutePath) :
-                    new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
-            WechatMetaBean wechatMetaBean = keyPairFactory.initWechatMetaBean(resource, CERT_ALIAS, mchId);
-            wechatMetaBean.setV3(v3);
-            wechatMetaBean.setTenantId(tenantId);
-            container.addWechatMeta(tenantId, wechatMetaBean);
-        });
+              container.addWechatMetas(wechatTenantService.loadTenants());
         return container;
     }
 

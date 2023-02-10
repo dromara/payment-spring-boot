@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3.model.batchtransfer;
 
@@ -59,6 +57,10 @@ public class CreateBatchTransferParams {
      * 转账总笔数,一个转账批次单最多发起三千笔转账。转账总笔数必须与批次内所有明细之和保持一致，否则无法发起转账操作
      */
     private Integer totalNum;
+    /**
+     * 指定该笔转账使用的转账场景ID
+     */
+    private String transferSceneId;
 
     /**
      * 转账明细.

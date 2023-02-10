@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3;
 
@@ -45,17 +43,6 @@ public class WechatApiProvider {
     }
 
     /**
-     * 代金券.
-     *
-     * @param tenantId the tenant id
-     * @return the wechat marketing favor api
-     * @since 1.0.0.RELEASE
-     */
-    public WechatMarketingFavorApi favorApi(String tenantId) {
-        return new WechatMarketingFavorApi(this.wechatPayClient, tenantId);
-    }
-
-    /**
      * 普通支付-直连模式.
      *
      * @param tenantId the tenant id
@@ -65,7 +52,6 @@ public class WechatApiProvider {
     public WechatDirectPayApi directPayApi(String tenantId) {
         return new WechatDirectPayApi(wechatPayClient, tenantId);
     }
-
 
     /**
      * 普通支付-服务商模式.
@@ -123,6 +109,17 @@ public class WechatApiProvider {
     }
 
     /**
+     * 代金券.
+     *
+     * @param tenantId the tenant id
+     * @return the wechat marketing favor api
+     * @since 1.0.0.RELEASE
+     */
+    public WechatMarketingFavorApi favorApi(String tenantId) {
+        return new WechatMarketingFavorApi(this.wechatPayClient, tenantId);
+    }
+
+    /**
      * 微信支付商家券.
      *
      * @param tenantId the tenant id
@@ -131,6 +128,16 @@ public class WechatApiProvider {
      */
     public WechatMarketingBusiFavorApi busiFavorApi(String tenantId) {
         return new WechatMarketingBusiFavorApi(wechatPayClient, tenantId);
+    }
+
+    /**
+     * 委托营销-直连商户
+     *
+     * @param tenantId the tenant id
+     * @return the wechat marketing partnership api
+     */
+    public WechatMarketingPartnershipApi marketingshipApi(String tenantId) {
+        return new WechatMarketingPartnershipApi(this.wechatPayClient, tenantId);
     }
 
     /**
@@ -200,7 +207,7 @@ public class WechatApiProvider {
     }
 
     /**
-     * 服务商微信支付分账，基于V3
+     * 服务商-微信支付分账，基于V3
      *
      * @param tenantId the tenant id
      * @return the wechat partner profitsharing api
@@ -210,7 +217,7 @@ public class WechatApiProvider {
     }
 
     /**
-     * 服务商品牌分账
+     * 服务商-品牌分账
      *
      * @param tenantId the tenant id
      * @return the wechat brand profitsharing api
@@ -264,7 +271,7 @@ public class WechatApiProvider {
     }
 
     /**
-     * 服务商智慧商圈
+     * 服务商-智慧商圈
      *
      * @param tenantId the tenant id
      * @return the wechat business circle api
@@ -275,7 +282,7 @@ public class WechatApiProvider {
     }
 
     /**
-     * 直连商户智慧商圈
+     * 直连商户-智慧商圈
      *
      * @param tenantId the tenant id
      * @return the wechat business circle api
@@ -307,4 +314,13 @@ public class WechatApiProvider {
         return new WechatCapitalApi(wechatPayClient, tenantId);
     }
 
+    /**
+     * 风险合规-消费者投诉2.0
+     *
+     * @param tenantId the tenant id
+     * @return the wechat complaints api
+     */
+    public WechatComplaintsApi complaintsApi(String tenantId) {
+        return new WechatComplaintsApi(wechatPayClient, tenantId);
+    }
 }

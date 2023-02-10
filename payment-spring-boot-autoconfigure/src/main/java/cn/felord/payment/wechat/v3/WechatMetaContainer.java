@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +13,13 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.v3;
 
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * 配置容器
@@ -28,21 +28,25 @@ import java.util.*;
  * @since 1.0.0.RELEASE
  */
 public class WechatMetaContainer {
-    private final Map<String, WechatMetaBean> wechatMetaBeanMap = new HashMap<>();
-    private final Set<String> tenantIds = new HashSet<>();
+    private final Map<String, WechatMetaBean> wechatMetaBeanMap = new ConcurrentHashMap<>();
+    private final Set<String> tenantIds = new ConcurrentSkipListSet<>();
 
 
     /**
-     * Add wechat meta boolean.
+     * Add wechat metas.
      *
-     * @param tenantId       the tenantId
-     * @param wechatMetaBean the wechat meta bean
-     * @return the boolean
+     * @param wechatMetaBeans the wechat meta beans
      */
-    public WechatMetaBean addWechatMeta(String tenantId, WechatMetaBean wechatMetaBean) {
-        tenantIds.add(tenantId);
-        return this.wechatMetaBeanMap.put(tenantId, wechatMetaBean);
+    public void addWechatMetas(Collection<WechatMetaBean> wechatMetaBeans) {
+        wechatMetaBeans.forEach(this::addMeta);
     }
+
+    private void addMeta(WechatMetaBean wechatMetaBean) {
+        String tenantId = wechatMetaBean.getTenantId();
+        tenantIds.add(tenantId);
+        wechatMetaBeanMap.put(tenantId, wechatMetaBean);
+    }
+
 
     /**
      * Remove wechat meta wechat meta bean.

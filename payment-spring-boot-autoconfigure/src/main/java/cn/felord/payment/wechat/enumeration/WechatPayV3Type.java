@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright 2019-2022 felord.cn
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
  */
 package cn.felord.payment.wechat.enumeration;
 
@@ -495,6 +493,20 @@ public enum WechatPayV3Type {
      * @since 1.0.13.RELEASES
      */
     MARKETING_BUSI_FAVOR_SUBSIDY_QUERY(HttpMethod.GET, "%s/v3/marketing/busifavor/subsidy/pay-receipts/{subsidy_receipt_id}"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
+     * 建立合作关系API.
+     *
+     * @since 1.0.16.RELEASES
+     */
+    MARKETING_PARTNERSHIPS_BUILD(HttpMethod.POST, "%s/v3/marketing/partnerships/build"),
+    /**
+     * 查询合作关系列表API.
+     *
+     * @since 1.0.16.RELEASES
+     */
+    MARKETING_PARTNERSHIPS_GET(HttpMethod.GET, "%s/v3/marketing/partnerships"),
+
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * 发起批量转账API.
