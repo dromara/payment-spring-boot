@@ -1,3 +1,12 @@
+## 1.0.16.RELEASE
+### 微信支付
+- feat: 直连商户-委托营销相关API实现
+- enhance:基础支付增加电子发票入口开放标识
+- enhance:商家转账到零钱-发起商家转账 增加转账场景ID
+- enhance: 增加抽象接口`WechatTenantService`负责从配置文件或者其它数据源检索租户配置信息，提供默认实现`InMemoryWechatTenantService`向下兼容 #88
+- refactor: 服务商商户进件请求不再需要银行证明材料信息`BankAccountInfo`，已标记为废弃，涉及特约商户进件和电商收付通
+- upgrade: bcprov-jdk15to18 1.67 升级到 1.69
+
 ## 1.0.15.RELEASE
 ### 微信支付
 - feat: 增加服务商退款API
