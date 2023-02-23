@@ -41,7 +41,7 @@ Java微信支付V3支付Spring Boot Starter，支持微信优惠券，代金券�
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.16.RELEASE</version>
+    <version>1.0.17.RELEASE</version>
 </dependency>
 ```
 ## JDK问题

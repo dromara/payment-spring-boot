@@ -45,12 +45,12 @@ public class StocksCreateParams {
     /**
      * 批次开始时间 rfc 3339   yyyy-MM-ddTHH:mm:ss.sss+TIMEZONE
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime availableBeginTime;
     /**
      * 批次结束时间 rfc 3339   yyyy-MM-ddTHH:mm:ss.sss+TIMEZONE
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime availableEndTime;
     /**
      * 可创建代金券的类型包含预充值和免充值两种类型。此字段用来标识制券 <strong>是否无资金流</strong>

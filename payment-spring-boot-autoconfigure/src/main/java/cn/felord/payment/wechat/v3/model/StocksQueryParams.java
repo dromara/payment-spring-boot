@@ -46,13 +46,13 @@ public class StocksQueryParams {
     /**
      * 选填
      * <p>
-     * 起始时间  最终满足格式 {@code yyyy-MM-dd'T'HH:mm:ss.SSSXXX}
+     * 起始时间  最终满足格式 {@code yyyy-MM-dd'T'HH:mm:ssXXX}
      */
     private OffsetDateTime createStartTime;
     /**
      * 选填
      * <p>
-     * 终止时间  最终满足格式 {@code yyyy-MM-dd'T'HH:mm:ss.SSSXXX}
+     * 终止时间  最终满足格式 {@code yyyy-MM-dd'T'HH:mm:ssXXX}
      */
     private OffsetDateTime createEndTime;
     /**
