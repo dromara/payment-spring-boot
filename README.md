@@ -54,20 +54,10 @@ Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家�
 
 - [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
 
-## 目前已经实现所有服务商和直连商户接口
-
-- 实现微信支付多商户
-- 集成支付宝SDK、快速接入Spring Boot
-- 实现微信支付V3 基础支付
-- 实现微信支付V3 合单支付
-- 实现微信支付V3 代金券
-- 实现微信支付V3 微信支付分
-- 实现微信支付V3 先享卡
-- 实现微信支付V3 商家券
-- 实现微信支付V3 批量转账到零钱
-
-更新日志参考[changelog](https://notfound403.github.io/payment-spring-boot/#/changelog)
-
+## API清单
+目前已经实现绝大部分微信支付直连商户和服务商的接口，具体的API明细可查看[API清单]()
+## CHANGELOG
+更新日志[CHANGELOG](https://notfound403.github.io/payment-spring-boot/#/changelog)
 ## API清单
 
 API结构如下：
