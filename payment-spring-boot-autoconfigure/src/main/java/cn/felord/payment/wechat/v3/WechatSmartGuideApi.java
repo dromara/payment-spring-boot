@@ -109,9 +109,9 @@ public class WechatSmartGuideApi extends AbstractApi {
     }
 
     /**
-     * 服务人员分配API
+     * 服务人员查询API
      * <p>
-     * 用于开发者在顾客下单后为顾客分配服务人员使用。
+     * 用于商户开发者查询已注册的服务人员ID等信息。
      * <p>
      * 成功返回后请自行使用{@link SignatureProvider#decryptResponseMessage(String, String)}解密敏感字段。
      *
