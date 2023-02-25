@@ -215,7 +215,7 @@ public class WechatCombinePayApi extends AbstractApi {
      *
      * @param outRefundNo the out refund no
      * @return the wechat response entity
-     * @since 1.0.16.RELEASE
+     * @since 1.0.17.RELEASE
      */
     public WechatResponseEntity<ObjectNode> queryRefundInfo(String outRefundNo) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();

@@ -82,6 +82,7 @@ public class WechatMediaApi extends AbstractApi {
                 .request();
         return wechatResponseEntity;
     }
+
     @SneakyThrows
     private RequestEntity<?> uploadFunction(WechatPayV3Type type, MultipartFile file) {
 
@@ -107,5 +108,25 @@ public class WechatMediaApi extends AbstractApi {
                 .header("Meta-Info", metaStr)
                 .header("Pay-TenantId", tenantId())
                 .body(body);
+    }
+
+    /**
+     * 营销图片上传API
+     * <p>
+     * 媒体图片只支持JPG、BMP、PNG格式，文件大小不能超过2M。
+     * <p>
+     * 通过本接口上传图片后可获得图片url地址。图片url可在微信支付营销相关的API使用，包括商家券、代金券、支付有礼等。
+     *
+     * @param file the file
+     * @return the wechat response entity
+     * @since 1.0.17.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> marketingImageUpload(MultipartFile file) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.MARKETING_IMAGE_UPLOAD, file)
+                .function(this::uploadFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
     }
 }
