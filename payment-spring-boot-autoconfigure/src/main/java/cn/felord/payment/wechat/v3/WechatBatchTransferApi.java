@@ -103,7 +103,7 @@ public class WechatBatchTransferApi extends AbstractApi {
     }
 
     /**
-     * 微信批次单号查询批次单API
+     * 通过微信批次单号查询批次单API
      *
      * @param queryBatchTransferParams the queryBatchTransferParams
      * @return the wechat response entity
@@ -132,33 +132,7 @@ public class WechatBatchTransferApi extends AbstractApi {
     }
 
     /**
-     * 微信明细单号查询明细单API
-     *
-     * @param queryBatchTransferDetailParams the queryBatchTransferDetailParams
-     * @return the wechat response entity
-     * @since 1.0.6.RELEASE
-     */
-    public WechatResponseEntity<ObjectNode> queryBatchDetailByWechat(QueryBatchTransferDetailParams queryBatchTransferDetailParams) {
-        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_WECHAT, queryBatchTransferDetailParams)
-                .function((type, params) -> {
-                    Map<String, String> pathParams = new HashMap<>(2);
-                    pathParams.put("batch_id", params.getBatchIdOrOutBatchNo());
-                    pathParams.put("detail_id", params.getDetailIdOrOutDetailNo());
-
-                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
-                            .build()
-                            .expand(pathParams)
-                            .toUri();
-                    return Get(uri);
-                })
-                .consumer(wechatResponseEntity::convert)
-                .request();
-        return wechatResponseEntity;
-    }
-
-    /**
-     * 微信批次单号查询批次单API
+     * 通过商家批次单号查询批次单API
      *
      * @param queryBatchTransferParams the queryBatchTransferParams
      * @return the wechat response entity
@@ -187,7 +161,33 @@ public class WechatBatchTransferApi extends AbstractApi {
     }
 
     /**
-     * 商家明细单号查询明细单API
+     * 通过微信明细单号查询明细单API
+     *
+     * @param queryBatchTransferDetailParams the queryBatchTransferDetailParams
+     * @return the wechat response entity
+     * @since 1.0.6.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> queryBatchDetailByWechat(QueryBatchTransferDetailParams queryBatchTransferDetailParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.BATCH_TRANSFER_DETAIL_WECHAT, queryBatchTransferDetailParams)
+                .function((type, params) -> {
+                    Map<String, String> pathParams = new HashMap<>(2);
+                    pathParams.put("batch_id", params.getBatchIdOrOutBatchNo());
+                    pathParams.put("detail_id", params.getDetailIdOrOutDetailNo());
+
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(pathParams)
+                            .toUri();
+                    return Get(uri);
+                })
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 通过商家明细单号查询明细单API
      *
      * @param queryBatchTransferDetailParams the queryBatchTransferDetailParams
      * @return the wechat response entity
@@ -260,7 +260,7 @@ public class WechatBatchTransferApi extends AbstractApi {
     }
 
     /**
-     * 转账明细电子回单受理API
+     * 受理转账明细电子回单API
      * <p>
      * 受理转账明细电子回单接口，商户通过该接口可以申请受理转账明细单电子回单服务。
      * <p>

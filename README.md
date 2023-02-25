@@ -1,4 +1,3 @@
-
    <div align="center" style="margin-bottom: 10px"><h1>最全最好用的微信支付V3 Spring Boot 组件</h1></div>
 
 <p align="center">
@@ -33,22 +32,26 @@
 
 ## 简介
 
-Java微信支付V3支付Spring Boot Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家转账到零钱、公众号支付、微信小程序支付、分账、支付分、商家券、合单支付、先享卡、电商收付通等全部微信支付功能API，同时满足多个服务商、多个商户开发需求。一键集成，屏蔽了复杂度，API友好，上手快，欢迎star。
+Java微信支付V3支付Spring Boot
+Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家转账到零钱、公众号支付、微信小程序支付、分账、支付分、商家券、合单支付、先享卡、电商收付通等全部微信支付功能API，同时满足多个服务商、多个商户开发需求。一键集成，屏蔽了复杂度，API友好，上手快，欢迎star。
 
 ## Maven 最新中央仓库坐标
 
 ```xml
+
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
     <version>1.0.17.RELEASE</version>
 </dependency>
 ```
+
 ## JDK问题
 
 **推荐使用Open JDK**，原因参见[FBI Warning](https://github.com/NotFound403/payment-spring-boot/issues/5)
 
 ## 文档地址
+
 - [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
 
 ## 目前已经实现所有服务商和直连商户接口
@@ -65,39 +68,27 @@ Java微信支付V3支付Spring Boot Starter，支持微信优惠券，代金券�
 
 更新日志参考[changelog](https://notfound403.github.io/payment-spring-boot/#/changelog)
 
-## 核心API结构
-![](https://asset.felord.cn/blog/20220613092244.png)
+## API清单
 
-- `WechatPartnerProfitsharingApi`  微信支付服务商V3分账
-- `WechatBrandProfitsharingApi` 微信支付服务商V3连锁品牌分账
-- `WechatPayCallback`  微信支付V3回调通知工具封装
-- `WechatAllocationApi` 微信支付V2分账（未来会移除）
-- `WechatMarketingFavorApi` 微信支付代金券V3
-- `WechatCombinePayApi` 微信支付合单支付V3
-- `WechatPayScoreApi` 微信支付分V3
-- `WechatPayRedpackApi` 微信支付V2现金红包
-- `WechatDiscountCardApi` 微信支付V3先享卡
-- `WechatProfitsharingApi` 微信支付直连商户V3分账
-- `WechatPartnerPayApi` 微信支付服务商模式V3普通支付
-- `WechatMarketingBusiFavorApi` 微信支付V3商家券
-- `WechatPayTransfersApi` 微信支付V2企业付款到零钱，目前不包括到银行卡
-- `WechatDirectPayApi` 微信支付直连模式V3普通支付
-- `WechatPayScoreParkingApi` 微信支付分V3停车服务
-- `WechatBatchTransferApi` 微信支付V3批量转账到零钱
-- `WechatPartnerSpecialMchApi` 微信支付V3服务商商户进件
-- `WechatMediaApi` 微信支付V3媒体上传
-- `WechatEcommerceApi` 电商收付通
-- `WechatSmartGuideApi` 服务商或者直连商户-经营能力-支付即服务
-- `WechatGoldPlanApi` 服务商-经营能力-点金计划
+API结构如下：
+![](https://asset.felord.cn/blog/20220613092244.png)
+具体分为**直连商户**和**服务商**两个体系，请详细阅读文档说明
 
 > 随着版本迭代功能会增加，可通过API注册表类`WechatPayV3Type`进行API接口检索。
 
 ## 使用入门
+
 ### 集成配置
-关于集成配置请详细阅读[payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)中[快速接入](https://notfound403.github.io/payment-spring-boot/#/quick_start)章节
+
+关于集成配置请详细阅读[payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
+中[快速接入](https://notfound403.github.io/payment-spring-boot/#/quick_start)章节
+
 ### 调用示例
+
 #### 开启支付
+
 需要手动通过`@EnableMobilePay`注解开启支付
+
 ```java
 import cn.felord.payment.autoconfigure.EnableMobilePay;
 import org.springframework.context.annotation.Configuration;
@@ -109,7 +100,9 @@ public class PayConfig {
 ```
 
 #### 支付接口调用
+
 这里简单以小程序支付为例，写了一个Spring MVC 控制器，在实践中建议对`WechatApiProvider`进行二次封装作服务层调用
+
 ```java 
 import cn.felord.payment.wechat.enumeration.TradeBillType;
 import cn.felord.payment.wechat.v3.WechatApiProvider;
@@ -135,6 +128,7 @@ public class PayController {
     @Autowired
     private WechatApiProvider wechatApiProvider;
     String TENANT_ID = "mobile";
+
     /**
      * 总流程建议为 生成商品订单 -> 生成对应的支付订单 -> 支付操作 -> 支付结果回调更新 -> 结束
      * <p>
@@ -213,7 +207,9 @@ public class PayController {
     }
 }
 ```
+
 #### 回调示例
+
 回调可通过以下示例实现，多租户的回调可将租户ID`tenantId`作为路径参数来实现
 
 ```java
@@ -248,7 +244,7 @@ import java.util.stream.Collectors;
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
-@Profile({"wechat","dev"})
+@Profile({"wechat", "dev"})
 @RestController
 @RequestMapping("/wxpay/callbacks")
 public class CallbackController {
@@ -358,16 +354,17 @@ public class CallbackController {
 }
 ```
 
-
-
 ## 开源协议
+
 **Apache 2.0**
 
 ## 仓库地址
+
 - [GitHub](https://github.com/NotFound403/payment-spring-boot)
 - [Gitee](https://gitee.com/felord/payment-spring-boot)
 
 ## QQ交流群
+
 为了交流解惑，新建QQ群，可通过扫码进入。
 
 ![QQ交流群](./docs/img/qqun.png)
