@@ -55,16 +55,13 @@ Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家�
 - [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
 
 ## API清单
-目前已经实现绝大部分微信支付直连商户和服务商的接口，具体的API明细可查看[API清单]()
+
+目前已经实现绝大部分微信支付直连商户和服务商的接口，具体的API明细可查看[API清单](https://notfound403.github.io/payment-spring-boot/#/wechat_v3_api)
+> 随着版本迭代功能会增加，也可通过API注册表类`WechatPayV3Type`进行API接口检索。
+
 ## CHANGELOG
+
 更新日志[CHANGELOG](https://notfound403.github.io/payment-spring-boot/#/changelog)
-## API清单
-
-API结构如下：
-![](https://asset.felord.cn/blog/20220613092244.png)
-具体分为**直连商户**和**服务商**两个体系，请详细阅读文档说明
-
-> 随着版本迭代功能会增加，可通过API注册表类`WechatPayV3Type`进行API接口检索。
 
 ## 使用入门
 
