@@ -20,6 +20,7 @@ import cn.felord.payment.wechat.WechatPayProperties;
 import cn.felord.payment.wechat.enumeration.TarType;
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
+import cn.felord.payment.wechat.v3.model.RefundParams;
 import cn.felord.payment.wechat.v3.model.payscore.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.util.LinkedMultiValueMap;
@@ -246,21 +247,18 @@ public class WechatPayScoreApi extends AbstractApi {
     }
 
     /**
-     * 商户发起催收扣款API
+     * 同步服务订单信息API
      * <p>
-     * 前置条件：服务订单支付状态处于“待支付”状态
+     * 前提条件：同步商户渠道收款成功信息时，即场景类型=“Order_Paid”，订单的状态需为[MCH_COMPLETE:商户完结订单]
      * <p>
-     * 当微信支付分订单支付状态处于“待支付”时，商户可使用该接口向用户发起收款。
-     * <p>
-     * 注意：
-     * • 此能力不影响微信支付分代商户向用户发起收款的策略。
+     * 由于收款商户进行的某些“线下操作”会导致微信支付侧的订单状态与实际情况不符。例如，用户通过线下付款的方式已经完成支付，而微信支付侧并未支付成功，此时可能导致用户重复支付。因此商户需要通过订单同步接口将订单状态同步给微信支付，修改订单在微信支付系统中的状态。
      *
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> payServiceOrder(PayServiceOrderParams params) {
+    public WechatResponseEntity<ObjectNode> syncServiceOrder(SyncServiceOrderParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.PAY_SCORE_PAY_USER_SERVICE_ORDER, params)
+        this.client().withType(WechatPayV3Type.PAY_SCORE_SYNC_USER_SERVICE_ORDER, params)
                 .function((wechatPayV3Type, orderParams) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
@@ -278,18 +276,69 @@ public class WechatPayScoreApi extends AbstractApi {
     }
 
     /**
-     * 同步服务订单信息API
+     * 申请退款API
+     *
+     * @param refundParams the refund params
+     * @return the wechat response entity
+     * @since 1.0.6.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> refund(RefundParams refundParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.REFUND, refundParams)
+                .function(((type, params) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .toUri();
+                    WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+                    String notifyUrl = params.getNotifyUrl();
+                    if (StringUtils.hasText(notifyUrl)) {
+                        params.setNotifyUrl(v3.getDomain().concat(notifyUrl));
+                    }
+                    return Post(uri, params);
+                }))
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 查询单笔退款API
+     *
+     * @param outRefundNo the out refund no
+     * @return the wechat response entity
+     * @since 1.0.6.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> queryRefundInfo(String outRefundNo) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.QUERY_REFUND, outRefundNo)
+                .function(((type, param) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(param)
+                            .toUri();
+                    return Get(uri);
+                }))
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
+    /**
+     * 商户发起催收扣款API
      * <p>
-     * 前提条件：同步商户渠道收款成功信息时，即场景类型=“Order_Paid”，订单的状态需为[MCH_COMPLETE:商户完结订单]
+     * 前置条件：服务订单支付状态处于“待支付”状态
      * <p>
-     * 由于收款商户进行的某些“线下操作”会导致微信支付侧的订单状态与实际情况不符。例如，用户通过线下付款的方式已经完成支付，而微信支付侧并未支付成功，此时可能导致用户重复支付。因此商户需要通过订单同步接口将订单状态同步给微信支付，修改订单在微信支付系统中的状态。
+     * 当微信支付分订单支付状态处于“待支付”时，商户可使用该接口向用户发起收款。
+     * <p>
+     * 注意：
+     * • 此能力不影响微信支付分代商户向用户发起收款的策略。
      *
      * @param params the params
      * @return the wechat response entity
      */
-    public WechatResponseEntity<ObjectNode> syncServiceOrder(SyncServiceOrderParams params) {
+    public WechatResponseEntity<ObjectNode> payServiceOrder(PayServiceOrderParams params) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
-        this.client().withType(WechatPayV3Type.PAY_SCORE_SYNC_USER_SERVICE_ORDER, params)
+        this.client().withType(WechatPayV3Type.PAY_SCORE_PAY_USER_SERVICE_ORDER, params)
                 .function((wechatPayV3Type, orderParams) -> {
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
@@ -488,7 +537,7 @@ public class WechatPayScoreApi extends AbstractApi {
                     queryParams.add("bill_date", billDate.format(DateTimeFormatter.ISO_DATE));
                     queryParams.add("tar_type", TarType.GZIP.name());
                     queryParams.add("encryption_algorithm", "AEAD_AES_256_GCM");
-                    queryParams.add("service_id",billParams.getServiceId());
+                    queryParams.add("service_id", billParams.getServiceId());
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .queryParams(queryParams)
