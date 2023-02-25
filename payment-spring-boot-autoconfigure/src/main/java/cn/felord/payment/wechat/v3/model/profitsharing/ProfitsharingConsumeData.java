@@ -19,7 +19,7 @@ package cn.felord.payment.wechat.v3.model.profitsharing;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -69,7 +69,7 @@ public class ProfitsharingConsumeData {
      * <p>
      * Rfc3339标准
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-    private LocalDateTime successTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime successTime;
 
 }

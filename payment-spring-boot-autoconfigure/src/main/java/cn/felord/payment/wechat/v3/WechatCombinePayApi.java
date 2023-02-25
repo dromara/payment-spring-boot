@@ -209,4 +209,26 @@ public class WechatCombinePayApi extends AbstractApi {
                 .request();
         return wechatResponseEntity;
     }
+
+    /**
+     * 查询单笔退款API
+     *
+     * @param outRefundNo the out refund no
+     * @return the wechat response entity
+     * @since 1.0.17.RELEASE
+     */
+    public WechatResponseEntity<ObjectNode> queryRefundInfo(String outRefundNo) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.QUERY_REFUND, outRefundNo)
+                .function(((type, param) -> {
+                    URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                            .build()
+                            .expand(param)
+                            .toUri();
+                    return Get(uri);
+                }))
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
 }

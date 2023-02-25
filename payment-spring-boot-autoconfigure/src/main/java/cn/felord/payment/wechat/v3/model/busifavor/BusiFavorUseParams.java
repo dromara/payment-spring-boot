@@ -19,7 +19,7 @@ package cn.felord.payment.wechat.v3.model.busifavor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * 核销用户券请求参数
@@ -44,8 +44,8 @@ public class BusiFavorUseParams {
     /**
      * 请求核销时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-    private LocalDateTime useTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime useTime;
     /**
      * 核销请求单据号,商户侧保证唯一
      */

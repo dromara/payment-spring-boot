@@ -53,6 +53,6 @@ public class CouponsCardSendParams {
     /**
      * 请求发卡时间,由于系统限制，暂不支持传入早于当前时间24小时以上的时间进行发券请求。
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime sendTime;
 }

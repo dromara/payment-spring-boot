@@ -19,7 +19,7 @@ package cn.felord.payment.wechat.v3.model.busifavor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -54,13 +54,13 @@ public class CouponAvailableTime {
     /**
      * 批次开始时间 rfc 3339   yyyy-MM-ddTHH:mm:ss+TIMEZONE
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-    private LocalDateTime availableBeginTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime availableBeginTime;
     /**
      * 批次结束时间 rfc 3339  yyyy-MM-ddTHH:mm:ss+TIMEZONE
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX", timezone = "GMT+8")
-    private LocalDateTime availableEndTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime availableEndTime;
     /**
      * 固定周期有效时间段
      */
