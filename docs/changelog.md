@@ -1,3 +1,11 @@
+## 1.0.17.RELEASE
+### 微信支付
+- feat: 直连商户合单支付增加查询单笔退款
+- feat: 支付分增加退款独立的API
+- factor: 营销图片上传API现在由WechatMediaApi#marketingImageUpload实现，以代替WechatMarketingFavorApi#marketingImageUpload，旧实现已标记为过时 
+- factor:时间格式优化，移除时区限制为东八区，由LocalDateTime改为OffsetDateTime
+- docs: 现在可以通过API清单检索API了
+
 ## 1.0.16.RELEASE
 ### 微信支付
 - feat: 直连商户-委托营销相关API实现
