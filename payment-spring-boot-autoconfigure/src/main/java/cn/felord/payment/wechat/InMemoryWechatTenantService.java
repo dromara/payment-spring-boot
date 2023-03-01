@@ -20,9 +20,9 @@ package cn.felord.payment.wechat;
 import cn.felord.payment.wechat.v3.KeyPairFactory;
 import cn.felord.payment.wechat.v3.WechatMetaBean;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class InMemoryWechatTenantService implements WechatTenantService {
     private final WechatPayProperties wechatPayProperties;
-
+    private final ResourceLoader resourceLoader;
     @Override
     public Set<WechatMetaBean> loadTenants() {
         Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
@@ -51,7 +51,7 @@ public class InMemoryWechatTenantService implements WechatTenantService {
                     String certAbsolutePath = v3.getCertAbsolutePath();
                     String mchId = v3.getMchId();
                     Resource resource = certAbsolutePath != null ? new FileSystemResource(certAbsolutePath) :
-                            new ClassPathResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
+                             resourceLoader.getResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
                     WechatMetaBean wechatMetaBean = keyPairFactory.initWechatMetaBean(resource, mchId);
                     wechatMetaBean.setV3(v3);
                     wechatMetaBean.setTenantId(tenantId);
