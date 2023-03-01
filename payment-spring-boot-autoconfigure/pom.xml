@@ -22,11 +22,11 @@
     <parent>
         <groupId>cn.felord</groupId>
         <artifactId>payment-spring-boot</artifactId>
-        <version>1.0.17.RELEASE</version>
+        <version>1.0.18.RELEASE</version>
     </parent>
 
     <artifactId>payment-spring-boot-autoconfigure</artifactId>
-    <version>1.0.17.RELEASE</version>
+    <version>1.0.18.RELEASE</version>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
