@@ -23,6 +23,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.ResourceUtils;
 
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 public class InMemoryWechatTenantService implements WechatTenantService {
     private final WechatPayProperties wechatPayProperties;
     private final ResourceLoader resourceLoader;
+
     @Override
     public Set<WechatMetaBean> loadTenants() {
         Map<String, WechatPayProperties.V3> v3Map = wechatPayProperties.getV3();
@@ -51,7 +53,8 @@ public class InMemoryWechatTenantService implements WechatTenantService {
                     String certAbsolutePath = v3.getCertAbsolutePath();
                     String mchId = v3.getMchId();
                     Resource resource = certAbsolutePath != null ? new FileSystemResource(certAbsolutePath) :
-                             resourceLoader.getResource(certPath == null ? "wechat/apiclient_cert.p12" : certPath);
+                            resourceLoader.getResource(certPath == null ? "classpath:wechat/apiclient_cert.p12" :
+                                    certPath.startsWith(ResourceUtils.CLASSPATH_URL_PREFIX) ? certPath : ResourceUtils.CLASSPATH_URL_PREFIX + certPath);
                     WechatMetaBean wechatMetaBean = keyPairFactory.initWechatMetaBean(resource, mchId);
                     wechatMetaBean.setV3(v3);
                     wechatMetaBean.setTenantId(tenantId);
