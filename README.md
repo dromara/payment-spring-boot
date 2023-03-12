@@ -1,8 +1,8 @@
    <div align="center" style="margin-bottom: 10px"><h1>最全最好用的微信支付V3 Spring Boot 组件</h1></div>
 
 <p align="center">
-    <a target="_blank" href="https://github.com/NotFound403/payment-spring-boot/blob/release/LICENSE">
-     	<img alt="" src="https://img.shields.io/github/license/NotFound403/payment-spring-boot"/>
+    <a target="_blank" href="https://github.com/dromara/payment-spring-boot/blob/release/LICENSE">
+     	<img alt="" src="https://img.shields.io/github/license/dromara/payment-spring-boot"/>
     </a>
     <a target="_blank" href="https://felord.cn">
      	<img alt="" src="https://img.shields.io/badge/java-8-red"/>
@@ -13,10 +13,10 @@
     <a target="_blank" href="https://mvnrepository.com/artifact/cn.felord/payment-spring-boot">
      	<img alt="" src="https://img.shields.io/maven-central/v/cn.felord/payment-spring-boot.svg?style=flat-square"/>
     </a>   
-    <a target="_blank" href="https://github.com/NotFound403/payment-spring-boot">
-     	<img alt="" src="https://img.shields.io/github/stars/NotFound403/payment-spring-boot?style=social"/>
+    <a target="_blank" href="https://github.com/dromara/payment-spring-boot">
+     	<img alt="" src="https://img.shields.io/github/stars/dromara/payment-spring-boot?style=social"/>
     </a>    
-    <a target="_blank" href="https://gitee.com/felord/payment-spring-boot/stargazers">
+    <a target="_blank" href="https://gitee.com/dromara/payment-spring-boot/stargazers">
      	<img alt="" src="https://gitee.com/felord/payment-spring-boot/badge/star.svg?theme=white"/>
     </a>    
     <a target="_blank" href="https://work.weixin.qq.com/kfid/kfc9d9d759f27f087e1">
@@ -48,27 +48,27 @@ Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家�
 
 ## JDK问题
 
-**推荐使用Open JDK**，原因参见[FBI Warning](https://github.com/NotFound403/payment-spring-boot/issues/5)
+**推荐使用Open JDK**，原因参见[FBI Warning](https://github.com/dromara/payment-spring-boot/issues/5)
 
 ## 文档地址
 
-- [payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
+- [payment-spring-boot GitHub文档](https://dromara.github.io/payment-spring-boot)
 
 ## API清单
 
-目前已经实现绝大部分微信支付直连商户和服务商的接口，具体的API明细可查看[API清单](https://notfound403.github.io/payment-spring-boot/#/wechat_v3_api)
+目前已经实现绝大部分微信支付直连商户和服务商的接口，具体的API明细可查看[API清单](https://dromara.github.io/payment-spring-boot/#/wechat_v3_api)
 > 随着版本迭代功能会增加，也可通过API注册表类`WechatPayV3Type`进行API接口检索。
 
 ## CHANGELOG
 
-更新日志[CHANGELOG](https://notfound403.github.io/payment-spring-boot/#/changelog)
+更新日志[CHANGELOG](https://dromara.github.io/payment-spring-boot/#/changelog)
 
 ## 使用入门
 
 ### 集成配置
 
-关于集成配置请详细阅读[payment-spring-boot GitHub文档](https://notfound403.github.io/payment-spring-boot)
-中[快速接入](https://notfound403.github.io/payment-spring-boot/#/quick_start)章节
+关于集成配置请详细阅读[payment-spring-boot GitHub文档](https://dromara.github.io/payment-spring-boot)
+中[快速接入](https://dromara.github.io/payment-spring-boot/#/quick_start)章节
 
 ### 调用示例
 
@@ -347,8 +347,8 @@ public class CallbackController {
 
 ## 仓库地址
 
-- [GitHub](https://github.com/NotFound403/payment-spring-boot)
-- [Gitee](https://gitee.com/felord/payment-spring-boot)
+- [GitHub](https://github.com/dromara/payment-spring-boot)
+- [Gitee](https://gitee.com/dromara/payment-spring-boot)
 
 ## QQ交流群
 
