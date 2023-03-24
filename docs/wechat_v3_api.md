@@ -9,8 +9,8 @@
 #### 基础支付
 
 - [x] `WechatDirectPayApi` 基础支付，通过`WechatApiProvider#directPayApi`初始化
-    - [x] `jsPay` APP下单
-    - [x] `appPay` JSAPI/小程序下单
+    - [x] `jsPay` JSAPI/小程序下单
+    - [x] `appPay` APP下单
     - [x] `h5Pay` H5下单
     - [x] `nativePay` Native下单
     - [x] 查询订单
@@ -24,8 +24,8 @@
     - [x] `downloadTradeBill` 申请交易账单，直接下载为gzip或者txt文件
     - [x] `downloadFundFlowBill` 申请资金账单，直接下载为gzip或者txt文件
 - [x] `WechatCombinePayApi` 合单支付，通过`WechatApiProvider#combinePayApi`初始化
-    - [x] `jsPay` 合单APP下单
-    - [x] `appPay` 合单JSAPI/小程序下单
+    - [x] `jsPay` 合单JSAPI/小程序下单
+    - [x] `appPay` 合单APP下单
     - [x] `h5Pay` 合单H5下单
     - [x] `nativePay` 合单Native下单
     - [x] `queryTransactionByOutTradeNo` 查询订单，**合单支付目前只支持商户订单号查询**
