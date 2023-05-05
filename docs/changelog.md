@@ -1,3 +1,12 @@
+## 1.0.18.RELEASE
+### 微信支付
+
+- enhance: 使用`ResourceLoader`加载资源以改善Docker容器环境下的文件挂载问题
+- enhance: 修改了微信支付配置加载机制，现在可以借助于`WechatTenantService`实现不停机维护微信支付参数的能力
+- factor: 移除过时的V2退款API相关参数`RefundModel`和`RefundQueryModel`
+- docs: 更新文档地址到[dromara.org](https://gitee.com/dromara)，现在你可以通过[https://dromara.org/payment-spring-boot/](https://dromara.org/payment-spring-boot/)访问项目文档
+- docs: 修正文档描述错误
+
 ## 1.0.17.RELEASE
 ### 微信支付
 - feat: 直连商户合单支付增加查询单笔退款
