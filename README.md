@@ -16,14 +16,17 @@
     <a target="_blank" href="https://github.com/dromara/payment-spring-boot">
      	<img alt="" src="https://img.shields.io/github/stars/dromara/payment-spring-boot?style=social"/>
     </a>    
-    <a target="_blank" href="https://gitee.com/felord/payment-spring-boot/stargazers">
+    <a target="_blank" href="https://gitee.com/dromara/payment-spring-boot/stargazers">
      	<img alt="" src="https://gitee.com/felord/payment-spring-boot/badge/star.svg?theme=white"/>
     </a>    
     <a target="_blank" href="https://work.weixin.qq.com/kfid/kfc9d9d759f27f087e1">
      	<img alt="点击立即微信咨询" src="https://img.shields.io/badge/%E7%82%B9%E5%87%BB-%E5%BE%AE%E4%BF%A1%E5%92%A8%E8%AF%A2-brightgreen"/>
     </a>    
-    <a target="_blank" href="https://jq.qq.com/?_wv=1027&k=qRTKHWY0">
-     	<img alt="点击加入QQ交流群" src="https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-945342113-ff69b4"/>
+    <a target="_blank" href="#">
+     	<img alt="点击加入QQ交流①群（满）" src="https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-945342113（满）-ff69b4"/>
+    </a>   
+     <a target="_blank" href="https://jq.qq.com/?_wv=1027&k=cCiv8Vlv">
+     	<img alt="点击加入QQ交流②群" src="https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-549174561-ff69b4"/>
     </a>
 </p>
 
@@ -348,10 +351,5 @@ public class CallbackController {
 ## 仓库地址
 
 - [GitHub](https://github.com/dromara/payment-spring-boot)
-- [Gitee](https://gitee.com/felord/payment-spring-boot)
-
-## QQ交流群
-
-为了交流解惑，新建QQ群，可通过扫码进入。
-
-![QQ交流群](./docs/img/qqun.png)
+- [Gitee](https://gitee.com/dromara/payment-spring-boot)
+ 
