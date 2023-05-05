@@ -43,9 +43,7 @@ public class WechatPayConfiguration {
     @Bean
     @ConditionalOnMissingBean
     WechatMetaContainer wechatMetaContainer(WechatTenantService wechatTenantService) {
-        WechatMetaContainer container = new WechatMetaContainer();
-              container.addWechatMetas(wechatTenantService.loadTenants());
-        return container;
+        return new WechatMetaContainer(wechatTenantService);
     }
 
     /**

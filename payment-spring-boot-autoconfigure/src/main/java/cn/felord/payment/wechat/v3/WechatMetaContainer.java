@@ -17,6 +17,9 @@
 package cn.felord.payment.wechat.v3;
 
 
+import cn.felord.payment.wechat.WechatTenantService;
+import lombok.AllArgsConstructor;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -27,10 +30,11 @@ import java.util.concurrent.ConcurrentSkipListSet;
  * @author felord.cn
  * @since 1.0.0.RELEASE
  */
+@AllArgsConstructor
 public class WechatMetaContainer {
     private final Map<String, WechatMetaBean> wechatMetaBeanMap = new ConcurrentHashMap<>();
     private final Set<String> tenantIds = new ConcurrentSkipListSet<>();
-
+    private final WechatTenantService wechatTenantService;
 
     /**
      * Add wechat metas.
@@ -66,7 +70,14 @@ public class WechatMetaContainer {
      * @return the wechat meta
      */
     public WechatMetaBean getWechatMeta(String tenantId) {
-        return Objects.requireNonNull(this.wechatMetaBeanMap.get(tenantId));
+        WechatMetaBean wechatMetaBean = this.wechatMetaBeanMap.get(tenantId);
+        if (Objects.nonNull(wechatMetaBean)) {
+            return wechatMetaBean;
+        } else {
+            this.addWechatMetas(wechatTenantService.loadTenants());
+            return Objects.requireNonNull(this.wechatMetaBeanMap.get(tenantId),
+                    "cant obtain the config with tenant: "+tenantId);
+        }
     }
 
     /**

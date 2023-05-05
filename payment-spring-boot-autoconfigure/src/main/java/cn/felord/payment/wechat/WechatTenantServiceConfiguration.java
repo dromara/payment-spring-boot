@@ -22,6 +22,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ResourceLoader;
 
 /**
  * The type Wechat tenant service configuration.
@@ -42,7 +43,7 @@ public class WechatTenantServiceConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public WechatTenantService wechatTenantService(WechatPayProperties wechatPayProperties) {
-        return new InMemoryWechatTenantService(wechatPayProperties);
+    public WechatTenantService wechatTenantService(WechatPayProperties wechatPayProperties, ResourceLoader resourceLoader) {
+        return new InMemoryWechatTenantService(wechatPayProperties, resourceLoader);
     }
 }
