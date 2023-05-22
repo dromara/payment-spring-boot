@@ -27,11 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.util.AlternativeJdkIdGenerator;
@@ -54,8 +50,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -135,7 +130,7 @@ public class SignatureProvider {
     @SneakyThrows
     public String requestSign(String tenantId, String method, String canonicalUrl, String body) {
 
-        long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        long timestamp = Instant.now().getEpochSecond();
         String nonceStr = nonceStrGenerator.generateId()
                 .toString()
                 .replaceAll("-", "");
@@ -175,7 +170,6 @@ public class SignatureProvider {
      * @param params the params
      * @return the boolean
      */
-    @SneakyThrows
     public boolean responseSignVerify(ResponseSignVerifyParams params) {
 
         String wechatpaySerial = params.getWechatpaySerial();
@@ -190,13 +184,15 @@ public class SignatureProvider {
                             .orElseThrow(() -> new PayException("cannot obtain the certificate"));
                 });
 
-
-        final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
-        Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
-        signer.initVerify(certificate.getX509Certificate());
-        signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
-
-        return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
+      try {
+          final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
+          Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
+          signer.initVerify(certificate.getX509Certificate());
+          signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
+          return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
+      }catch (Exception e){
+          throw new PayException("An exception occurred during the response verification, the cause: "+e.getMessage());
+      }
     }
 
 

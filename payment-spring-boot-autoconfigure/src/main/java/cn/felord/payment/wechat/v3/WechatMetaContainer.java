@@ -20,9 +20,12 @@ package cn.felord.payment.wechat.v3;
 import cn.felord.payment.wechat.WechatTenantService;
 import lombok.AllArgsConstructor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Collectors;
 
 /**
  * 配置容器
@@ -33,7 +36,6 @@ import java.util.concurrent.ConcurrentSkipListSet;
 @AllArgsConstructor
 public class WechatMetaContainer {
     private final Map<String, WechatMetaBean> wechatMetaBeanMap = new ConcurrentHashMap<>();
-    private final Set<String> tenantIds = new ConcurrentSkipListSet<>();
     private final WechatTenantService wechatTenantService;
 
     /**
@@ -47,20 +49,7 @@ public class WechatMetaContainer {
 
     private void addMeta(WechatMetaBean wechatMetaBean) {
         String tenantId = wechatMetaBean.getTenantId();
-        tenantIds.add(tenantId);
         wechatMetaBeanMap.put(tenantId, wechatMetaBean);
-    }
-
-
-    /**
-     * Remove wechat meta wechat meta bean.
-     *
-     * @param tenantId the tenantId
-     * @return the wechat meta bean
-     */
-    public WechatMetaBean removeWechatMeta(String tenantId) {
-        tenantIds.remove(tenantId);
-        return this.wechatMetaBeanMap.remove(tenantId);
     }
 
     /**
@@ -86,6 +75,9 @@ public class WechatMetaContainer {
      * @return the properties keys
      */
     public Set<String> getTenantIds() {
-        return tenantIds;
+        return wechatTenantService.loadTenants()
+                .stream()
+                .map(WechatMetaBean::getTenantId)
+                .collect(Collectors.toSet());
     }
 }
