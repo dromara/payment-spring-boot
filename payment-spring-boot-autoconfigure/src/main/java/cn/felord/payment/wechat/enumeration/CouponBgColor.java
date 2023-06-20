@@ -28,41 +28,57 @@ public enum CouponBgColor {
     /**
      * Color 010 coupon bg color.
      */
-    COLOR010,
+    COLOR010("Color010"),
     /**
      * COLOR 020 coupon bg color.
      */
-    COLOR020,
+    COLOR020("Color010"),
     /**
      * COLOR 030 coupon bg color.
      */
-    COLOR030,
+    COLOR030("Color010"),
     /**
      * COLOR 040 coupon bg color.
      */
-    COLOR040,
+    COLOR040("Color010"),
     /**
      * COLOR 050 coupon bg color.
      */
-    COLOR050,
+    COLOR050("Color010"),
     /**
      * COLOR 060 coupon bg color.
      */
-    COLOR060,
+    COLOR060("Color010"),
     /**
      * COLOR 070 coupon bg color.
      */
-    COLOR070,
+    COLOR070("Color010"),
     /**
      * COLOR 080 coupon bg color.
      */
-    COLOR080,
+    COLOR080("Color010"),
     /**
      * COLOR 090 coupon bg color.
      */
-    COLOR090,
+    COLOR090("Color010"),
     /**
      * COLOR 100 coupon bg color.
      */
-    COLOR100
+    COLOR100("Color010");
+
+
+    private final String value;
+
+    CouponBgColor(String value) {
+        this.value = value;
+    }
+
+    /**
+     * Gets value.
+     *
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
 }

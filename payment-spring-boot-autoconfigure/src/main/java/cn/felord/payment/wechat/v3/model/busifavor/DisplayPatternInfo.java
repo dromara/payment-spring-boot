@@ -17,7 +17,7 @@
 package cn.felord.payment.wechat.v3.model.busifavor;
 
 import cn.felord.payment.wechat.enumeration.CouponBgColor;
-import cn.felord.payment.wechat.v3.WechatMarketingFavorApi;
+import cn.felord.payment.wechat.v3.WechatMediaApi;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +33,7 @@ public class DisplayPatternInfo {
     /**
      * 背景颜色
      */
-    private CouponBgColor backgroundColor;
+    private String backgroundColor;
     /**
      * 商户logo
      * <ol>
@@ -42,7 +42,7 @@ public class DisplayPatternInfo {
      * </ol>
      * 仅支持通过 <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/chapter3_1.shtml">图片上传API</a> 接口获取的图片URL地址。
      *
-     * @see WechatMarketingFavorApi#marketingImageUpload(MultipartFile)
+     * @see WechatMediaApi#marketingImageUpload(MultipartFile)
      */
     private String merchantLogoUrl;
     /**
@@ -54,7 +54,7 @@ public class DisplayPatternInfo {
      * </ol>
      * 仅支持通过 <a target= "_blank" href= "https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/chapter3_1.shtml">图片上传API</a> 接口获取的图片URL地址。
      *
-     * @see WechatMarketingFavorApi#marketingImageUpload(MultipartFile)
+     * @see WechatMediaApi#marketingImageUpload(MultipartFile)
      */
     private String couponImageUrl;
     /**
@@ -69,4 +69,17 @@ public class DisplayPatternInfo {
      * 商户名称,字数上限为16个
      */
     private String merchantName;
+
+    /**
+     * Sets background color.
+     *
+     * @param backgroundColor the background color
+     */
+    public void setBackgroundColor(CouponBgColor backgroundColor) {
+        this.backgroundColor = backgroundColor.getValue();
+    }
+
+    private void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
 }

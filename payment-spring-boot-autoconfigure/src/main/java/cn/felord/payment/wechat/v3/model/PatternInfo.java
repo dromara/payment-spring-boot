@@ -31,7 +31,7 @@ public class PatternInfo {
     /**
      * 背景色
      */
-    private CouponBgColor backgroundColor;
+    private String backgroundColor;
     /**
      * 券详情图片
      */
@@ -49,4 +49,16 @@ public class PatternInfo {
      */
     private String merchantName;
 
+    /**
+     * Sets background color.
+     *
+     * @param backgroundColor the background color
+     */
+    public void setBackgroundColor(CouponBgColor backgroundColor) {
+        this.backgroundColor = backgroundColor.name();
+    }
+
+    private void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
 }
