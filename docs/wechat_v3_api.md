@@ -1,6 +1,7 @@
 ## 入口类
 
-`WechatApiProvider`是本项目微信支付的入口类，已被注入**Spring IoC**，由它来初始化微信支付相关的**API**，具体分为**直连商户**和**服务商**两个体系。
+`WechatApiProvider`是本项目微信支付的入口类，已被注入**Spring IoC**，由它来初始化微信支付相关的**API**，具体分为**直连商户
+**和**服务商**两个体系。
 
 > 以下清单请搭配微信支付文档使用。
 
@@ -152,7 +153,15 @@
 
 ##### 支付有礼
 
-- [ ] 功能实现中……
+- [x] `WechatMarketingPayGiftActivityApi` 支付有礼，通过`WechatApiProvider#marketingPayGiftActivityApi`初始化
+    - [x] `create` 创建全场满额送活动
+    - [x] `details` 查询活动详情接口
+    - [x] `merchants` 查询活动发券商户号
+    - [x] `goods` 查询活动指定商品列表
+    - [x] `terminate` 终止活动
+    - [x] `addMches` 新增活动发券商户号
+    - [x] `page` 获取支付有礼活动列表
+    - [x] `deleteMch` 删除活动发券商户号
 
 ##### 图片上传（营销专用）
 
@@ -221,5 +230,7 @@
     - [x] `marketingImageUpload` 营销图片上传
 
 > 通过营销**图片上传API**上传图片后可获得图片url地址。图片url可在微信支付营销相关的API使用，包括商家券、代金券、支付有礼等。
+
 ### 服务商
+
 施工中……

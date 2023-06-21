@@ -509,6 +509,55 @@ public enum WechatPayV3Type {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
+     * 创建全场满额送活动API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY(HttpMethod.POST, "%s/v3/marketing/paygiftactivity/unique-threshold-activity"),
+    /**
+     * 查询活动详情接口API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY_DETAIL(HttpMethod.GET, "%s/v3/marketing/paygiftactivity/activities/{activity_id}"),
+    /**
+     * 查询活动发券商户号API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY_MCH(HttpMethod.GET, "%s/v3/marketing/paygiftactivity/activities/{activity_id}/merchants"),
+    /**
+     * 查询活动指定商品列表API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY_GOODS(HttpMethod.GET, "%s/v3/marketing/paygiftactivity/activities/{activity_id}/goods"),
+    /**
+     * 终止活动API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY_TERMINATE(HttpMethod.POST, "%s/v3/marketing/paygiftactivity/activities/{activity_id}/terminate"),
+    /**
+     * 新增活动发券商户号API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY_MCH_ADD(HttpMethod.POST, "%s/v3/marketing/paygiftactivity/activities/{activity_id}/merchants/add"),
+    /**
+     * 获取支付有礼活动列表API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY_ACTIVITIES(HttpMethod.GET, "%s/v3/marketing/paygiftactivity/activities"),
+    /**
+     * 删除活动发券商户号API
+     *
+     * @since 1.0.19.RELEASES
+     */
+    MARKETING_PAYGIFTACTIVITY_MCH_DEL(HttpMethod.POST, "%s/v3/marketing/paygiftactivity/activities/{activity_id}/merchants/delete"),
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /**
      * 发起批量转账API.
      *
      * @since 1.0.6.RELEASES

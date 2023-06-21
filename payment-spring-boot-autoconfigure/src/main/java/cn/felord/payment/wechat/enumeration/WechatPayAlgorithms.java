@@ -20,7 +20,7 @@ package cn.felord.payment.wechat.enumeration;
 import lombok.Getter;
 
 /**
- * @author xiafang
+ * @author dax
  * @since 2023/2/1 8:59
  */
 @Getter

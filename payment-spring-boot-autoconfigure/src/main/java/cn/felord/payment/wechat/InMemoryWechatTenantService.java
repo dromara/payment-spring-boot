@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 /**
  * 从配置文件中加载租户信息,默认实现,可被覆盖
  *
- * @author xiafang
+ * @author dax
  * @since 2023/2/3 11:40
  */
 @AllArgsConstructor

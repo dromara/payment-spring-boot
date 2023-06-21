@@ -141,6 +141,17 @@ public class WechatApiProvider {
     }
 
     /**
+     * 支付有礼-直连商户
+     *
+     * @param tenantId the tenant id
+     * @return the wechat marketing pay gift activity api
+     * @since 1.0.19.RELEASE
+     */
+    public WechatMarketingPayGiftActivityApi marketingPayGiftActivityApi(String tenantId) {
+        return new WechatMarketingPayGiftActivityApi(this.wechatPayClient, tenantId);
+    }
+
+    /**
      * 批量转账到零钱.
      * <p>
      * 批量转账到零钱提供商户同时向多个用户微信零钱转账的能力。商户可以使用批量转账到零钱用于费用报销、员工福利发放、合作伙伴货款或服务款项支付等场景，提高转账效率。

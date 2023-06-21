@@ -15,25 +15,23 @@
  *  limitations under the License.
  */
 
-package cn.felord.payment.wechat.v3.model.profitsharing;
+package cn.felord.payment.wechat.v3.model.paygiftactivity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.List;
+import java.time.OffsetDateTime;
 
 /**
+ * The type Time periods.
+ *
  * @author dax
- * @since 2023/1/3 10:27
+ * @since 1.0.19.RELEASE
  */
 @Data
-public class BrandProfitsharingOrder {
-    private final String brandMchid;
-    private final String subMchid;
-    private String appid;
-    private final String transactionId;
-    private final String outOrderNo;
-    private final List<Receiver> receivers;
-    private final Boolean finish;
-    private String subAppid;
-
+public class OffsetDateTimePeriods {
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private final OffsetDateTime beginTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private final OffsetDateTime endTime;
 }
