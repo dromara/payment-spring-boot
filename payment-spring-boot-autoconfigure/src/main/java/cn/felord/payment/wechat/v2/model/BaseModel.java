@@ -73,7 +73,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 public abstract class BaseModel {
-    public static final String HMAC_SHA256="HMAC-SHA256";
+    public static final String HMAC_SHA256 = "HMAC-SHA256";
     private static final XmlMapper XML_MAPPER = new XmlMapper();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -84,8 +84,7 @@ public abstract class BaseModel {
                 .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         OBJECT_MAPPER
 //                .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
 
@@ -165,7 +164,7 @@ public abstract class BaseModel {
     @SneakyThrows
     private String hmacSha256(String src) {
         String algorithm = "HmacSHA256";
-        Mac sha256HMAC = Mac.getInstance(algorithm,"BC");
+        Mac sha256HMAC = Mac.getInstance(algorithm, "BC");
         SecretKeySpec secretKeySpec = new SecretKeySpec(appSecret.getBytes(), algorithm);
         sha256HMAC.init(secretKeySpec);
         byte[] bytes = sha256HMAC.doFinal(src.getBytes(StandardCharsets.UTF_8));
@@ -182,7 +181,7 @@ public abstract class BaseModel {
     @SneakyThrows
     private <T> String link(T t) {
         Assert.hasText(appSecret, "wechat pay appSecret is required");
-          String json = OBJECT_MAPPER
+        String json = OBJECT_MAPPER
                 .writeValueAsString(t);
 
         TreeMap<String, String> map = OBJECT_MAPPER.readValue(json, new TypeReference<TreeMap<String, String>>() {
@@ -200,8 +199,8 @@ public abstract class BaseModel {
     public JsonNode request(String mchId, HttpMethod method, String url) {
         String xml = this.xml();
         RequestEntity<String> body = RequestEntity.method(method, UriComponentsBuilder.fromHttpUrl(url)
-                .build()
-                .toUri())
+                        .build()
+                        .toUri())
                 .contentType(MediaType.valueOf("application/x-www-form-urlencoded;charset=UTF-8"))
                 .body(xml);
         ResponseEntity<String> responseEntity = this.getRestTemplateClientAuthentication(mchId)
