@@ -20,6 +20,9 @@ import cn.felord.payment.wechat.enumeration.ContactType;
 import cn.felord.payment.wechat.enumeration.IdDocType;
 import cn.felord.payment.wechat.v3.model.specmch.FinanceInstitutionInfo;
 import lombok.Data;
+
+import java.util.List;
+
 /**
  * 二级商户进件申请API请求参数
  *
@@ -41,6 +44,7 @@ public class EcommerceApplymentParams{
 	private Boolean owner;
 	private UboInfo uboInfo;
 	private Boolean needAccountInfo;
+	private List<UboInfoListItem> uboInfoList;
 	private EcommerceAccountInfo accountInfo;
 	private EcommerceContactInfo contactInfo;
 	private SalesSceneInfo salesSceneInfo;
