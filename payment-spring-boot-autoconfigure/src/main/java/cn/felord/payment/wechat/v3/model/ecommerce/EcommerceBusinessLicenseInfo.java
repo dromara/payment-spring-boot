@@ -17,6 +17,7 @@
 
 package cn.felord.payment.wechat.v3.model.ecommerce;
 
+import cn.felord.payment.wechat.enumeration.BusinessCertType;
 import lombok.Data;
 
 /**
@@ -25,6 +26,7 @@ import lombok.Data;
  */
 @Data
 public class EcommerceBusinessLicenseInfo {
+    private BusinessCertType certType;
     private String businessLicenseCopy;
     private String businessLicenseNumber;
     private String merchantName;

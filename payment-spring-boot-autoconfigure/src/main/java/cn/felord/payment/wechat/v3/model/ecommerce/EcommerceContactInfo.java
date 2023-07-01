@@ -19,11 +19,18 @@ package cn.felord.payment.wechat.v3.model.ecommerce;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class EcommerceContactInfo {
 	private String contactType;
 	private String contactName;
 	private String contactIdCardNumber;
+	private String contactIdDocCopy;
+	private String contactIdDocCopyBack;
+	private LocalDate contactIdDocPeriodBegin;
+	private String contactIdDocPeriodEnd;
+	private String businessAuthorizationLetter;
 	private String mobilePhone;
 	private String contactEmail;
 }
