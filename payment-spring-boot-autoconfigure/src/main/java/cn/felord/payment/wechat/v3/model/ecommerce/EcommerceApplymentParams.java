@@ -42,8 +42,6 @@ public class EcommerceApplymentParams{
 	private EcommerceIdCardInfo idCardInfo;
 	private EcommerceIdDocInfo idDocInfo;
 	private Boolean owner;
-	private UboInfo uboInfo;
-	private Boolean needAccountInfo;
 	private List<UboInfoListItem> uboInfoList;
 	private EcommerceAccountInfo accountInfo;
 	private EcommerceContactInfo contactInfo;

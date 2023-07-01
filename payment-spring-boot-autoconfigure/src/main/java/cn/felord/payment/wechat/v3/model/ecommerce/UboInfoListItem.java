@@ -31,5 +31,5 @@ public class UboInfoListItem {
 	private String uboIdDocNumber;
 	private String uboIdDocAddress;
 	private LocalDate uboIdDocPeriodBegin;
-	private LocalDate uboIdDocPeriodEnd;
+	private String uboIdDocPeriodEnd;
 }
