@@ -17,13 +17,20 @@
 
 package cn.felord.payment.wechat.v3.model.ecommerce;
 
+import cn.felord.payment.wechat.enumeration.IdDocType;
 import lombok.Data;
 
 @Data
 public class EcommerceContactInfo {
 	private String contactType;
 	private String contactName;
+	private IdDocType contactIdDocType;
 	private String contactIdCardNumber;
+	private String contactIdDocCopy;
+	private String contactIdDocCopyBack;
+	private String contactIdDocPeriodBegin;
+	private String contactIdDocPeriodEnd;
+	private String businessAuthorizationLetter;
 	private String mobilePhone;
 	private String contactEmail;
 }
