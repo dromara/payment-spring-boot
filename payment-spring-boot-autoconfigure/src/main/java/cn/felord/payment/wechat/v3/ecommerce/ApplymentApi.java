@@ -178,6 +178,7 @@ public class ApplymentApi extends AbstractApi {
         EcommerceContactInfo contactInfo = applymentParams.getContactInfo();
         contactInfo.setContactName(signatureProvider.encryptRequestMessage(contactInfo.getContactName(), x509Certificate));
         contactInfo.setContactIdCardNumber(signatureProvider.encryptRequestMessage(contactInfo.getContactIdCardNumber(), x509Certificate));
+        contactInfo.setMobilePhone(signatureProvider.encryptRequestMessage(contactInfo.getMobilePhone(), x509Certificate));
         String contactEmail = contactInfo.getContactEmail();
         if (contactEmail != null) {
             contactInfo.setContactEmail(signatureProvider.encryptRequestMessage(contactEmail, x509Certificate));
