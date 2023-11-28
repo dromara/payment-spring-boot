@@ -19,18 +19,26 @@ package cn.felord.payment.wechat.v3.ecommerce;
 
 import cn.felord.payment.wechat.enumeration.WeChatServer;
 import cn.felord.payment.wechat.enumeration.WechatPayV3Type;
-import cn.felord.payment.wechat.v3.*;
-import cn.felord.payment.wechat.v3.model.ecommerce.*;
+import cn.felord.payment.wechat.v3.AbstractApi;
+import cn.felord.payment.wechat.v3.SignatureProvider;
+import cn.felord.payment.wechat.v3.WechatPartnerSpecialMchApi;
+import cn.felord.payment.wechat.v3.WechatPayClient;
+import cn.felord.payment.wechat.v3.WechatResponseEntity;
+import cn.felord.payment.wechat.v3.X509WechatCertificateInfo;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceAccountInfo;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceApplymentParams;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceContactInfo;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceIdCardInfo;
+import cn.felord.payment.wechat.v3.model.ecommerce.EcommerceIdDocInfo;
+import cn.felord.payment.wechat.v3.model.ecommerce.UboInfo;
 import cn.felord.payment.wechat.v3.model.specmch.SubMchModifyParams;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.security.cert.X509Certificate;
-import java.util.List;
 
 /**
  * 电商收付通-商户进件
@@ -149,13 +157,18 @@ public class ApplymentApi extends AbstractApi {
                 idDocInfo.setIdDocAddress(signatureProvider.encryptRequestMessage(idDocAddress, x509Certificate));
             }
         }
-        List<UboInfoListItem> uboInfoList = applymentParams.getUboInfoList();
-        if (!CollectionUtils.isEmpty(uboInfoList)) {
-            uboInfoList.forEach(uboInfoListItem -> {
-                uboInfoListItem.setUboIdDocName(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocName(), x509Certificate));
-                uboInfoListItem.setUboIdDocNumber(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocNumber(), x509Certificate));
-                uboInfoListItem.setUboIdDocAddress(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocAddress(), x509Certificate));
-            });
+        UboInfo uboInfo = applymentParams.getUboInfo();
+        if (uboInfo != null) {
+            UboInfo.IdCardInfo cardInfo = uboInfo.getIdCardInfo();
+            if (cardInfo != null) {
+                cardInfo.setIdCardName(signatureProvider.encryptRequestMessage(cardInfo.getIdCardName(), x509Certificate));
+                cardInfo.setIdCardNumber(signatureProvider.encryptRequestMessage(cardInfo.getIdCardNumber(), x509Certificate));
+            }
+            UboInfo.IdDocInfo docInfo = uboInfo.getIdDocInfo();
+            if (docInfo != null) {
+                docInfo.setIdDocName(signatureProvider.encryptRequestMessage(docInfo.getIdDocName(), x509Certificate));
+                docInfo.setIdDocNumber(signatureProvider.encryptRequestMessage(docInfo.getIdDocNumber(), x509Certificate));
+            }
         }
         EcommerceAccountInfo accountInfo = applymentParams.getAccountInfo();
         if (accountInfo != null) {
