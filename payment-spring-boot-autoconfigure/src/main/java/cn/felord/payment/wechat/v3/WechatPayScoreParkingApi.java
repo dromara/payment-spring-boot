@@ -76,6 +76,7 @@ public class WechatPayScoreParkingApi extends AbstractApi {
 
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .queryParams(queryParams)
+                            .encode()
                             .build()
                             .toUri();
                     return Get(uri);
