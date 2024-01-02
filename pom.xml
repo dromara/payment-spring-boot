@@ -21,7 +21,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot</artifactId>
-    <version>1.0.19.RELEASE</version>
+    <version>1.0.20.RELEASE</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -80,15 +80,16 @@
     <modules>
         <module>payment-spring-boot-autoconfigure</module>
         <module>payment-spring-boot-starter</module>
+        <module>payment-spring-boot-example</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <spring-boot.version>2.7.7</spring-boot.version>
+        <java.version>17</java.version>
+        <spring-boot.version>3.2.1</spring-boot.version>
         <alipay-sdk.version>4.31.7.ALL</alipay-sdk.version>
         <bcprov.version>1.69</bcprov.version>
     </properties>
