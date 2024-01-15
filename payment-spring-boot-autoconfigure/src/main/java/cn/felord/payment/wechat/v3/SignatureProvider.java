@@ -184,15 +184,15 @@ public class SignatureProvider {
                             .orElseThrow(() -> new PayException("cannot obtain the certificate"));
                 });
 
-      try {
-          final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
-          Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
-          signer.initVerify(certificate.getX509Certificate());
-          signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
-          return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
-      }catch (Exception e){
-          throw new PayException("An exception occurred during the response verification, the cause: "+e.getMessage());
-      }
+        try {
+            final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
+            Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
+            signer.initVerify(certificate.getX509Certificate());
+            signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
+            return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
+        } catch (Exception e) {
+            throw new PayException("An exception occurred during the response verification, the cause: " + e.getMessage());
+        }
     }
 
 
@@ -230,12 +230,9 @@ public class SignatureProvider {
             throw new PayException("cant obtain the response body");
         }
         ArrayNode certificates = bodyObjectNode.withArray("data");
-        if (certificates.isArray() && certificates.size() > 0) {
-            CERTIFICATE_SET.forEach(x509WechatCertificateInfo -> {
-                if (Objects.equals(tenantId, x509WechatCertificateInfo.getTenantId())) {
-                    CERTIFICATE_SET.remove(x509WechatCertificateInfo);
-                }
-            });
+        if (certificates.isArray() && !certificates.isEmpty()) {
+            CERTIFICATE_SET.removeIf(x509WechatCertificateInfo ->
+                    Objects.equals(tenantId, x509WechatCertificateInfo.getTenantId()));
             final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509", BC_PROVIDER);
             certificates.forEach(objectNode -> {
                 JsonNode encryptCertificate = objectNode.get("encrypt_certificate");
