@@ -252,7 +252,7 @@ public class WechatPayClient {
             ResponseEntity<ObjectNode> responseEntity = restOperations.exchange(requestEntity, ObjectNode.class);
             HttpHeaders headers = responseEntity.getHeaders();
             ObjectNode body = responseEntity.getBody();
-            HttpStatus statusCode = responseEntity.getStatusCode();
+            HttpStatusCode statusCode = responseEntity.getStatusCode();
             // 微信请求id
             String requestId = headers.getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
@@ -298,7 +298,7 @@ public class WechatPayClient {
 
             ResponseEntity<String> responseEntity = restOperations.exchange(requestEntity, String.class);
 
-            HttpStatus statusCode = responseEntity.getStatusCode();
+            HttpStatusCode statusCode = responseEntity.getStatusCode();
             // 微信请求id
             String requestId = requestEntity.getHeaders().getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {
@@ -322,7 +322,7 @@ public class WechatPayClient {
 
             ResponseEntity<Resource> responseEntity = restOperations.exchange(requestEntity, Resource.class);
 
-            HttpStatus statusCode = responseEntity.getStatusCode();
+            HttpStatusCode statusCode = responseEntity.getStatusCode();
             // 微信请求id
             String requestId = requestEntity.getHeaders().getFirst("Request-ID");
             if (!statusCode.is2xxSuccessful()) {

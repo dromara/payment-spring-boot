@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: payment-spring-boot-example
+
+server:
+  port: 8080
+
+wechat:
+  pay:
+    v3:
+      '100000000':
+        app-id: wx524534x423234
+        app-secret: felord
+        app-v3-secret: 0e5b123323h12234927e455703ec
+        mch-id: '1000000000200'
+        domain: https://felord.cn/mobile
+        cert-path: classpath:cert/wx.p12
+      miniapp:
+        app-id: wx344123x3541223
+        app-secret: felord
+        app-v3-secret: 0e5b123323h12234927e455703ec
+        mch-id: '1000000000200'
+        domain: https://felord.cn/miniapp
+        cert-path: classpath:cert/wx.p12
+
+ali1:
+  pay:
+    v1:
+      server-url: https://openapi.alipaydev.com/gateway.do
+      app-id: 2016223700762343
+      app-private-key-path: META-INF/app_rsa
+      alipay-public-cert-path: META-INF/alipayCertPublicKey_RSA2.crt
+      alipay-root-cert-path: META-INF/alipayRootCert.crt
+      app-cert-public-key-path: META-INF/appCertPublicKey_2016102700769563.crt
+      charset: utf-8
+      format: json
+      sign-type: RSA2
+
