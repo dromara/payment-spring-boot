@@ -32,7 +32,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.Assert;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.IdGenerator;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
@@ -161,7 +160,7 @@ public class SignatureProvider {
         signer.initSign(privateKey);
         final String signatureStr = createSign(orderedComponents);
         signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
-        return Base64Utils.encodeToString(signer.sign());
+        return Base64.getEncoder().encodeToString(signer.sign());
     }
 
     /**
@@ -189,7 +188,7 @@ public class SignatureProvider {
             Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
             signer.initVerify(certificate.getX509Certificate());
             signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
-            return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
+            return signer.verify(Base64.getDecoder().decode((params.getWechatpaySignature())));
         } catch (Exception e) {
             throw new PayException("An exception occurred during the response verification, the cause: " + e.getMessage());
         }
@@ -288,7 +287,7 @@ public class SignatureProvider {
 
             byte[] bytes;
             try {
-                bytes = cipher.doFinal(Base64Utils.decodeFromString(ciphertext));
+                bytes = cipher.doFinal(Base64.getDecoder().decode((ciphertext)));
             } catch (GeneralSecurityException e) {
                 throw new PayException(e);
             }
@@ -314,7 +313,7 @@ public class SignatureProvider {
 
             byte[] data = message.getBytes(StandardCharsets.UTF_8);
             byte[] cipherData = cipher.doFinal(data);
-            return Base64Utils.encodeToString(cipherData);
+            return Base64.getEncoder().encodeToString(cipherData);
 
         } catch (Exception e) {
             throw new PayException(e);
@@ -335,7 +334,7 @@ public class SignatureProvider {
             PrivateKey privateKey = wechatMetaBean.getKeyPair().getPrivate();
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BC_PROVIDER);
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[] data = Base64Utils.decodeFromString(message);
+            byte[] data = Base64.getDecoder().decode((message));
             byte[] cipherData = cipher.doFinal(data);
             return new String(cipherData, StandardCharsets.UTF_8);
 
