@@ -55,23 +55,23 @@ Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家�
 
 ## 文档地址
 
-- [payment-spring-boot GitHub文档](https://dromara.github.io/payment-spring-boot)
+- ~~[payment-spring-boot GitHub文档](https://dromara.github.io/payment-spring-boot) (暂时不可用)~~
 
 ## API清单
 
-目前已经实现绝大部分微信支付直连商户和服务商的接口，具体的API明细可查看[API清单](https://dromara.github.io/payment-spring-boot/#/wechat_v3_api)
+目前已经实现绝大部分微信支付直连商户和服务商的接口，具体的API明细可查看[API清单(暂时不可用)](https://dromara.github.io/payment-spring-boot/#/wechat_v3_api)
 > 随着版本迭代功能会增加，也可通过API注册表类`WechatPayV3Type`进行API接口检索。
 
 ## CHANGELOG
 
-更新日志[CHANGELOG](https://dromara.github.io/payment-spring-boot/#/changelog)
+~~更新日志[CHANGELOG](https://dromara.github.io/payment-spring-boot/#/changelog) (暂时不可用)~~
 
 ## 使用入门
 
 ### 集成配置
 
-关于集成配置请详细阅读[payment-spring-boot GitHub文档](https://dromara.github.io/payment-spring-boot)
-中[快速接入](https://dromara.github.io/payment-spring-boot/#/quick_start)章节
+~~关于集成配置请详细阅读[payment-spring-boot GitHub文档](https://dromara.github.io/payment-spring-boot)
+中[快速接入](https://dromara.github.io/payment-spring-boot/#/quick_start)章节 (暂时不可用)~~
 
 ### 调用示例
 
