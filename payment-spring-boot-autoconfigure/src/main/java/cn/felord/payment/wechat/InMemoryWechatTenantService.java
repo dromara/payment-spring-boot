@@ -27,6 +27,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.FileReader;
 import java.io.InputStreamReader;
@@ -79,6 +80,10 @@ public class InMemoryWechatTenantService implements WechatTenantService {
     }
 
     private WeChatPublicKeyInfo initWeChatPublicKeyInfo(WechatMetaBean meta) {
+        boolean enablePublicKey=StringUtils.hasLength(meta.getV3().getWeChatPayPublicKeyId()) && StringUtils.hasLength(meta.getV3().getWeChatPayPublicKeyPath());
+        if (!enablePublicKey) {
+            return null;
+        }
         try {
             String certPath=meta.getV3().getWeChatPayPublicKeyPath();
             Resource resource =
