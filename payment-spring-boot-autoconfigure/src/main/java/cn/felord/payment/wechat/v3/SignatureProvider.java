@@ -448,7 +448,7 @@ public class SignatureProvider {
 
     public boolean isSwitchVerifySignMethod(String tenantId) {
 
-        String publicKeyId=wechatMetaContainer.getWechatMeta(tenantId).getV3().getWeChatPayPublicKeyId();
+        String publicKeyId=wechatMetaContainer.getWechatMeta(tenantId).getV3().getWechatPayPublicKeyId();
 
         Boolean switchVerifySignMethod = wechatMetaContainer.getWechatMeta(tenantId).getV3().getSwitchVerifySignMethod();
 
@@ -456,6 +456,6 @@ public class SignatureProvider {
     }
 
     public String getWechatPublicKeyId(String tenantId) {
-        return  wechatMetaContainer.getWechatMeta(tenantId).getV3().getWeChatPayPublicKeyId();
+        return  wechatMetaContainer.getWechatMeta(tenantId).getV3().getWechatPayPublicKeyId();
     }
 }

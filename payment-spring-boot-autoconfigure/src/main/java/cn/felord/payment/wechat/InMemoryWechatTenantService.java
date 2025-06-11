@@ -80,14 +80,17 @@ public class InMemoryWechatTenantService implements WechatTenantService {
     }
 
     private WeChatPublicKeyInfo initWeChatPublicKeyInfo(WechatMetaBean meta) {
-        boolean enablePublicKey=StringUtils.hasLength(meta.getV3().getWeChatPayPublicKeyId()) && StringUtils.hasLength(meta.getV3().getWeChatPayPublicKeyPath());
+        boolean enablePublicKey=StringUtils.hasLength(meta.getV3().getWechatPayPublicKeyId()) &&
+                (StringUtils.hasLength(meta.getV3().getWechatPayPublicKeyPath())||StringUtils.hasLength(meta.getV3().getWechatPayPublicKeyAbsolutePath()));
         if (!enablePublicKey) {
             return null;
         }
         try {
-            String certPath=meta.getV3().getWeChatPayPublicKeyPath();
+            String certPath=meta.getV3().getWechatPayPublicKeyPath();
+            String certAbsolutePath = meta.getV3().getWechatPayPublicKeyAbsolutePath();
             Resource resource =
-                    resourceLoader.getResource(certPath == null ? "classpath:wechat/pub_key.pem" :
+                    StringUtils.hasLength(certAbsolutePath) ? new FileSystemResource(certAbsolutePath) :
+                    resourceLoader.getResource(!StringUtils.hasLength(certPath) ? "classpath:wechat/pub_key.pem" :
                             certPath.startsWith(ResourceUtils.CLASSPATH_URL_PREFIX) ? certPath : ResourceUtils.CLASSPATH_URL_PREFIX + certPath);
             PemReader pemReader = new PemReader(new InputStreamReader(resource.getInputStream()));
             PemObject pemObject = pemReader.readPemObject();
@@ -95,10 +98,8 @@ public class InMemoryWechatTenantService implements WechatTenantService {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
             // 生成公钥
-            WeChatPublicKeyInfo keyInfo = new WeChatPublicKeyInfo(publicKey, meta.getV3().getWeChatPayPublicKeyId(), meta.getTenantId());
-            return keyInfo;
+            return new WeChatPublicKeyInfo(publicKey, meta.getV3().getWechatPayPublicKeyId(), meta.getTenantId());
         }catch (Exception e){
-            e.printStackTrace();
             throw new PayException("An error occurred while generating the public key,Please check the format and content of the configured public key");
         }
     }
