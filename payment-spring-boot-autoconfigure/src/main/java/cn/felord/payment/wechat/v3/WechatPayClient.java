@@ -224,6 +224,8 @@ public class WechatPayClient {
             String tenantId = Objects.requireNonNull(headers.get("Pay-TenantId")).get(0);
             String authorization = signatureProvider.requestSign(tenantId, httpMethod.name(), canonicalUrl, body);
 
+
+
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.addAll(headers);
             httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -232,6 +234,11 @@ public class WechatPayClient {
                 // 避免出现因为中文导致的 HttpRetryException
                 httpHeaders.setContentType(MediaType.parseMediaType("application/json;charset=UTF-8"));
             }
+
+            if (signatureProvider.isSwitchVerifySignMethod(tenantId)){
+                httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPublicKeyId(tenantId));
+            }
+
             httpHeaders.add("Authorization", authorization);
             httpHeaders.add("User-Agent", "X-Pay-Service");
             httpHeaders.remove("Meta-Info");
