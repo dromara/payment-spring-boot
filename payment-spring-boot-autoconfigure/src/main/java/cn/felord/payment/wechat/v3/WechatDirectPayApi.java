@@ -56,6 +56,12 @@ public class WechatDirectPayApi extends AbstractApi {
         super(wechatPayClient, tenantId);
     }
 
+    /**
+     * 付款码支付API
+     *
+     * @param payParams the pay params
+     * @return the wechat response entity
+     */
     public WechatResponseEntity<ObjectNode> codePay(PayParams payParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.CODE, payParams)

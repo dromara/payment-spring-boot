@@ -186,10 +186,7 @@ public class SignatureProvider {
      * @return the boolean
      */
     public boolean responseSignVerify(ResponseSignVerifyParams params) {
-
-        log.debug("responseSignVerify: {}", params);
         log.debug("wechatpaySerial: {}", params.getWechatpaySerial());
-
         boolean verifyResult=  params.getWechatpaySerial().startsWith(PUBLIC_KYE_ID_PREFIX)?
                 responseSignVerifyWithWeChatPublicKeyInfo(params):
                 responseSignVerifyWithX509WechatCertificate(params);
@@ -197,10 +194,12 @@ public class SignatureProvider {
         return  verifyResult;
     }
 
+    /***
+     *通过平台证书进行验签
+     */
     private  boolean responseSignVerifyWithX509WechatCertificate(ResponseSignVerifyParams params){
         log.debug("responseSignVerifyWithX509WechatCertificate: {}", params);
         String wechatpaySerial = params.getWechatpaySerial();
-
         X509WechatCertificateInfo certificate = CERTIFICATE_SET.stream()
                 .filter(cert -> Objects.equals(wechatpaySerial, cert.getWechatPaySerial()))
                 .findAny()
@@ -223,13 +222,12 @@ public class SignatureProvider {
         }
     }
 
+    /***
+     *通过微信支付公钥进行验签
+     */
     private boolean responseSignVerifyWithWeChatPublicKeyInfo(ResponseSignVerifyParams params){
         log.debug("responseSignVerifyWithWeChatPublicKeyInfo: {}", params);
-
         String wechatpaySerial = params.getWechatpaySerial();
-
-        log.debug("wechatpaySerial: {}", wechatpaySerial);
-
         if (wechatpaySerial.startsWith(PUBLIC_KYE_ID_PREFIX)){
             WeChatPublicKeyInfo info = PUBLIC_KEY_SET.stream()
                     .filter(key -> Objects.equals(wechatpaySerial, key.getPublicKeyId()))

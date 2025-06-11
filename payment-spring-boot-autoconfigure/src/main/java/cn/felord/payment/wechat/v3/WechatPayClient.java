@@ -224,8 +224,6 @@ public class WechatPayClient {
             String tenantId = Objects.requireNonNull(headers.get("Pay-TenantId")).get(0);
             String authorization = signatureProvider.requestSign(tenantId, httpMethod.name(), canonicalUrl, body);
 
-
-
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.addAll(headers);
             httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

@@ -14,11 +14,9 @@ public class WeChatPublicKeyInfo {
     private String tenantId;
 
     public WeChatPublicKeyInfo(RSAPublicKey publicKey, String publicKeyId, String tenantId) {
-
         this.publicKeyId = publicKeyId;
         this.tenantId = tenantId;
         this.publicKey = publicKey;
-
     }
 
     public WeChatPublicKeyInfo() {
