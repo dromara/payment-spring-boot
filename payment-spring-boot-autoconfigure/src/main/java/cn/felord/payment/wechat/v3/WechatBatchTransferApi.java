@@ -77,18 +77,16 @@ public class WechatBatchTransferApi extends AbstractApi {
         List<CreateBatchTransferParams.TransferDetailListItem> transferDetailList = createBatchTransferParams.getTransferDetailList();
 
         SignatureProvider signatureProvider = this.client().signatureProvider();
-        X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-        final X509Certificate x509Certificate = certificate.getX509Certificate();
         List<CreateBatchTransferParams.TransferDetailListItem> encrypted = transferDetailList.stream()
                 .peek(transferDetailListItem -> {
                     String userName = transferDetailListItem.getUserName();
                     if (StringUtils.hasText(userName)) {
-                        String encryptedUserName = signatureProvider.encryptRequestMessage(userName, x509Certificate);
+                        String encryptedUserName = signatureProvider.encryptRequestMessage(userName, this.wechatMetaBean());
                         transferDetailListItem.setUserName(encryptedUserName);
                     }
                     String userIdCard = transferDetailListItem.getUserIdCard();
                     if (StringUtils.hasText(userIdCard)) {
-                        String encryptedUserIdCard = signatureProvider.encryptRequestMessage(userIdCard, x509Certificate);
+                        String encryptedUserIdCard = signatureProvider.encryptRequestMessage(userIdCard, this.wechatMetaBean());
                         transferDetailListItem.setUserIdCard(encryptedUserIdCard);
                     }
                 }).collect(Collectors.toList());
@@ -98,7 +96,7 @@ public class WechatBatchTransferApi extends AbstractApi {
                 .build()
                 .toUri();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+        httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
         return Post(uri, createBatchTransferParams, httpHeaders);
     }
 

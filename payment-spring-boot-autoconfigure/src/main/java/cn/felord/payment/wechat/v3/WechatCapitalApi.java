@@ -56,11 +56,8 @@ public class WechatCapitalApi extends AbstractApi{
         this.client().withType(WechatPayV3Type.CAPITAL_SEARCH, accountNumber)
                 .function((type, param) -> {
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
-                            .queryParam("account_number", signatureProvider.encryptRequestMessage(param,x509Certificate))
+                            .queryParam("account_number", signatureProvider.encryptRequestMessage(param,this.wechatMetaBean()))
                             .build()
                             .toUri();
                     return Get(uri);

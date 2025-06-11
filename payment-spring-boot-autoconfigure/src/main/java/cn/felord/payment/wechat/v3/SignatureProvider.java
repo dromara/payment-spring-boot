@@ -254,8 +254,12 @@ public class SignatureProvider {
      */
     @SneakyThrows
     private synchronized void refreshCertificate(String tenantId) {
-        String url = WechatPayV3Type.CERT.uri(WeChatServer.CHINA);
 
+        WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
+        if (wechatMetaBean.getV3().getEnableWechatPayPublic() && wechatMetaBean.getV3().getSwitchVerifySignMethod()){
+            return;
+        }
+        String url = WechatPayV3Type.CERT.uri(WeChatServer.CHINA);
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
 
         String canonicalUrl = uri.getPath();
@@ -350,18 +354,42 @@ public class SignatureProvider {
         }
     }
 
+
+    public String encryptRequestMessage(String message, WechatMetaBean wechatMetaBean) {
+        PublicKey publicKey;
+        if (wechatMetaBean.getEnableWechatPayPublicEncrypt()){
+            WeChatPublicKeyInfo info=this.getWechatPublicKeyInfo(wechatMetaBean.getTenantId());
+            publicKey=info.getPublicKey();
+        }else {
+            X509WechatCertificateInfo certificate = getCertificate(wechatMetaBean.getTenantId());
+            final X509Certificate x509Certificate = certificate.getX509Certificate();
+            publicKey=x509Certificate.getPublicKey();
+        }
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BC_PROVIDER);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] data = message.getBytes(StandardCharsets.UTF_8);
+            byte[] cipherData = cipher.doFinal(data);
+            return Base64Utils.encodeToString(cipherData);
+
+        } catch (Exception e) {
+            throw new PayException(e);
+        }
+    }
+
     /**
      * 对请求敏感字段进行加密
      *
      * @param message     the message
-     * @param certificate the certificate
+     * @param publicKey the wechatPubicKey certificate
      * @return encrypt message
      * @since 1.0.6.RELEASE
      */
-    public String encryptRequestMessage(String message, Certificate certificate) {
+    @Deprecated
+    public String encryptRequestMessage(String message, RSAPublicKey publicKey) {
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BC_PROVIDER);
-            cipher.init(Cipher.ENCRYPT_MODE, certificate.getPublicKey());
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
             byte[] data = message.getBytes(StandardCharsets.UTF_8);
             byte[] cipherData = cipher.doFinal(data);
@@ -401,7 +429,7 @@ public class SignatureProvider {
      * @param tenantId the tenant id
      * @return the x 509 wechat certificate info
      */
-    public X509WechatCertificateInfo getCertificate(String tenantId) {
+    private X509WechatCertificateInfo getCertificate(String tenantId) {
 
         return CERTIFICATE_SET.stream()
                 .filter(cert -> Objects.equals(tenantId, cert.getTenantId()))
@@ -413,6 +441,15 @@ public class SignatureProvider {
                             .findAny()
                             .orElseThrow(() -> new PayException("cannot obtain the certificate"));
                 });
+    }
+
+    private WeChatPublicKeyInfo getWechatPublicKeyInfo(String tenantId) {
+        return PUBLIC_KEY_SET.stream()
+                .filter(publicKeyInfo -> Objects.equals(tenantId, publicKeyInfo.getTenantId()))
+                .findAny()
+                .orElseThrow(
+                        () -> new PayException("cannot obtain the public key")
+                );
     }
 
 
@@ -457,5 +494,13 @@ public class SignatureProvider {
 
     public String getWechatPublicKeyId(String tenantId) {
         return  wechatMetaContainer.getWechatMeta(tenantId).getV3().getWechatPayPublicKeyId();
+    }
+
+    public String getWechatPaySerial(WechatMetaBean wechatMetaBean) {
+        if (wechatMetaBean.getEnableWechatPayPublicEncrypt()){
+            return this.getWechatPublicKeyInfo(wechatMetaBean.getTenantId()).getPublicKeyId();
+        }else {
+            return this.getCertificate(wechatMetaBean.getTenantId()).getWechatPaySerial();
+        }
     }
 }

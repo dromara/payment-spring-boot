@@ -2,8 +2,9 @@
 ### 微信支付
 
 - enhance: 增加了通过微信公钥对微信支付相关接口的响应内容或微信回调通知的参数进行验签的支持。
-  - 微信配置项增加了：``` wechat-pay-public-key-id: 微信支付公钥的ID、 wechat-pay-public-key-path：微信支付公钥的路径、wechat-pay-public-key-absolute-path:  微信支付公钥的绝对路径、 switch-verify-sign-method: 是否启用从平台证书切换到微信支公钥```
-  - `wechat-pay-public-key-id ` 与`wechat-pay-public-key-path或wechat-pay-public-key-absolute-path`<font color=red>同时正确配置</font>,才会启用微信支付公钥验签，否则默认使用平台证书进行验签。</font>
+  - 微信配置项增加了：```enable-wechat-pay-public: 是否启用微信支付公钥验签、  wechat-pay-public-key-id: 微信支付公钥的ID、 wechat-pay-public-key-path：微信支付公钥的路径、wechat-pay-public-key-absolute-path:  微信支付公钥的绝对路径、 switch-verify-sign-method: 是否启用从平台证书切换到微信支公钥```
+  - `enable-wechat-pay-public` 与 `wechat-pay-public-key-id ` 、`wechat-pay-public-key-path或wechat-pay-public-key-absolute-path`<font color=red>同时正确配置</font>,才会启用微信支付公钥验签，否则默认使用平台证书进行验签。
+  -  
   - 如果需要[从平台证书切换成微信支付公钥](https://pay.weixin.qq.com/doc/v3/merchant/4012154180#5.-%E6%B2%A1%E6%9C%89%E4%BD%BF%E7%94%A8%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98SDK%E7%9A%84%E5%95%86%E6%88%B7%E5%A6%82%E4%BD%95%E5%B0%86%E5%B9%B3%E5%8F%B0%E8%AF%81%E4%B9%A6%E5%88%87%E6%8D%A2%E6%88%90%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E5%85%AC%E9%92%A5)，请启用`switch-verify-sign-method`参数
 - enhance: 增加了微信支付V3版本的付款码支付``codePay``与撤销API``reverse``(仅支持普通商户模式，服务商模式暂不支持) 
 - factor: 升级了spring-boot-parent版本从 2.7.7 到2.7.18

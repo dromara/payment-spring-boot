@@ -47,6 +47,8 @@ public class WechatMetaBean {
      */
     private WechatPayProperties.V3 v3;
     
-    private WeChatPublicKeyInfo publicKeyInfo;
 
+    public Boolean getEnableWechatPayPublicEncrypt() {
+        return v3.getEnableWechatPayPublic();
+    }
 }

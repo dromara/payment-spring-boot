@@ -86,12 +86,14 @@ wechat:
       mch-id: 1603337223
       domain: https://felord.cn/miniapp
       cert-path: miniapp/apiclient_cert.p12
+      # 是否启用微信支付公钥
+      enable-wechat-pay-public: true
       #微信公钥ID
       wechat-pay-public-key-id: PUB_KEY_ID_0116278111111115222222501
       #微信公钥
       wechat-pay-public-key-path: pub_key.pem
       wechat-pay-public-key-absolute-path: D:\\felord\\wechat\\cert\\pub_key.pem
-      #是否启用从平台证书切换成微信支付公钥 不填默认为false
+      #是否启用从平台证书切换成微信支付公钥 不填默认为false，
       switch-verify-sign-method: true
 ```
 

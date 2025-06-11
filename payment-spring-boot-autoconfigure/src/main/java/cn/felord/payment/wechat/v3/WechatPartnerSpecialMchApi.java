@@ -63,14 +63,12 @@ public class WechatPartnerSpecialMchApi extends AbstractApi {
         this.client().withType(WechatPayV3Type.SPEC_MCH_APPLY_PARTNER, params)
                 .function((wechatPayV3Type, applymentParams) -> {
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-                    ApplymentParams applyRequestParams = this.convert(applymentParams, signatureProvider, x509Certificate);
+                    ApplymentParams applyRequestParams = this.convert(applymentParams, signatureProvider);
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
                             .toUri();
                     HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+                    httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
                     return Post(uri, applyRequestParams, httpHeaders);
                 })
                 .consumer(wechatResponseEntity::convert)
@@ -133,17 +131,15 @@ public class WechatPartnerSpecialMchApi extends AbstractApi {
         this.client().withType(WechatPayV3Type.SPEC_MCH_SUB_MODIFY, params)
                 .function((type, subMchModifyParams) -> {
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
                     URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                             .build()
                             .expand(subMchModifyParams.getSubMchid())
                             .toUri();
 
                     subMchModifyParams.setSubMchid(null);
-                    subMchModifyParams.setAccountNumber(signatureProvider.encryptRequestMessage(subMchModifyParams.getAccountNumber(), x509Certificate));
+                    subMchModifyParams.setAccountNumber(signatureProvider.encryptRequestMessage(subMchModifyParams.getAccountNumber(), this.wechatMetaBean()));
                     HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+                    httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
                     return Post(uri, subMchModifyParams, httpHeaders);
                 })
                 .consumer(wechatResponseEntity::convert)
@@ -175,55 +171,55 @@ public class WechatPartnerSpecialMchApi extends AbstractApi {
         return wechatResponseEntity;
     }
 
-    private ApplymentParams convert(ApplymentParams applymentParams, SignatureProvider signatureProvider, final X509Certificate x509Certificate) {
+    private ApplymentParams convert(ApplymentParams applymentParams, SignatureProvider signatureProvider) {
 
         ContactInfo contactInfo = applymentParams.getContactInfo();
-        contactInfo.setContactName(signatureProvider.encryptRequestMessage(contactInfo.getContactName(), x509Certificate));
+        contactInfo.setContactName(signatureProvider.encryptRequestMessage(contactInfo.getContactName(), this.wechatMetaBean()));
         String contactIdNumber = contactInfo.getContactIdNumber();
         if (contactIdNumber != null) {
-            contactInfo.setContactIdNumber(signatureProvider.encryptRequestMessage(contactIdNumber, x509Certificate));
+            contactInfo.setContactIdNumber(signatureProvider.encryptRequestMessage(contactIdNumber,this.wechatMetaBean()));
         }
         String openid = contactInfo.getOpenid();
         if (openid != null) {
-            contactInfo.setOpenid(signatureProvider.encryptRequestMessage(openid, x509Certificate));
+            contactInfo.setOpenid(signatureProvider.encryptRequestMessage(openid,this.wechatMetaBean()));
         }
-        contactInfo.setMobilePhone(signatureProvider.encryptRequestMessage(contactInfo.getMobilePhone(), x509Certificate));
-        contactInfo.setContactEmail(signatureProvider.encryptRequestMessage(contactInfo.getContactEmail(), x509Certificate));
+        contactInfo.setMobilePhone(signatureProvider.encryptRequestMessage(contactInfo.getMobilePhone(), this.wechatMetaBean()));
+        contactInfo.setContactEmail(signatureProvider.encryptRequestMessage(contactInfo.getContactEmail(), this.wechatMetaBean()));
 
         SubjectInfo subjectInfo = applymentParams.getSubjectInfo();
         IdentityInfo identityInfo = subjectInfo.getIdentityInfo();
 
         IdCardInfo idCardInfo = identityInfo.getIdCardInfo();
         if (idCardInfo != null) {
-            idCardInfo.setIdCardName(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardName(), x509Certificate));
-            idCardInfo.setIdCardNumber(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardNumber(), x509Certificate));
+            idCardInfo.setIdCardName(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardName(), this.wechatMetaBean()));
+            idCardInfo.setIdCardNumber(signatureProvider.encryptRequestMessage(idCardInfo.getIdCardNumber(), this.wechatMetaBean()));
             String idCardAddress = idCardInfo.getIdCardAddress();
             if (StringUtils.hasText(idCardAddress)){
-                idCardInfo.setIdCardAddress(signatureProvider.encryptRequestMessage(idCardAddress, x509Certificate));
+                idCardInfo.setIdCardAddress(signatureProvider.encryptRequestMessage(idCardAddress,this.wechatMetaBean()));
             }
         }
         IdDocInfo idDocInfo = identityInfo.getIdDocInfo();
         if (idDocInfo != null) {
-            idDocInfo.setIdDocName(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocName(), x509Certificate));
-            idDocInfo.setIdDocNumber(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocNumber(), x509Certificate));
+            idDocInfo.setIdDocName(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocName(), this.wechatMetaBean()));
+            idDocInfo.setIdDocNumber(signatureProvider.encryptRequestMessage(idDocInfo.getIdDocNumber(), this.wechatMetaBean()));
             String idDocAddress = idDocInfo.getIdDocAddress();
             if (StringUtils.hasText(idDocAddress)){
-                idDocInfo.setIdDocAddress(signatureProvider.encryptRequestMessage(idDocAddress, x509Certificate));
+                idDocInfo.setIdDocAddress(signatureProvider.encryptRequestMessage(idDocAddress,this.wechatMetaBean()));
             }
         }
         List<UboInfoListItem> uboInfoList = subjectInfo.getUboInfoList();
         if (!CollectionUtils.isEmpty(uboInfoList)) {
             uboInfoList.forEach(uboInfoListItem -> {
-                uboInfoListItem.setUboIdDocName(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocName(), x509Certificate));
-                uboInfoListItem.setUboIdDocNumber(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocNumber(), x509Certificate));
-                uboInfoListItem.setUboIdDocAddress(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocAddress(), x509Certificate));
+                uboInfoListItem.setUboIdDocName(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocName(), this.wechatMetaBean()));
+                uboInfoListItem.setUboIdDocNumber(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocNumber(), this.wechatMetaBean()));
+                uboInfoListItem.setUboIdDocAddress(signatureProvider.encryptRequestMessage(uboInfoListItem.getUboIdDocAddress(), this.wechatMetaBean()));
             });
         }
 
         BankAccountInfo bankAccountInfo = applymentParams.getBankAccountInfo();
 
-        bankAccountInfo.setAccountName(signatureProvider.encryptRequestMessage(bankAccountInfo.getAccountName(), x509Certificate));
-        bankAccountInfo.setAccountNumber(signatureProvider.encryptRequestMessage(bankAccountInfo.getAccountNumber(), x509Certificate));
+        bankAccountInfo.setAccountName(signatureProvider.encryptRequestMessage(bankAccountInfo.getAccountName(), this.wechatMetaBean()));
+        bankAccountInfo.setAccountNumber(signatureProvider.encryptRequestMessage(bankAccountInfo.getAccountNumber(), this.wechatMetaBean()));
 
         return applymentParams;
     }
