@@ -27,13 +27,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
-import org.springframework.util.AlternativeJdkIdGenerator;
-import org.springframework.util.Assert;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.IdGenerator;
+import org.springframework.util.*;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -44,12 +46,16 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -85,6 +91,11 @@ public class SignatureProvider {
      * 微信平台证书容器  key = 序列号  value = 证书对象
      */
     private static final Set<X509WechatCertificateInfo> CERTIFICATE_SET = Collections.synchronizedSet(new HashSet<>());
+
+    private static final Set<WeChatPublicKeyInfo> PUBLIC_KEY_SET = Collections.synchronizedSet(new HashSet<>());
+
+    private static final String  PUBLIC_KYE_ID_PREFIX = "PUB_KEY_ID";
+
     /**
      * 加密算法提供方 - BouncyCastle
      */
@@ -115,6 +126,10 @@ public class SignatureProvider {
         this.restOperations = restOperations;
         this.wechatMetaContainer = wechatMetaContainer;
         wechatMetaContainer.getTenantIds().forEach(this::refreshCertificate);
+    }
+
+    public  static void addWeChatPublicKey(WeChatPublicKeyInfo weChatPublicKeyInfo) {
+        PUBLIC_KEY_SET.add(weChatPublicKeyInfo);
     }
 
 
@@ -171,7 +186,19 @@ public class SignatureProvider {
      * @return the boolean
      */
     public boolean responseSignVerify(ResponseSignVerifyParams params) {
+        log.debug("wechatpaySerial: {}", params.getWechatpaySerial());
+        boolean verifyResult=  params.getWechatpaySerial().startsWith(PUBLIC_KYE_ID_PREFIX)?
+                responseSignVerifyWithWeChatPublicKeyInfo(params):
+                responseSignVerifyWithX509WechatCertificate(params);
+        log.debug("responseSignVerify: {}", verifyResult);
+        return  verifyResult;
+    }
 
+    /***
+     *通过平台证书进行验签
+     */
+    private  boolean responseSignVerifyWithX509WechatCertificate(ResponseSignVerifyParams params){
+        log.debug("responseSignVerifyWithX509WechatCertificate: {}", params);
         String wechatpaySerial = params.getWechatpaySerial();
         X509WechatCertificateInfo certificate = CERTIFICATE_SET.stream()
                 .filter(cert -> Objects.equals(wechatpaySerial, cert.getWechatPaySerial()))
@@ -195,6 +222,30 @@ public class SignatureProvider {
         }
     }
 
+    /***
+     *通过微信支付公钥进行验签
+     */
+    private boolean responseSignVerifyWithWeChatPublicKeyInfo(ResponseSignVerifyParams params){
+        log.debug("responseSignVerifyWithWeChatPublicKeyInfo: {}", params);
+        String wechatpaySerial = params.getWechatpaySerial();
+        if (wechatpaySerial.startsWith(PUBLIC_KYE_ID_PREFIX)){
+            WeChatPublicKeyInfo info = PUBLIC_KEY_SET.stream()
+                    .filter(key -> Objects.equals(wechatpaySerial, key.getPublicKeyId()))
+                    .findAny()
+                    .orElseThrow(() -> new PayException("cannot obtain the public key"));
+
+            try {
+                final String signatureStr = createSign(params.getWechatpayTimestamp(), params.getWechatpayNonce(), params.getBody());
+                Signature signer = Signature.getInstance("SHA256withRSA", BC_PROVIDER);
+                signer.initVerify(info.getPublicKey());
+                signer.update(signatureStr.getBytes(StandardCharsets.UTF_8));
+                return signer.verify(Base64Utils.decodeFromString(params.getWechatpaySignature()));
+            } catch (Exception e) {
+                throw new PayException("An exception occurred during the response verification, the cause: " + e.getMessage());
+            }
+        }
+        return false;
+    }
 
     /**
      * 当我方服务器不存在平台证书或者证书同当前响应报文中的证书序列号不一致时应当刷新  调用/v3/certificates
@@ -395,4 +446,16 @@ public class SignatureProvider {
                 .collect(Collectors.joining("\n", "", "\n"));
     }
 
+    public boolean isSwitchVerifySignMethod(String tenantId) {
+
+        String publicKeyId=wechatMetaContainer.getWechatMeta(tenantId).getV3().getWechatPayPublicKeyId();
+
+        Boolean switchVerifySignMethod = wechatMetaContainer.getWechatMeta(tenantId).getV3().getSwitchVerifySignMethod();
+
+        return switchVerifySignMethod && StringUtils.hasLength(publicKeyId);
+    }
+
+    public String getWechatPublicKeyId(String tenantId) {
+        return  wechatMetaContainer.getWechatMeta(tenantId).getV3().getWechatPayPublicKeyId();
+    }
 }

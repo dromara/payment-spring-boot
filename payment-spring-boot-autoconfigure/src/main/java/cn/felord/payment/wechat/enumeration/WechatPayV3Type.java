@@ -67,6 +67,13 @@ public enum WechatPayV3Type {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
+     * 付款码支付
+     *
+     * @since 1.0.0.RELEASE
+     */
+    CODE(HttpMethod.POST, "%s/v3/pay/transactions/codepay"),
+
+    /**
      * 微信公众号支付或者小程序支付.
      *
      * @since 1.0.0.RELEASE
@@ -99,6 +106,13 @@ public enum WechatPayV3Type {
      * @since 1.0.0.RELEASE
      */
     CLOSE(HttpMethod.POST, "%s/v3/pay/transactions/out-trade-no/{out_trade_no}/close"),
+    /**
+     * 关闭订单.
+     *
+     * @since 1.0.0.RELEASE
+     */
+    REVERSE(HttpMethod.POST, "%s/v3/pay/transactions/out-trade-no/{out_trade_no}/reverse"),
+
     /**
      * 微信支付订单号查询API.
      *
@@ -632,6 +646,7 @@ public enum WechatPayV3Type {
     BATCH_TRANSFER_FUND_INCOME_RECORDS(HttpMethod.GET, "%s/v3/merchantfund/merchant/income-records"),
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
     /**
      * 服务商APP下单API.

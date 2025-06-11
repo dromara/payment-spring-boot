@@ -46,5 +46,7 @@ public class WechatMetaBean {
      * The V3.
      */
     private WechatPayProperties.V3 v3;
+    
+    private WeChatPublicKeyInfo publicKeyInfo;
 
 }

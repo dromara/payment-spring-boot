@@ -76,5 +76,28 @@ public class WechatPayProperties {
          * your pay server domain
          */
         private String domain;
+
+        /**
+         * wechat pay public key id
+         */
+        private String wechatPayPublicKeyId;
+
+        /**
+         * see <a href="https://pay.weixin.qq.com/doc/v3/merchant/4012154180#4.1-%E8%8E%B7%E5%8F%96%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E5%85%AC%E9%92%A5">
+         *     </a>
+         * wechat pay public key
+         */
+        private String wechatPayPublicKeyPath;
+
+        private String wechatPayPublicKeyAbsolutePath;
+
+        /**
+         *
+         * see <a href="https://pay.weixin.qq.com/doc/v3/merchant/4012154180">
+         *     Indicate whether to switch from the platform certificate to the WeChat Pay public key
+         *     </a>
+         */
+        private Boolean switchVerifySignMethod = false;
+
     }
 }

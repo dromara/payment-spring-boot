@@ -4,7 +4,7 @@
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.20.RELEASE</version>
+    <version>1.0.21.RELEASE</version>
 </dependency>
 ```
 > 基于 **Spring Boot 2.x** 
@@ -86,6 +86,13 @@ wechat:
       mch-id: 1603337223
       domain: https://felord.cn/miniapp
       cert-path: miniapp/apiclient_cert.p12
+      #微信公钥ID
+      wechat-pay-public-key-id: PUB_KEY_ID_0116278111111115222222501
+      #微信公钥
+      wechat-pay-public-key-path: pub_key.pem
+      wechat-pay-public-key-absolute-path: D:\\felord\\wechat\\cert\\pub_key.pem
+      #是否启用从平台证书切换成微信支付公钥 不填默认为false
+      switch-verify-sign-method: true
 ```
 
 >  ❗注意：在一套系统中需要开发者保证`tentanID`唯一。

@@ -17,15 +17,23 @@
 
 package cn.felord.payment.wechat;
 
-import cn.felord.payment.wechat.v3.KeyPairFactory;
-import cn.felord.payment.wechat.v3.WechatMetaBean;
+import cn.felord.payment.PayException;
+import cn.felord.payment.wechat.v3.*;
 import lombok.AllArgsConstructor;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.security.KeyFactory;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -62,11 +70,37 @@ public class InMemoryWechatTenantService implements WechatTenantService {
                         WechatMetaBean wechatMetaBean = keyPairFactory.initWechatMetaBean(resource, mchId);
                         wechatMetaBean.setV3(v3);
                         wechatMetaBean.setTenantId(tenantId);
+                        SignatureProvider.addWeChatPublicKey(initWeChatPublicKeyInfo(wechatMetaBean));
                         return wechatMetaBean;
                     })
                     .collect(Collectors.toSet());
             cache.addAll(beans);
         }
         return cache;
+    }
+
+    private WeChatPublicKeyInfo initWeChatPublicKeyInfo(WechatMetaBean meta) {
+        boolean enablePublicKey=StringUtils.hasLength(meta.getV3().getWechatPayPublicKeyId()) &&
+                (StringUtils.hasLength(meta.getV3().getWechatPayPublicKeyPath())||StringUtils.hasLength(meta.getV3().getWechatPayPublicKeyAbsolutePath()));
+        if (!enablePublicKey) {
+            return null;
+        }
+        try {
+            String certPath=meta.getV3().getWechatPayPublicKeyPath();
+            String certAbsolutePath = meta.getV3().getWechatPayPublicKeyAbsolutePath();
+            Resource resource =
+                    StringUtils.hasLength(certAbsolutePath) ? new FileSystemResource(certAbsolutePath) :
+                    resourceLoader.getResource(!StringUtils.hasLength(certPath) ? "classpath:wechat/pub_key.pem" :
+                            certPath.startsWith(ResourceUtils.CLASSPATH_URL_PREFIX) ? certPath : ResourceUtils.CLASSPATH_URL_PREFIX + certPath);
+            PemReader pemReader = new PemReader(new InputStreamReader(resource.getInputStream()));
+            PemObject pemObject = pemReader.readPemObject();
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(pemObject.getContent());
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
+            // 生成公钥
+            return new WeChatPublicKeyInfo(publicKey, meta.getV3().getWechatPayPublicKeyId(), meta.getTenantId());
+        }catch (Exception e){
+            throw new PayException("An error occurred while generating the public key,Please check the format and content of the configured public key");
+        }
     }
 }
