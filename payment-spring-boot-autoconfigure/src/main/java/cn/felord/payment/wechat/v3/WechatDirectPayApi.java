@@ -56,12 +56,29 @@ public class WechatDirectPayApi extends AbstractApi {
         super(wechatPayClient, tenantId);
     }
 
-    /**
-     * APP下单API
-     *
-     * @param payParams the pay params
-     * @return the wechat response entity
-     */
+    public WechatResponseEntity<ObjectNode> codePay(PayParams payParams) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.CODE, payParams)
+                .function(this::payFunction)
+                .consumer(responseEntity -> {
+                    ObjectNode body = responseEntity.getBody();
+                    if (Objects.isNull(body)) {
+                        throw new PayException("response body cannot be resolved");
+                    }
+                    wechatResponseEntity.setHttpStatus(responseEntity.getStatusCodeValue());
+                    wechatResponseEntity.setBody(body);
+                })
+                .request();
+        return wechatResponseEntity;
+    }
+
+
+        /**
+         * APP下单API
+         *
+         * @param payParams the pay params
+         * @return the wechat response entity
+         */
     public WechatResponseEntity<ObjectNode> appPay(PayParams payParams) {
         WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
         this.client().withType(WechatPayV3Type.APP, payParams)
@@ -185,8 +202,10 @@ public class WechatDirectPayApi extends AbstractApi {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
         payParams.setAppid(v3.getAppId());
         payParams.setMchid(v3.getMchId());
-        String notifyUrl = v3.getDomain().concat(payParams.getNotifyUrl());
-        payParams.setNotifyUrl(notifyUrl);
+        if (!type.equals(WechatPayV3Type.CODE)){
+            String notifyUrl = v3.getDomain().concat(payParams.getNotifyUrl());
+            payParams.setNotifyUrl(notifyUrl);
+        }
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()
                 .toUri();
@@ -252,11 +271,40 @@ public class WechatDirectPayApi extends AbstractApi {
         return wechatResponseEntity;
     }
 
+    /**
+     * 撤销API
+     *
+     * @param outTradeNo the out trade no
+     * @return the wechat response entity
+     */
+    public WechatResponseEntity<ObjectNode> reverse(String outTradeNo) {
+        WechatResponseEntity<ObjectNode> wechatResponseEntity = new WechatResponseEntity<>();
+        this.client().withType(WechatPayV3Type.REVERSE, outTradeNo)
+                .function(this::reverseOutTradeNoFunction)
+                .consumer(wechatResponseEntity::convert)
+                .request();
+        return wechatResponseEntity;
+    }
+
     private RequestEntity<?> closeByOutTradeNoFunction(WechatPayV3Type type, String outTradeNo) {
         WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
 
         Map<String, String> queryParams = new HashMap<>(1);
         queryParams.put("mchid", v3.getMchId());
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
+                .build()
+                .expand(outTradeNo)
+                .toUri();
+        return Post(uri, queryParams);
+    }
+
+    private RequestEntity<?> reverseOutTradeNoFunction(WechatPayV3Type type, String outTradeNo) {
+        WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
+
+        Map<String, String> queryParams = new HashMap<>(1);
+        queryParams.put("mchid", v3.getMchId());
+        queryParams.put("appid", v3.getAppId());
 
         URI uri = UriComponentsBuilder.fromHttpUrl(type.uri(WeChatServer.CHINA))
                 .build()

@@ -38,4 +38,6 @@ public class Payer {
      * 用户子标识
      */
     private String subOpenid;
+
+    private String  authCode;
 }
