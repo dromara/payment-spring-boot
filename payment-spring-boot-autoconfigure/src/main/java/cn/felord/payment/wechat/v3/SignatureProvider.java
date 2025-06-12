@@ -379,7 +379,7 @@ public class SignatureProvider {
 
     /**
      * 对请求敏感字段进行加密
-     *
+     * 只有使用平台证书进行验签与签名的商户使用该方法
      * @param message     the message
      * @param publicKey the wechatPubicKey certificate
      * @return encrypt message
