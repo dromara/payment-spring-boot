@@ -256,7 +256,7 @@ public class SignatureProvider {
     private synchronized void refreshCertificate(String tenantId) {
 
         WechatMetaBean wechatMetaBean = wechatMetaContainer.getWechatMeta(tenantId);
-        if (wechatMetaBean.getV3().getEnableWechatPayPublic() && wechatMetaBean.getV3().getSwitchVerifySignMethod()){
+        if (wechatMetaBean.getV3().getEnableWechatPayPublic() && !wechatMetaBean.getV3().getSwitchVerifySignMethod()){
             return;
         }
         String url = WechatPayV3Type.CERT.uri(WeChatServer.CHINA);
@@ -485,11 +485,8 @@ public class SignatureProvider {
 
     public boolean isSwitchVerifySignMethod(String tenantId) {
 
-        String publicKeyId=wechatMetaContainer.getWechatMeta(tenantId).getV3().getWechatPayPublicKeyId();
-
-        Boolean switchVerifySignMethod = wechatMetaContainer.getWechatMeta(tenantId).getV3().getSwitchVerifySignMethod();
-
-        return switchVerifySignMethod && StringUtils.hasLength(publicKeyId);
+        return wechatMetaContainer.getWechatMeta(tenantId).getV3().getSwitchVerifySignMethod()
+                &&  wechatMetaContainer.getWechatMeta(tenantId).getV3().getEnableWechatPayPublic();
     }
 
     public String getWechatPublicKeyId(String tenantId) {

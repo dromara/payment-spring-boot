@@ -15,7 +15,7 @@
 ```xml
     <properties>
         <!--  修改为你对应的Spring Boot版本号 -->
-        <spring-boot.version>2.4.0</spring-boot.version>
+        <spring-boot.version>2.7.18</spring-boot.version>
     </properties>
 ```
 然后安装使用
