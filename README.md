@@ -45,7 +45,7 @@ Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家�
 <dependency>
     <groupId>cn.felord</groupId>
     <artifactId>payment-spring-boot-starter</artifactId>
-    <version>1.0.20.RELEASE</version>
+    <version>1.0.21.RELEASE</version>
 </dependency>
 ```
 
@@ -73,6 +73,29 @@ Starter，支持微信优惠券，代金券、商家券、智慧商圈、商家�
 ~~关于集成配置请详细阅读[payment-spring-boot GitHub文档](https://dromara.github.io/payment-spring-boot)
 中[快速接入](https://dromara.github.io/payment-spring-boot/#/quick_start)章节 (暂时不可用)~~
 
+[关于微信支付公钥](https://pay.weixin.qq.com/doc/v3/merchant/4012153196)
+微信官方推出了微信支付公钥产品以替代原来的微信平台证书,我们对此进行了适配
+相关配置如下
+```yaml
+wechat:
+  pay:
+    v3:
+      #    租户id
+      <tentantId>:
+        # 是否使用微信支付公钥验签 默认false
+        enable-wechat-pay-public: true
+        # 微信支付公钥id
+        wechat-pay-public-key-id: PUB_KEY_ID_1111213
+        # 微信支付公钥路径
+        wechat-pay-public-key-path: 'pub_key.pem'
+        
+        wechat-pay-public-key-absolute-path: ''
+        # 是否启用签名验签方法切换 默认false
+        switch-verify-sign-method: true
+```
+- 对于旧版本商户,若不使用微信支付公钥，则不需要配置上述对应参数，则默认使用微信平台证书验签。
+- 对于新进件的商户，微信官方默认启用支付公钥，需要配置上述参数。其中 `switch-verify-sign-method` 参数不需要配置
+- 若旧版版商户使用微信支付公钥，则需要配置上述参数,并启用 `switch-verify-sign-method : true` [原理参考](https://pay.weixin.qq.com/doc/v3/merchant/4012154180)。<font color=red>当完成从平台证书切换到微信支付公钥后，请务必将`switch-verify-sign-method`参数设置为false 或删除该字段</font>
 ### 调用示例
 
 #### 开启支付

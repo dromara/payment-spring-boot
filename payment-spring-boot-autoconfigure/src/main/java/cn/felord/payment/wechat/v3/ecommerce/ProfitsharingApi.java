@@ -77,15 +77,13 @@ public class ProfitsharingApi extends AbstractApi {
                 .function((wechatPayV3Type, params) -> {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
                     params.setAppid(v3.getAppId());
                     List<Receiver> receivers = params.getReceivers();
                     if (!CollectionUtils.isEmpty(receivers)) {
                         receivers.forEach(receiversItem -> {
                             String name = receiversItem.getReceiverName();
                             if (StringUtils.hasText(name)) {
-                                String encryptedName = signatureProvider.encryptRequestMessage(name, x509Certificate);
+                                String encryptedName = signatureProvider.encryptRequestMessage(name,this.wechatMetaBean());
                                 receiversItem.setReceiverName(encryptedName);
                             }
                         });
@@ -94,7 +92,7 @@ public class ProfitsharingApi extends AbstractApi {
                             .build()
                             .toUri();
                     HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+                    httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
                     return Post(uri, params, httpHeaders);
                 })
                 .consumer(wechatResponseEntity::convert)
@@ -256,20 +254,17 @@ public class ProfitsharingApi extends AbstractApi {
                     WechatPayProperties.V3 v3 = this.wechatMetaBean().getV3();
                     params.setAppid(v3.getAppId());
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-
                     String name = params.getName();
                     if (ReceiverType.PERSONAL_OPENID.equals(params.getType()) && StringUtils.hasText(name)) {
                         // 个人应该必传
-                        String encryptedName = signatureProvider.encryptRequestMessage(name, x509Certificate);
+                        String encryptedName = signatureProvider.encryptRequestMessage(name,this.wechatMetaBean());
                         params.setEncryptedName(encryptedName);
                     }
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
                             .toUri();
                     HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+                    httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
                     return Post(uri, params, httpHeaders);
                 })
                 .consumer(wechatResponseEntity::convert)

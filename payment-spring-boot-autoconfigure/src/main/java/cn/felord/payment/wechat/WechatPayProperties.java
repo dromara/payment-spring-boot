@@ -77,6 +77,9 @@ public class WechatPayProperties {
          */
         private String domain;
 
+
+        private Boolean enableWechatPayPublic=false;
+
         /**
          * wechat pay public key id
          */

@@ -65,15 +65,13 @@ public class WechatSmartGuideApi extends AbstractApi {
         this.client().withType(WechatPayV3Type.SMART_GUIDES, params)
                 .function((wechatPayV3Type, smartGuidesParams) -> {
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-                    smartGuidesParams.setName(signatureProvider.encryptRequestMessage(smartGuidesParams.getName(), x509Certificate));
-                    smartGuidesParams.setMobile(signatureProvider.encryptRequestMessage(smartGuidesParams.getMobile(), x509Certificate));
+                    smartGuidesParams.setName(signatureProvider.encryptRequestMessage(smartGuidesParams.getName(), this.wechatMetaBean()));
+                    smartGuidesParams.setMobile(signatureProvider.encryptRequestMessage(smartGuidesParams.getMobile(), this.wechatMetaBean()));
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
                             .toUri();
                     HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+                    httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
                     return Post(uri, smartGuidesParams, httpHeaders);
                 })
                 .consumer(wechatResponseEntity::convert)
@@ -137,10 +135,8 @@ public class WechatSmartGuideApi extends AbstractApi {
                     String mobile = smartGuidesQueryParams.getMobile();
                     if (mobile != null) {
                         SignatureProvider signatureProvider = this.client().signatureProvider();
-                        X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                        final X509Certificate x509Certificate = certificate.getX509Certificate();
-                        queryParams.add("mobile", signatureProvider.encryptRequestMessage(mobile, x509Certificate));
-                        httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+                        queryParams.add("mobile", signatureProvider.encryptRequestMessage(mobile,this.wechatMetaBean()));
+                        httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
                     }
                     String workId = smartGuidesQueryParams.getWorkId();
                     if (workId != null) {
@@ -177,15 +173,13 @@ public class WechatSmartGuideApi extends AbstractApi {
         this.client().withType(WechatPayV3Type.SMART_GUIDES_MODIFY, params)
                 .function((wechatPayV3Type, smartGuidesParams) -> {
                     SignatureProvider signatureProvider = this.client().signatureProvider();
-                    X509WechatCertificateInfo certificate = signatureProvider.getCertificate(this.wechatMetaBean().getTenantId());
-                    final X509Certificate x509Certificate = certificate.getX509Certificate();
-                    smartGuidesParams.setName(signatureProvider.encryptRequestMessage(smartGuidesParams.getName(), x509Certificate));
-                    smartGuidesParams.setMobile(signatureProvider.encryptRequestMessage(smartGuidesParams.getMobile(), x509Certificate));
+                    smartGuidesParams.setName(signatureProvider.encryptRequestMessage(smartGuidesParams.getName(), this.wechatMetaBean()));
+                    smartGuidesParams.setMobile(signatureProvider.encryptRequestMessage(smartGuidesParams.getMobile(), this.wechatMetaBean()));
                     URI uri = UriComponentsBuilder.fromHttpUrl(wechatPayV3Type.uri(WeChatServer.CHINA))
                             .build()
                             .toUri();
                     HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.add("Wechatpay-Serial", certificate.getWechatPaySerial());
+                    httpHeaders.add("Wechatpay-Serial", signatureProvider.getWechatPaySerial(this.wechatMetaBean()));
                     return Patch(uri, smartGuidesParams, httpHeaders);
                 })
                 .consumer(wechatResponseEntity::convert)
